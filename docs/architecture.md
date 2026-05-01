@@ -34,4 +34,31 @@ Base Endpoints:
 * /api/users/health
 * /api/users/me
 
+### 2. api-gateway
 
+Responsible for:
+
+- Acting as the single entry point for frontend requests
+- Routing user-related APIs to user-service
+- Preparing the platform for future authentication and rate limiting
+
+Current Route:
+
+```text
+/api/users/**  →  user-service
+
+ports:
+api-gateway: 8080
+user-service: 8081
+```
+
+
+Current limitations:
+
+```md
+## Current Limitations
+
+- No authentication
+- No database persistence
+- No async processing
+- Gateway currently uses static service URL

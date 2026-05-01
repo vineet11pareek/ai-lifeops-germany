@@ -38,7 +38,11 @@ cd ai-lifeops-germany
 ---
 ## 4. What working now
 
-Currently, only the basic project structure is created.
+Currently working:
+
+- user-service runs on port 8081
+- api-gateway runs on port 8080
+- Gateway routes `/api/users/**` to user-service
 
 Next steps will include:
 
@@ -50,7 +54,29 @@ Next steps will include:
 ---
 ## 5. How we will run the project (later)
 
+For now, run services manually:
+
+Terminal 1:
+
 ```bash
+cd backend/user-service
+mvnw.cmd spring-boot:run
+
+````
+
+Terminal 2:
+
+```bash
+cd backend/api-gateway
+mvnw.cmd spring-boot:run
+````
+
+Test through gateway:
+
+http://localhost:8080/api/users/health
+http://localhost:8080/api/users/me
+
+````
 docker compose up
 ````
 
