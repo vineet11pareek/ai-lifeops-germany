@@ -85,3 +85,45 @@ Reason:
 - Simpler for Phase 0
 - Avoids service discovery complexity at the beginning
 - Can later evolve to Docker DNS, Eureka, Kubernetes service names, or service mesh
+
+## Decision 007 — Use PostgreSQL as Primary Database
+
+Status: Accepted
+
+PostgreSQL will be used as the primary relational database.
+
+Reason:
+
+- Strong production-grade database
+- Works well with Spring Boot and JPA
+- Supports structured business data
+- Can later support vector search using pgvector
+
+---
+
+## Decision 008 — Use Kafka for Async Processing
+
+Status: Accepted
+
+Kafka will be used for asynchronous workflows.
+
+Reason:
+
+- AI processing may take time
+- Document analysis should not block user requests
+- Task creation can be event-driven
+- Kafka supports scalable distributed processing
+
+---
+
+## Decision 009 — Disable Kafka Auto Topic Creation
+
+Status: Accepted
+
+Kafka topic auto-creation is disabled in local setup.
+
+Reason:
+
+- Prevents accidental topic creation
+- Encourages explicit topic management
+- Closer to production behavior

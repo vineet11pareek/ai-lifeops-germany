@@ -100,11 +100,76 @@ We are still in foundation setup phase
 
 ---
 
-# ✅ After adding
+## Local Infrastructure
 
-Run:
+The local development environment uses Docker Compose.
+
+Current local infrastructure:
+
+- PostgreSQL
+- pgAdmin
+- Kafka
+- Kafka UI
+
+Start infrastructure:
 
 ```bash
-git add docs/setup-local.md
-git commit -m "Fix setup-local documentation"
-git push
+docker compose -f infra/local/docker-compose.yml up -d
+```
+
+Stop infrastructure:
+
+```bash
+docker compose -f infra/local/docker-compose.yml down
+```
+
+View running containers:
+
+```bash
+docker ps
+```
+### PostgreSQL
+PostgreSQL runs on:
+
+
+```text
+localhost:5432
+```
+
+Default database:
+
+```text
+lifeops_db
+```
+
+Default user:
+
+```text
+lifeops
+```
+### pgAdmin
+pgAdmin runs on:
+
+```text
+http://localhost:5050
+```
+
+### Kafka UI
+
+Kafka UI runs on:
+
+```text
+http://localhost:8085
+```
+
+### Kafka Topics
+Kafka topic auto-creation is disabled.
+
+Topics must be created explicitly.
+
+Initial topics:
+
+```text
+ai.analysis.requested
+ai.analysis.completed
+```

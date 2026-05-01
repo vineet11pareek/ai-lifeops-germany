@@ -55,10 +55,42 @@ user-service: 8081
 
 Current limitations:
 
-```md
+
 ## Current Limitations
 
 - No authentication
 - No database persistence
 - No async processing
 - Gateway currently uses static service URL
+
+## Local Infrastructure
+
+The platform uses Docker Compose for local development infrastructure.
+
+Current local components:
+
+### PostgreSQL
+
+Used for:
+
+- user data
+- query history
+- task records
+- document metadata
+- audit logs
+
+### Kafka
+
+Used for asynchronous processing.
+
+Planned event flows:
+
+```text
+document uploaded → AI analysis requested → AI analysis completed → task created
+```
+
+### Kafka UI
+Used for local visibility into Kafka topics and messages.
+
+### pgAdmin
+Used for local PostgreSQL inspection and debugging.
