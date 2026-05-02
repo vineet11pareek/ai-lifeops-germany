@@ -14,7 +14,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        formate_sql: true
+        format_sql: true
 
   # Flyway
   flyway:
@@ -23,3 +23,10 @@ spring:
 
 server:
   port: 8081
+
+
+logging:
+  level:
+    org.flywaydb: DEBUG
+    org.springframework.boot.autoconfigure.flyway: DEBUG
+debug: true

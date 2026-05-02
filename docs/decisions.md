@@ -176,3 +176,30 @@ Reason:
 - Easier unit testing
 - Easier maintenance
 - Better alignment with production Spring Boot applications
+
+## Decision 013 — Use Instant for Timestamps
+
+Status: Accepted
+
+We use java.time.Instant for createdAt and updatedAt fields.
+
+Reason:
+
+- Stores timestamps in UTC
+- Avoids timezone-related bugs
+- Suitable for distributed systems
+- Works well with PostgreSQL TIMESTAMP WITH TIME ZONE
+
+## Decision 014 — Use Centralized Exception Handling
+
+Status: Accepted
+
+Each backend service will use centralized exception handling with `@RestControllerAdvice`.
+
+Reason:
+
+- Keeps controllers clean
+- Ensures consistent API error responses
+- Prevents raw stack traces from being exposed
+- Improves frontend integration
+- Aligns with production API design

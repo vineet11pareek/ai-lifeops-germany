@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserService {
 
-    private static final String DEMO_USER_EMAIL = "vineet@example.com";
+    private static final String DEMO_USER_EMAIL = "vineet@example1.com";
 
     private final UserRepository userRepository;
 

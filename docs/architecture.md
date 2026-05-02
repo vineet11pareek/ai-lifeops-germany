@@ -69,6 +69,23 @@ Base Endpoints:
 * /api/users/health
 * /api/users/me
 
+### Error Handling
+
+user-service uses centralized exception handling with `@RestControllerAdvice`.
+
+All API errors follow a consistent structure:
+
+```json
+{
+  "timestamp": "2026-05-02T10:30:00Z",
+  "status": 404,
+  "error": "Not Found",
+  "message": "User not found with email: vineet@example.com",
+  "path": "/api/users/me",
+  "fieldErrors": []
+}
+```
+
 ### 2. api-gateway
 
 Responsible for:

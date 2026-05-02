@@ -181,3 +181,22 @@ Initial topics:
 ai.analysis.requested
 ai.analysis.completed
 ```
+
+
+## Testing Error Handling
+
+user-service provides centralized error responses.
+
+Example error response:
+
+```json
+{
+  "timestamp": "2026-05-02T10:30:00Z",
+  "status": 404,
+  "error": "Not Found",
+  "message": "User not found with email: wrong@example.com",
+  "path": "/api/users/me",
+  "fieldErrors": []
+}
+```
+
