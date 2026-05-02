@@ -30,6 +30,41 @@ Responsible for:
 * User related API
 * Future Integration
 
+### Database Integration
+
+user-service is connected to PostgreSQL.
+
+Current database table:
+
+```text
+users
+```
+
+### Package Structure
+
+user-service follows a layered package structure:
+
+```text
+controller  → handles REST APIs
+service     → contains business logic
+repository  → handles database access
+entity      → maps database tables
+dto         → request/response models
+exception   → custom exceptions
+
+```
+Request flow:
+
+```text
+HTTP Request → Controller → Service → Repository → Database
+```
+Reason:
+
+* clear separation of concerns
+* easier testing
+* easier future extension
+* production-friendly structure
+
 Base Endpoints:
 * /api/users/health
 * /api/users/me

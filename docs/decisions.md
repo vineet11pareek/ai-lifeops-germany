@@ -127,3 +127,52 @@ Reason:
 - Prevents accidental topic creation
 - Encourages explicit topic management
 - Closer to production behavior
+
+## Decision 010 — Use Flyway for Database Migrations
+
+Status: Accepted
+
+Flyway will manage database schema migrations.
+
+Reason:
+
+- Database changes are version-controlled
+- Schema changes are repeatable across environments
+- Avoids relying on Hibernate automatic table creation
+- Matches production-grade database change management
+
+---
+
+## Decision 011 — Use Hibernate Validate Mode
+
+Status: Accepted
+
+Hibernate is configured with `ddl-auto=validate`.
+
+Reason:
+
+- Prevents accidental schema changes by the application
+- Ensures entity mappings match the database schema
+- Keeps Flyway as the source of truth for schema creation
+
+## Decision 012 — Use Layered Package Structure
+
+Status: Accepted
+
+Each backend service will follow a layered package structure.
+
+Standard layers:
+
+- controller
+- service
+- repository
+- entity
+- dto
+- exception
+
+Reason:
+
+- Clear separation of concerns
+- Easier unit testing
+- Easier maintenance
+- Better alignment with production Spring Boot applications

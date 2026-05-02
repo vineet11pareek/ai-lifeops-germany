@@ -54,6 +54,14 @@ Next steps will include:
 ---
 ## 5. How we will run the project (later)
 
+## Running user-service with PostgreSQL
+
+Start local infrastructure first:
+
+```bash
+docker compose -f infra/local/docker-compose.yml up -d
+````
+
 For now, run services manually:
 
 Terminal 1:
