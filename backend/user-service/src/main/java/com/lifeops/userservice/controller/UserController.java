@@ -1,10 +1,12 @@
 package com.lifeops.userservice.controller;
 
+import com.lifeops.userservice.dto.ApiResponse;
+import com.lifeops.userservice.dto.CreateUserRequest;
 import com.lifeops.userservice.dto.UserResponse;
 import com.lifeops.userservice.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -19,7 +21,17 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserResponse getCurrentUser(){
-       return userService.getCurrentUser();
+    public ApiResponse<UserResponse> getCurrentUser(){
+       return ApiResponse.success("Current User fetched successfully", userService.getCurrentUser());
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request){
+        return ApiResponse.success(
+                "User Created successfully",userService.createUser(request));
+
+    }
+
+
 }

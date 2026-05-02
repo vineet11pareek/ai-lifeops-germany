@@ -203,3 +203,29 @@ Reason:
 - Prevents raw stack traces from being exposed
 - Improves frontend integration
 - Aligns with production API design
+
+## Decision 015 — Use Standard API Response Wrapper
+
+Status: Accepted
+
+Successful API responses will use a common response wrapper.
+
+Reason:
+
+- Consistent frontend integration
+- Easier API consumption
+- Common structure across services
+
+---
+
+## Decision 016 — Validate Requests at API Boundary
+
+Status: Accepted
+
+API request DTOs will use Jakarta Bean Validation annotations.
+
+Reason:
+
+- Prevents invalid data from entering business logic
+- Keeps validation close to input model
+- Improves API reliability and security

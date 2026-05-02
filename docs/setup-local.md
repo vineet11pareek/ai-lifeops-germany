@@ -200,3 +200,33 @@ Example error response:
 }
 ```
 
+## Testing User Creation API
+
+Run user-service and test:
+
+```http
+POST http://localhost:8081/api/users
+Content-Type: application/json
+```
+Example valid body:
+
+```JSON
+{
+  "fullName": "Test User",
+  "email": "test.user@example.com",
+  "country": "Germany",
+  "provider": "GOOGLE"
+}
+```
+Example invalid body:
+```JSON
+{
+  "fullName": "",
+  "email": "wrong-email",
+  "country": "Germany",
+  "provider": "GOOGLE"
+}
+```
+Invalid requests return validation errors in a standard format.
+
+

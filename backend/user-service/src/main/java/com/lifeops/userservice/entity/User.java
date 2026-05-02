@@ -29,6 +29,17 @@ public class User {
     @Column(name="updated_at",nullable = false)
     private Instant updatedAt;
 
+    protected User() {
+    }
+
+    public User(String fullName, String email, String country, String provider) {
+        this.id = UUID.randomUUID();
+        this.fullName = fullName;
+        this.email = email;
+        this.country = country;
+        this.provider = provider;
+    }
+
     @PrePersist
     public void prePersist() {
         Instant now = Instant.now();

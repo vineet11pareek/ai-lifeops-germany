@@ -86,6 +86,43 @@ All API errors follow a consistent structure:
 }
 ```
 
+### Request Validation
+
+Incoming API requests are validated using Jakarta Bean Validation.
+
+Example validations:
+
+- required fields with `@NotBlank`
+- valid email format with `@Email`
+- length limits with `@Size`
+
+Reason:
+
+- invalid data is rejected at API boundary
+- business logic receives clean input
+- improves API reliability
+
+### API Response Standard
+
+user-service uses a standard success response wrapper.
+
+Example:
+
+```json
+{
+  "timestamp": "2026-05-02T10:30:00Z",
+  "success": true,
+  "message": "Current user fetched successfully",
+  "data": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "name": "Vineet Pareek",
+    "email": "vineet@example.com",
+    "country": "Germany",
+    "provider": "GOOGLE"
+  }
+}
+```
+
 ### 2. api-gateway
 
 Responsible for:
