@@ -123,6 +123,27 @@ Example:
 }
 ```
 
+### Testing Strategy
+
+user-service currently includes automated tests for:
+
+- service-layer business logic
+- controller API contract
+- request validation behavior
+
+Current test types:
+
+```text
+Unit tests        → service logic with Mockito
+Web layer tests   → controller APIs with MockMvc
+```
+
+Reason:
+
+* protects business rules
+* verifies API response structure
+* prepares services for CI/CD execution
+
 ### 2. api-gateway
 
 Responsible for:

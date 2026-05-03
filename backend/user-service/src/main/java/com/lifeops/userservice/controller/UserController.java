@@ -29,7 +29,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request){
         return ApiResponse.success(
-                "User Created successfully",userService.createUser(request));
+                "User created successfully",userService.createUser(request));
 
     }
 

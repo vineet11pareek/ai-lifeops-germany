@@ -229,4 +229,18 @@ Example invalid body:
 ```
 Invalid requests return validation errors in a standard format.
 
+## Running Tests
+
+Run user-service tests:
+
+```bash
+cd backend/user-service
+mvnw.cmd test
+```
+Expected result:
+```text
+BUILD SUCCESS
+```
+
+
 

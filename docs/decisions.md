@@ -229,3 +229,15 @@ Reason:
 - Prevents invalid data from entering business logic
 - Keeps validation close to input model
 - Improves API reliability and security
+
+## Decision 017 — Add Tests Before CI/CD
+
+Status: Accepted
+
+Automated tests are added before GitHub Actions CI/CD.
+
+Reason:
+
+- CI pipeline should validate real behavior
+- Prevents broken code from being merged
+- Supports production-grade development workflow

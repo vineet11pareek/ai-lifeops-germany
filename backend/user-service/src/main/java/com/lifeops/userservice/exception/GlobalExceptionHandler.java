@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "Validation Failed",
+                "Validation failed",
                 request.getRequestURI(),
                 fieldError
         );
