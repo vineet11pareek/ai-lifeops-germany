@@ -254,3 +254,30 @@ Reason:
 - Easy to configure per service
 - Supports test, build, Docker image creation, and deployment workflows
 - Good fit for portfolio and production-style development
+
+## Decision 019 — Dockerize Backend Services
+
+Status: Accepted
+
+Backend services will be packaged as Docker containers.
+
+Reason:
+
+- Consistent runtime across environments
+- Easier local orchestration
+- Prepares services for cloud deployment
+- Aligns with microservice deployment practices
+
+---
+
+## Decision 020 — Use Environment-Based Service Configuration
+
+Status: Accepted
+
+Service URLs and database connections are provided using environment variables.
+
+Reason:
+
+- Avoids hardcoded environment-specific values
+- Enables local, Docker, CI, and cloud deployment with the same code
+- Supports twelve-factor application principles

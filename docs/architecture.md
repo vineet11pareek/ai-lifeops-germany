@@ -227,3 +227,31 @@ The pipeline runs on:
 * push to main
 * pull requests to main
 * changes inside backend/user-service/**
+
+## Containerization
+
+The platform uses Docker for service packaging and Docker Compose for local orchestration.
+
+Current containerized services:
+
+- api-gateway
+- user-service
+- PostgreSQL
+- pgAdmin
+- Kafka
+- Kafka UI
+
+Service communication inside Docker uses Docker network names.
+
+Example:
+
+```text
+api-gateway → http://user-service:8081
+user-service → jdbc:postgresql://postgres:5432/lifeops_db
+```
+
+Reason:
+
+* services are portable
+* local setup is closer to deployment architecture
+* avoids machine-specific configuration

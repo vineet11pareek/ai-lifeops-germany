@@ -1,6 +1,39 @@
 version: "3.9"
 
 services:
+  user-service:
+    build:
+      context: ../../backend/user-service
+      dockerfile: Dockerfile
+    container_name: lifeops-user-service
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lifeops_db
+      SPRING_DATASOURCE_USERNAME: lifeops
+      SPRING_DATASOURCE_PASSWORD: lifeops_password
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lifeops-network
+
+  api-gateway:
+    build:
+      context: ../../backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: lifeops-api-gateway
+    restart: unless-stopped
+    environment:
+      USER_SERVICE_URL: http://user-service:8081
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+    networks:
+      - lifeops-network
+
   postgres:
     image: postgres:16
     container_name: lifeops-postgres

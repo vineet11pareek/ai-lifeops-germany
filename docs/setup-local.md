@@ -257,4 +257,40 @@ The pipeline runs:
 ```
 This ensures user-service builds successfully before future deployment.
 
+## Running Full System with Docker Compose
+
+Before running Docker Compose, build service JARs:
+
+```bash
+cd backend/user-service
+mvnw.cmd clean package
+
+cd ../api-gateway
+mvnw.cmd clean package
+```
+From project root, start all services:
+```bash
+docker compose -f infra/local/docker-compose.yml up --build
+```
+Test through API Gateway:
+```API
+http://localhost:8080/api/users/health
+http://localhost:8080/api/users/me
+```
+
+Current exposed ports:
+```text
+api-gateway     → 8080
+user-service    → 8081
+pgAdmin         → 5050
+Kafka UI        → 8085
+PostgreSQL      → 5432
+Kafka           → 9092
+```
+Stop services
+```bash
+docker compose -f infra/local/docker-compose.yml down
+```
+
+
 

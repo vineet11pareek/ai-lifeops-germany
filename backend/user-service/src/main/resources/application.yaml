@@ -3,9 +3,9 @@ spring:
     name: user-service
   # PostgreSQL
   datasource:
-    url: jdbc:postgresql://localhost:5432/lifeops_db
-    username: lifeops
-    password: lifeops_password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/lifeops_db}
+    username: ${SPRING_DATASOURCE_USERNAME:lifeops}
+    password: ${SPRING_DATASOURCE_PASSWORD:lifeops_password}
     driver-class-name: org.postgresql.Driver
   # JPA
   jpa:
