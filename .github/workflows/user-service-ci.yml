@@ -20,6 +20,21 @@ jobs:
     name: Build and Test User Service
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: lifeops_db
+          POSTGRES_USER: lifeops
+          POSTGRES_PASSWORD: lifeops_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U lifeops -d lifeops_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     defaults:
       run:
         working-directory: backend/user-service
