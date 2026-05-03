@@ -204,3 +204,26 @@ Used for local visibility into Kafka topics and messages.
 
 ### pgAdmin
 Used for local PostgreSQL inspection and debugging.
+
+## CI/CD
+
+The project uses GitHub Actions for continuous integration.
+
+Current pipeline:
+
+```text
+User Service CI
+```
+
+Current checks:
+
+checkout repository
+* set up Java 21
+* run automated tests
+* build application package
+
+The pipeline runs on:
+
+* push to main
+* pull requests to main
+* changes inside backend/user-service/**

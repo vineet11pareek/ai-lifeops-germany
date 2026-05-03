@@ -241,6 +241,20 @@ Expected result:
 ```text
 BUILD SUCCESS
 ```
+## Continuous Integration
 
+GitHub Actions runs the user-service CI pipeline automatically.
+
+Current pipeline file:
+
+```text
+.github/workflows/user-service-ci.yml
+```
+The pipeline runs:
+```text
+./mvnw test
+./mvnw clean package -DskipTests
+```
+This ensures user-service builds successfully before future deployment.
 
 

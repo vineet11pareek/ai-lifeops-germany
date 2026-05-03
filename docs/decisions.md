@@ -241,3 +241,16 @@ Reason:
 - CI pipeline should validate real behavior
 - Prevents broken code from being merged
 - Supports production-grade development workflow
+
+## Decision 018 — Use GitHub Actions for CI
+
+Status: Accepted
+
+GitHub Actions will be used for continuous integration.
+
+Reason:
+
+- Native integration with GitHub
+- Easy to configure per service
+- Supports test, build, Docker image creation, and deployment workflows
+- Good fit for portfolio and production-style development
