@@ -259,15 +259,10 @@ This ensures user-service builds successfully before future deployment.
 
 ## Running Full System with Docker Compose
 
-Before running Docker Compose, build service JARs:
+Backend services use multi-stage Dockerfiles.
 
-```bash
-cd backend/user-service
-mvnw.cmd clean package
+This means Docker builds the application JAR automatically.
 
-cd ../api-gateway
-mvnw.cmd clean package
-```
 From project root, start all services:
 ```bash
 docker compose -f infra/local/docker-compose.yml up --build

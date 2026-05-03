@@ -281,3 +281,16 @@ Reason:
 - Avoids hardcoded environment-specific values
 - Enables local, Docker, CI, and cloud deployment with the same code
 - Supports twelve-factor application principles
+
+## Decision 021 — Use Multi-Stage Docker Builds
+
+Status: Accepted
+
+Backend services use multi-stage Dockerfiles.
+
+Reason:
+
+- Separates build-time dependencies from runtime image
+- Reduces final image size
+- Improves build repeatability
+- Makes Docker builds suitable for CI/CD pipelines

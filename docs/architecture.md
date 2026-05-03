@@ -255,3 +255,24 @@ Reason:
 * services are portable
 * local setup is closer to deployment architecture
 * avoids machine-specific configuration
+
+### Multi-Stage Docker Build
+
+Backend services use multi-stage Docker builds.
+
+Build stage:
+
+```text
+eclipse-temurin:21-jdk
+```
+Runtime stage:
+```text
+eclipse-temurin:21-jre
+```
+
+Reason:
+
+* build tools stay out of final runtime image
+* final image is cleaner
+* Docker build becomes repeatable
+* CI/CD can build images without manual Maven packaging
