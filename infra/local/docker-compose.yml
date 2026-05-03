@@ -18,6 +18,12 @@ services:
         condition: service_healthy
     networks:
       - lifeops-network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep UP || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
 
   api-gateway:
     build:
@@ -30,9 +36,16 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - user-service
+      user-service:
+        condition: service_healthy
     networks:
       - lifeops-network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
 
   postgres:
     image: postgres:16

@@ -294,3 +294,16 @@ Reason:
 - Reduces final image size
 - Improves build repeatability
 - Makes Docker builds suitable for CI/CD pipelines
+
+## Decision 022 — Use Spring Boot Actuator for Health Checks
+
+Status: Accepted
+
+Backend services expose health endpoints using Spring Boot Actuator.
+
+Reason:
+
+- Provides standard operational endpoints
+- Supports local Docker health checks
+- Prepares services for Kubernetes readiness and liveness probes
+- Helps monitoring and alerting systems verify service health

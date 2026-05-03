@@ -286,6 +286,31 @@ Stop services
 ```bash
 docker compose -f infra/local/docker-compose.yml down
 ```
+## Health Checks
+
+Backend services expose health endpoints.
+
+API Gateway:
+
+```text
+http://localhost:8080/actuator/health
+```
+User Service:
+
+```text
+http://localhost:8081/actuator/health
+```
+When running with Docker Compose, check container health:
+```bash
+docker ps
+```
+Expected:
+
+```text
+lifeops-user-service   healthy
+lifeops-api-gateway    healthy
+```
+
 
 
 

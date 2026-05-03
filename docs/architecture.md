@@ -276,3 +276,27 @@ Reason:
 * final image is cleaner
 * Docker build becomes repeatable
 * CI/CD can build images without manual Maven packaging
+
+## Health Checks and Actuator
+
+Backend services expose Spring Boot Actuator endpoints for operational visibility.
+
+Current exposed endpoints:
+
+```text
+/actuator/health
+/actuator/info
+```
+
+Current services with Actuator:
+
+* user-service
+* api-gateway
+
+The user-service health endpoint also checks PostgreSQL connectivity.
+
+Reason:
+* supports Docker health checks
+* prepares for Kubernetes readiness/liveness probes
+* helps monitoring tools verify service availability
+* improves production operability
