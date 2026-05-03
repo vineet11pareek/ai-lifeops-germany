@@ -300,3 +300,25 @@ Reason:
 * prepares for Kubernetes readiness/liveness probes
 * helps monitoring tools verify service availability
 * improves production operability
+
+## Request Correlation and Logging
+
+user-service supports request correlation using the `X-Correlation-Id` header.
+
+Behavior:
+
+- if request contains `X-Correlation-Id`, the service reuses it
+- if missing, the service generates a new UUID
+- the correlation ID is returned in response headers
+- logs include the correlation ID using MDC
+
+Example:
+
+```text
+X-Correlation-Id: 4f8a1d5e-5c67-4f8a-944d-5ab2a56a7c21
+```
+Reason:
+
+* trace requests across distributed services
+* simplify debugging
+* prepare for OpenTelemetry tracing later

@@ -307,3 +307,16 @@ Reason:
 - Supports local Docker health checks
 - Prepares services for Kubernetes readiness and liveness probes
 - Helps monitoring and alerting systems verify service health
+
+## Decision 023 — Use Correlation ID for Request Tracking
+
+Status: Accepted
+
+Backend services will support `X-Correlation-Id`.
+
+Reason:
+
+- Helps trace one request across multiple services
+- Improves debugging in distributed systems
+- Can be connected with future OpenTelemetry trace IDs
+- Supports better production support and incident investigation

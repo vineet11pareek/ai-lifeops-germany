@@ -311,6 +311,16 @@ lifeops-user-service   healthy
 lifeops-api-gateway    healthy
 ```
 
+## Testing Correlation ID
 
+Call user-service with a custom correlation ID:
+
+```bash
+curl -H "X-Correlation-Id: test-123" http://localhost:8081/api/users/me
+```
+Expected:
+
+* response contains X-Correlation-Id: test-123
+* logs contain correlationId=test-123
 
 

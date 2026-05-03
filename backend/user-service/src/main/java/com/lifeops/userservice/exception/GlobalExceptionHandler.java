@@ -1,8 +1,10 @@
 package com.lifeops.userservice.exception;
 
+import com.lifeops.userservice.common.CorrelationConstants;
 import com.lifeops.userservice.dto.error.ApiErrorResponse;
 import com.lifeops.userservice.dto.error.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.MDC;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUserNotFoundException(UserNotFoundException exception, HttpServletRequest request){
         ApiErrorResponse response = new ApiErrorResponse(
                 Instant.now(),
+                getCorrelationId(),
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 exception.getMessage(),
@@ -43,6 +46,7 @@ public class GlobalExceptionHandler {
 
         ApiErrorResponse response = new ApiErrorResponse(
                 Instant.now(),
+                getCorrelationId(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Validation failed",
@@ -58,6 +62,7 @@ public class GlobalExceptionHandler {
 
         ApiErrorResponse response = new ApiErrorResponse(
                 Instant.now(),
+                getCorrelationId(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 "Something went wrong. Please try again later",
@@ -72,6 +77,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleDuplicateUserException(DuplicateUserException exception,HttpServletRequest request){
         ApiErrorResponse response = new ApiErrorResponse(
                 Instant.now(),
+                getCorrelationId(),
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 exception.getMessage(),
@@ -80,5 +86,9 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    private String getCorrelationId(){
+        return MDC.get(CorrelationConstants.CORRELATION_ID_MDC_KEY);
     }
 }

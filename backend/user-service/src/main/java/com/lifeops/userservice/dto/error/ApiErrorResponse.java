@@ -5,6 +5,7 @@ import java.util.List;
 
 public record ApiErrorResponse(
         Instant timestamp,
+        String correlationId,
         int status,
         String error,
         String message,

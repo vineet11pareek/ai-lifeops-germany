@@ -41,10 +41,9 @@ management:
   health:
     db:
       enabled: true
-
+# Logging
 logging:
-  level:
-    org.flywaydb: DEBUG
-    org.springframework.boot.autoconfigure.flyway: DEBUG
+  pattern:
+    level: "%5p [correlationId=%X{correlationId}]"
 
 debug: true

@@ -6,10 +6,14 @@ import com.lifeops.userservice.entity.User;
 import com.lifeops.userservice.exception.DuplicateUserException;
 import com.lifeops.userservice.exception.UserNotFoundException;
 import com.lifeops.userservice.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private static final String DEMO_USER_EMAIL = "vineet@example.com";
 
@@ -20,6 +24,7 @@ public class UserService {
     }
 
     public UserResponse getCurrentUser(){
+        log.info("Fetching current user");
         User user = userRepository
                 .findByEmail(DEMO_USER_EMAIL)
                 .orElseThrow(()-> new UserNotFoundException(DEMO_USER_EMAIL));
@@ -34,7 +39,9 @@ public class UserService {
     }
 
     public UserResponse createUser(CreateUserRequest request){
+        log.info("Creating user with email={}", request.email());
         if(userRepository.existsByEmail(request.email())){
+            log.warn("User creation failed because email already exists: {}", request.email());
             throw new DuplicateUserException(request.email());
         }
 
