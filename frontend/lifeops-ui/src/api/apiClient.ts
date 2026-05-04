@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuthToken } from "../auth/authStorage";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,7 +15,7 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("lifeops_google_id_token");
+  const token = getAuthToken();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

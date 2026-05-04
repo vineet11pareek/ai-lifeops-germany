@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import { setAuthToken } from "../auth/authStorage";
+import { useEffect } from "react";
+import { isAuthenticated } from "../auth/authStorage";
 
 function LandingPage() {
     const navigate = useNavigate();
@@ -8,9 +11,14 @@ function LandingPage() {
         return;
       }
 
-      localStorage.setItem("lifeops_google_id_token", credentialResponse.credential);
+      setAuthToken(credentialResponse.credential);
       navigate("/dashboard");
     };
+    useEffect(() => {
+      if (isAuthenticated()) {
+        navigate("/dashboard");
+      }
+    }, [navigate]);
   return (
     <main style={styles.page}>
       <section style={styles.card}>

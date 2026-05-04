@@ -411,3 +411,16 @@ Reason:
 - verifies token audience, issuer, expiry, and signature
 - prevents unauthorized access using fake tokens
 - aligns with secure authentication practice
+
+## Decision 031 — Use Frontend Protected Routes
+
+Status: Accepted
+
+Private frontend pages are wrapped with a protected route component.
+
+Reason:
+
+- Prevents unauthenticated navigation to dashboard
+- Keeps routing logic centralized
+- Improves frontend maintainability
+- Complements backend token validation

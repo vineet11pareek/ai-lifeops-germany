@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCurrentUser, type UserResponse } from "../api/userApi";
+import { clearAuthToken } from "../auth/authStorage";
 const modules = [
   {
     title: "Bureaucracy Assistant",
@@ -26,7 +27,7 @@ function DashboardPage() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-      localStorage.removeItem("lifeops_google_id_token");
+      clearAuthToken();
       navigate("/");
     };
     useEffect(() => {

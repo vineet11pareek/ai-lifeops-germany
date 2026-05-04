@@ -504,3 +504,25 @@ Reason:
 - prevents trusting frontend-only state
 - prepares for protected routes and user-specific data
 
+### Frontend Protected Routes
+
+The frontend now protects private routes using a `ProtectedRoute` component.
+
+Current behavior:
+
+- `/` is public
+- `/dashboard` requires a stored Google ID token
+- unauthenticated users are redirected to `/`
+- logout clears the token and returns user to landing page
+
+Reason:
+
+- prevents unauthenticated UI access
+- improves user experience
+- prepares for future role-based frontend routing
+
+Security note:
+
+- Frontend route protection is not sufficient for real security.
+- Backend and API Gateway token validation are still required.
+

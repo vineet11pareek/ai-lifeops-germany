@@ -473,6 +473,28 @@ The frontend sends the Google ID token using:
 ```text
 Authorization: Bearer <google_id_token>
 ```
+## Testing Protected Routes
+
+Run frontend:
+
+```bash
+cd frontend/lifeops-ui
+npm run dev
+```
+Test:
+```bash
+http://localhost:5173/dashboard
+```
+Expected without login:
+```bash
+Redirects to /
+```
+
+After Google Login:
+```bash
+/dashboard opens
+```
+Logout clears local token and redirects to landing page.
 
 
 
