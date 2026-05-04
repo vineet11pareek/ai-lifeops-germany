@@ -373,4 +373,23 @@ Reason:
 * tools are available when needed
 * matches production-style separation between application and debugging tools
 
+---
+## Running Frontend
+
+Run frontend locally:
+
+```bash
+cd frontend/lifeops-ui
+npm install
+npm run dev
+```
+Frontend runs on:
+```text
+http://localhost:5173
+```
+Current route:
+```text
+/ → Landing page
+```
+
 

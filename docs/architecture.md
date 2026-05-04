@@ -371,3 +371,29 @@ Reason:
 - avoids running unnecessary tools by default
 - keeps local environment cleaner
 - supports debugging when required
+
+## Frontend
+
+The frontend application is created using React, TypeScript, and Vite.
+
+Current frontend responsibility:
+
+- show public landing/login page
+- prepare routing for dashboard
+- prepare future OAuth login integration
+
+Current route:
+
+```text
+/ → Landing page
+```
+Current login buttons:
+
+- Google login placeholder
+- Facebook login placeholder
+
+Reason:
+
+- creates first user-facing entry point
+- separates frontend from backend services
+- prepares for authenticated dashboard flow

@@ -46,7 +46,7 @@ Status: Completed
 
 Phase 0 established the production-grade foundation of the platform.
 
-Next phase:
+
 ---
 
 
@@ -57,6 +57,13 @@ Next phase:
 - add dashboard
 - integrate Google OAuth
 - connect frontend with api-gateway
+
+Completed:
+- frontend application created
+- landing/login page created
+- basic routing added
+
+---
 
 ## Phase 2 — AI Query Service
 
