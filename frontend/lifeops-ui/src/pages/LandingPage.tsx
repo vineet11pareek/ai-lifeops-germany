@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 function LandingPage() {
+    const navigate = useNavigate();
   return (
     <main style={styles.page}>
       <section style={styles.card}>
@@ -14,7 +17,7 @@ function LandingPage() {
         </p>
 
         <div style={styles.actions}>
-          <button style={styles.primaryButton}>
+          <button style={styles.primaryButton} onClick={() => navigate("/dashboard")}>
             Continue with Google
           </button>
 

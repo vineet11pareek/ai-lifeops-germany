@@ -374,7 +374,10 @@ Reason:
 * matches production-style separation between application and debugging tools
 
 ---
+
+
 ## Running Frontend
+
 
 Run frontend locally:
 
@@ -391,5 +394,15 @@ Current route:
 ```text
 / → Landing page
 ```
+
+## Frontend Routes
+
+Current frontend routes:
+
+```text
+/           → Landing/Login page
+/dashboard  → Dashboard page
+```
+
 
 

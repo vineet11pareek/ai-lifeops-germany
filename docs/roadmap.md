@@ -62,6 +62,9 @@ Completed:
 - frontend application created
 - landing/login page created
 - basic routing added
+- landing/login page
+- basic dashboard layout
+- temporary navigation from login to dashboard
 
 ---
 

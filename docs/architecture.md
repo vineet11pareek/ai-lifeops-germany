@@ -397,3 +397,33 @@ Reason:
 - creates first user-facing entry point
 - separates frontend from backend services
 - prepares for authenticated dashboard flow
+
+### Dashboard Layout
+
+The frontend now includes a dashboard route.
+
+Current routes:
+
+```text
+/           → Landing/Login page
+/dashboard  → Dashboard page
+```
+Current dashboard sections:
+
+- profile summary
+- recent queries
+- pending tasks
+- upcoming deadlines
+- available AI tools
+
+Current AI tools shown:
+
+- Bureaucracy Assistant
+- Truth Layer
+- Task Approval Layer
+
+Reason:
+
+- provides a centralized user workspace
+- prepares UI for authenticated user flow
+- supports future modules without redesigning navigation
