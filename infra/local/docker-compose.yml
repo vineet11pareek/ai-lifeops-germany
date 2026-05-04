@@ -48,6 +48,23 @@ services:
       retries: 10
       start_period: 40s
 
+  frontend:
+    build:
+      context: ../../frontend/lifeops-ui
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:8080
+        VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    container_name: lifeops-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - lifeops-network
+
   postgres:
     image: postgres:16
     container_name: lifeops-postgres

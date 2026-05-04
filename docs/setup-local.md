@@ -509,6 +509,31 @@ GitHub Actions also runs this build automatically using:
 .github/workflows/frontend-ci.yml
 ```
 
+## Running Frontend with Docker Compose
+
+The frontend can run as part of Docker Compose.
+
+Start full local system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Frontend runs on:
+```text
+http://localhost:5173
+```
+The frontend container serves the production React build using Nginx.
+
+Required local environment:
+```text
+infra/local/.env
+```
+
+Example:
+```text
+GOOGLE_CLIENT_ID=your-google-client-id
+```
+
 
 
 

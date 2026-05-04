@@ -547,3 +547,32 @@ Reason:
 - keeps frontend changes validated before deployment
 - aligns frontend with backend CI practices
 
+### Frontend Containerization
+
+The frontend is containerized using a multi-stage Docker build.
+
+Build stage:
+
+```text
+node:24-alpine
+```
+
+Runtime Stage:
+```text
+nginx:1.27-alpine
+```
+
+Current behavior:
+
+- React app is built into static assets
+- Nginx serves the production frontend 
+- React Router fallback is handled by Nginx
+- Docker Compose exposes frontend on port 5173
+
+Reason:
+
+- production-like static serving
+- smaller runtime image
+- consistent local and deployment behavior
+- prepares frontend for cloud deployment
+

@@ -437,3 +437,16 @@ Reason:
 - Detects TypeScript and bundling errors early
 - Keeps frontend quality aligned with backend CI
 - Prepares for future Docker image build and deployment
+
+## Decision 033 — Serve Frontend with Nginx Container
+
+Status: Accepted
+
+The React frontend is built with Node and served from an Nginx container.
+
+Reason:
+
+- separates build-time dependencies from runtime
+- serves optimized static assets
+- supports React Router fallback
+- matches common production deployment patterns
