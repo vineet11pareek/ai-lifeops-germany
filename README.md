@@ -33,3 +33,20 @@ The platform is not just a chatbot. It is an action-oriented AI system that can:
 - Docker
 - GitHub Actions
 - React / TypeScript
+
+## Local Development Commands
+
+Start core local system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml up --build
+```
+Start local system with tools:
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Stop local system:
+```bash
+docker compose -f infra/local/docker-compose.yml down
+```

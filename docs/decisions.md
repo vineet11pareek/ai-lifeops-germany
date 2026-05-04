@@ -333,3 +333,16 @@ Reason:
 - Makes APIs easier to test and share
 - Helps frontend teams understand backend APIs
 - Improves maintainability and interview presentation
+
+## Decision 025 — Use Docker Compose Profiles for Local Tools
+
+Status: Accepted
+
+Optional local tools such as pgAdmin and Kafka UI are started using the `tools` Docker Compose profile.
+
+Reason:
+
+- Keeps default local startup lightweight
+- Separates runtime services from debugging tools
+- Improves developer experience
+- Keeps local setup closer to production thinking

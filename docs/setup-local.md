@@ -342,6 +342,35 @@ Use Swagger UI to test:
 GET /api/users/me
 POST /api/users
 ```
+## Docker Compose Profiles
 
+The local Docker Compose setup uses profiles for optional tools.
+
+Core services start with:
+
+```bash
+docker compose -f infra/local/docker-compose.yml up --build
+```
+Core services:
+
+* PostgreSQL
+* Kafka
+* user-service
+* api-gateway
+
+Optional tools start with:
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Optional tools:
+
+* pgAdmin
+* Kafka UI
+
+Reason:
+
+* keeps normal local startup lighter
+* tools are available when needed
+* matches production-style separation between application and debugging tools
 
 

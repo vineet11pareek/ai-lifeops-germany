@@ -349,3 +349,25 @@ Reason:
 * helps frontend and backend collaboration
 * supports manual API testing
 * creates a production-friendly API contract foundation
+
+### Docker Compose Profiles
+
+The local environment separates core runtime services from optional debugging tools using Docker Compose profiles.
+
+Core runtime:
+
+- PostgreSQL
+- Kafka
+- user-service
+- api-gateway
+
+Tools profile:
+
+- pgAdmin
+- Kafka UI
+
+Reason:
+
+- avoids running unnecessary tools by default
+- keeps local environment cleaner
+- supports debugging when required

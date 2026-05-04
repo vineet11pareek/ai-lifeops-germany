@@ -71,6 +71,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: lifeops-pgadmin
     restart: unless-stopped
+    profiles:
+      - tools
     environment:
       PGADMIN_DEFAULT_EMAIL: vineet00pareek.de@gmail.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -113,6 +115,8 @@ services:
     image: provectuslabs/kafka-ui:latest
     container_name: lifeops-kafka-ui
     restart: unless-stopped
+    profiles:
+      - tools
     ports:
       - "8085:8080"
     environment:
