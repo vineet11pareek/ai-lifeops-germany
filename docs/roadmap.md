@@ -52,10 +52,11 @@ Next phase:
 
 ## Phase 1 — Login + Dashboard
 
-- Google login
-- User profile
-- Dashboard page
-- Query history
+- create frontend application
+- add login page
+- add dashboard
+- integrate Google OAuth
+- connect frontend with api-gateway
 
 ## Phase 2 — AI Query Service
 

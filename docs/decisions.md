@@ -359,3 +359,16 @@ Reason:
 - Helps developers run and test services independently
 - Supports microservice ownership
 - Improves maintainability and onboarding
+
+## Decision 027 — Use React with TypeScript for Frontend
+
+Status: Accepted
+
+The frontend will use React with TypeScript and Vite.
+
+Reason:
+
+- Fast development setup
+- Strong typing with TypeScript
+- Good ecosystem support
+- Easy integration with OAuth and API Gateway
