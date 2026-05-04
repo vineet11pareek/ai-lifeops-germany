@@ -385,3 +385,16 @@ Reason:
 - good support for OpenID Connect
 - suitable for fast onboarding
 - prepares the platform for future Facebook login
+
+## Decision 029 — Frontend Communicates Only Through API Gateway
+
+Status: Accepted
+
+The frontend will call backend APIs only through `api-gateway`.
+
+Reason:
+
+- hides internal service topology
+- centralizes routing
+- prepares for authentication and authorization enforcement
+- aligns with microservice architecture patterns

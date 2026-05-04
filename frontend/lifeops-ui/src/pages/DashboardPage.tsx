@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getCurrentUser, type UserResponse } from "../api/userApi";
 const modules = [
   {
     title: "Bureaucracy Assistant",
@@ -18,18 +20,38 @@ const modules = [
 ];
 
 function DashboardPage() {
+    const [user, setUser] = useState<UserResponse | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const handleLogout = () => {
       localStorage.removeItem("lifeops_google_id_token");
       navigate("/");
     };
+    useEffect(() => {
+      async function loadUser() {
+        try {
+          const currentUser = await getCurrentUser();
+          setUser(currentUser);
+        } catch (err) {
+          console.error(err);
+          setError("Unable to load user profile.");
+        } finally {
+          setIsLoading(false);
+        }
+      }
+
+      loadUser();
+    }, []);
   return (
     <main style={styles.page}>
       <section style={styles.header}>
         <div>
           <p style={styles.badge}>Dashboard</p>
-          <h1 style={styles.title}>Welcome back, Vineet</h1>
+          <h1 style={styles.title}>
+            Welcome back, {user?.name ?? "User"}
+          </h1>
           <p style={styles.subtitle}>
             Manage your documents, AI queries, deadlines, and approved tasks from one place.
           </p>
@@ -43,9 +65,19 @@ function DashboardPage() {
       <section style={styles.grid}>
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Profile</h2>
-          <p style={styles.cardText}>Name: Vineet Pareek</p>
-          <p style={styles.cardText}>Country: Germany</p>
-          <p style={styles.cardText}>Account type: Demo</p>
+
+            {isLoading && <p style={styles.emptyText}>Loading profile...</p>}
+
+            {!isLoading && error && <p style={styles.errorText}>{error}</p>}
+
+            {!isLoading && user && (
+              <>
+                <p style={styles.cardText}>Name: {user.name}</p>
+                <p style={styles.cardText}>Email: {user.email}</p>
+                <p style={styles.cardText}>Country: {user.country}</p>
+                <p style={styles.cardText}>Provider: {user.provider}</p>
+              </>
+            )}
         </div>
 
         <div style={styles.card}>
@@ -190,6 +222,9 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "6px 12px",
     fontSize: "13px",
     fontWeight: 700,
+  },
+  errorText: {
+      color: "#dc2626",
   },
 };
 

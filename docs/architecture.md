@@ -439,6 +439,33 @@ Current behavior:
 - frontend stores the token temporarily
 - user is redirected to dashboard
 
+
+### Frontend to API Gateway Integration
+
+The frontend communicates with backend services through `api-gateway`.
+
+Current flow:
+
+```text
+React frontend → api-gateway → user-service → PostgreSQL
+```
+Current frontend API base URL:
+```text
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+Current dashboard behavior:
+
+- loads current user profile from /api/users/me
+- displays backend user data
+- uses centralized API client
+
+Reason:
+
+- frontend does not call internal services directly
+- prepares for centralized authentication at gateway
+- supports future rate limiting and routing policies
+
 Current limitation:
 
 - backend token validation is not implemented yet
@@ -448,3 +475,4 @@ Next step:
 
 - validate Google ID token on backend/gateway
 - create or update user profile in user-service
+

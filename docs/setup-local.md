@@ -426,5 +426,38 @@ cd frontend/lifeops-ui
 npm run dev
 ```
 
+## Frontend API Gateway Connection
+
+Frontend uses this environment variable:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
+```
+Local request flow:
+```text
+React frontend → http://localhost:8080 → api-gateway → user-service
+```
+
+Run backend:
+```bash
+docker compose -f infra/local/docker-compose.yml up --build
+```
+
+Run frontend:
+```bash
+cd frontend/lifeops-ui
+npm install
+npm run dev
+```
+Open:
+```text
+http://localhost:5173
+```
+
+
+
+
+
+
 
 
