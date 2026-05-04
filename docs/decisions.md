@@ -346,3 +346,16 @@ Reason:
 - Separates runtime services from debugging tools
 - Improves developer experience
 - Keeps local setup closer to production thinking
+
+## Decision 026 — Maintain Service-Level README Files
+
+Status: Accepted
+
+Each backend service will include its own README file.
+
+Reason:
+
+- Documents service responsibility clearly
+- Helps developers run and test services independently
+- Supports microservice ownership
+- Improves maintainability and onboarding

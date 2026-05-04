@@ -34,6 +34,8 @@ The platform is not just a chatbot. It is an action-oriented AI system that can:
 - GitHub Actions
 - React / TypeScript
 
+---
+
 ## Local Development Commands
 
 Start core local system:
@@ -50,3 +52,18 @@ Stop local system:
 ```bash
 docker compose -f infra/local/docker-compose.yml down
 ```
+---
+
+## Service Documentation
+
+Service-level documentation:
+
+- [user-service](backend/user-service/README.md)
+- [api-gateway](backend/api-gateway/README.md)
+
+Reason:
+
+- each service is understandable independently
+- improves developer onboarding
+- supports microservice ownership
+- improves portfolio readability
