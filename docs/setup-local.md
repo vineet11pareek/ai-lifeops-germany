@@ -454,8 +454,25 @@ Open:
 http://localhost:5173
 ```
 
+## Backend Google Token Verification
 
+user-service requires Google client ID for token verification.
 
+For direct local run on Windows CMD:
+
+```bash
+set GOOGLE_CLIENT_ID=your-google-client-id
+mvnw.cmd spring-boot:run
+```
+For Docker Compose, add to:
+```text
+infra/local/.env
+GOOGLE_CLIENT_ID=your-google-client-id
+```
+The frontend sends the Google ID token using:
+```text
+Authorization: Bearer <google_id_token>
+```
 
 
 

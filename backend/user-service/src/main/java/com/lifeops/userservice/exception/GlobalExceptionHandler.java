@@ -91,4 +91,19 @@ public class GlobalExceptionHandler {
     private String getCorrelationId(){
         return MDC.get(CorrelationConstants.CORRELATION_ID_MDC_KEY);
     }
+
+    @ExceptionHandler(InvalidAuthTokenException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidAuthTokenException(InvalidAuthTokenException exception,HttpServletRequest request){
+        ApiErrorResponse response = new ApiErrorResponse(
+                Instant.now(),
+                getCorrelationId(),
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                List.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
 }

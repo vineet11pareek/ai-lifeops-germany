@@ -32,8 +32,9 @@ public class User {
     protected User() {
     }
 
-    public User(String fullName, String email, String country, String provider) {
+    public User(String externalId,String fullName, String email, String country, String provider) {
         this.id = UUID.randomUUID();
+        this.externalId = externalId;
         this.fullName = fullName;
         this.email = email;
         this.country = country;

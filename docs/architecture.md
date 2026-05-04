@@ -476,3 +476,31 @@ Next step:
 - validate Google ID token on backend/gateway
 - create or update user profile in user-service
 
+### Authenticated User Context
+
+The `/api/users/me` endpoint now uses the Google ID token from the Authorization header.
+
+Current flow:
+
+```text
+React frontend
+  → Authorization: Bearer <google_id_token>
+  → api-gateway
+  → user-service
+  → Google token verification
+  → find or create user
+  → return user profile
+```
+Current behavior:
+
+- backend validates Google ID token
+- backend extracts user email, name, and Google subject
+- user-service creates user profile if it does not exist
+- /api/users/me no longer uses hardcoded demo user
+
+Reason:
+
+- moves from mock identity to authenticated user context
+- prevents trusting frontend-only state
+- prepares for protected routes and user-specific data
+

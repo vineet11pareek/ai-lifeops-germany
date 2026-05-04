@@ -35,6 +35,7 @@ public class UserServiceTest {
         );
 
         User user = new User(
+                null,
                 request.fullName(),
                 request.email(),
                 request.country(),

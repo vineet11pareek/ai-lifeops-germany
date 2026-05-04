@@ -1,5 +1,6 @@
 package com.lifeops.userservice.service;
 
+import com.lifeops.userservice.dto.AuthenticatedUser;
 import com.lifeops.userservice.dto.CreateUserRequest;
 import com.lifeops.userservice.dto.UserResponse;
 import com.lifeops.userservice.entity.User;
@@ -15,7 +16,6 @@ public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private static final String DEMO_USER_EMAIL = "vineet@example.com";
 
     private final UserRepository userRepository;
 
@@ -23,19 +23,23 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse getCurrentUser(){
-        log.info("Fetching current user");
-        User user = userRepository
-                .findByEmail(DEMO_USER_EMAIL)
-                .orElseThrow(()-> new UserNotFoundException(DEMO_USER_EMAIL));
+    public UserResponse getOrCreateAuthenticatedUser(AuthenticatedUser authenticatedUser){
+        log.info("Loading authenticated user with email={}", authenticatedUser.email());
+        User user = userRepository.findByEmail(authenticatedUser.email())
+                .orElseGet(()-> {
+                    log.info("Creating new authenticated user with email={}",authenticatedUser.email());
 
-        return new UserResponse(
-                user.getId(),
-                user.getFullName(),
-                user.getEmail(),
-                user.getCountry(),
-                user.getProvider()
-        );
+                    User newUser = new User(
+                            authenticatedUser.externalId(),
+                            authenticatedUser.fullName(),
+                            authenticatedUser.email(),
+                            "Germany",
+                            authenticatedUser.provider()
+
+                    );
+                    return userRepository.save(newUser);
+                });
+        return toResponse(user);
     }
 
     public UserResponse createUser(CreateUserRequest request){
@@ -46,6 +50,7 @@ public class UserService {
         }
 
         User user = new User(
+                null,
                 request.fullName(),
                 request.email(),
                 request.country(),

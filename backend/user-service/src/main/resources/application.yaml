@@ -57,3 +57,9 @@ springdoc:
     path: /swagger-ui.html
     operations-sorter: method
     tags-sorter: alpha
+
+# Google OAuth
+lifeops:
+  security:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}

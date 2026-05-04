@@ -398,3 +398,16 @@ Reason:
 - centralizes routing
 - prepares for authentication and authorization enforcement
 - aligns with microservice architecture patterns
+
+## Decision 030 — Verify Google ID Token on Backend
+
+Status: Accepted
+
+Google ID tokens are verified in the backend before user data is returned or created.
+
+Reason:
+
+- frontend tokens cannot be trusted without backend verification
+- verifies token audience, issuer, expiry, and signature
+- prevents unauthorized access using fake tokens
+- aligns with secure authentication practice

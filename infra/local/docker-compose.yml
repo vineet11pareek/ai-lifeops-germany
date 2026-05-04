@@ -11,6 +11,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lifeops_db
       SPRING_DATASOURCE_USERNAME: lifeops
       SPRING_DATASOURCE_PASSWORD: lifeops_password
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
       - "8081:8081"
     depends_on:
