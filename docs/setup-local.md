@@ -403,6 +403,28 @@ Current frontend routes:
 /           → Landing/Login page
 /dashboard  → Dashboard page
 ```
+## Google Login Setup
+
+Create a Google OAuth Web Client ID.
+
+Authorized JavaScript origin for local development:
+
+```text
+http://localhost:5173
+```
+Create local frontend env file:
+```text
+frontend/lifeops-ui/.env.local
+```
+Add:
+```text
+VITE_GOOGLE_CLIENT_ID=your-google-client-id
+```
+
+```bash
+cd frontend/lifeops-ui
+npm run dev
+```
 
 
 

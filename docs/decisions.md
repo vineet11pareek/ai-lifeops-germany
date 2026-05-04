@@ -372,3 +372,16 @@ Reason:
 - Strong typing with TypeScript
 - Good ecosystem support
 - Easy integration with OAuth and API Gateway
+
+## Decision 028 — Use Google OAuth as First Login Provider
+
+Status: Accepted
+
+Google OAuth is implemented as the first login provider.
+
+Reason:
+
+- widely used authentication provider
+- good support for OpenID Connect
+- suitable for fast onboarding
+- prepares the platform for future Facebook login

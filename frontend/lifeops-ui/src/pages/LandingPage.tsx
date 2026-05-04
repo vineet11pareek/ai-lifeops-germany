@@ -1,7 +1,16 @@
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 
 function LandingPage() {
     const navigate = useNavigate();
+    const handleGoogleSuccess = (credentialResponse: { credential?: string }) => {
+      if (!credentialResponse.credential) {
+        return;
+      }
+
+      localStorage.setItem("lifeops_google_id_token", credentialResponse.credential);
+      navigate("/dashboard");
+    };
   return (
     <main style={styles.page}>
       <section style={styles.card}>
@@ -17,9 +26,12 @@ function LandingPage() {
         </p>
 
         <div style={styles.actions}>
-          <button style={styles.primaryButton} onClick={() => navigate("/dashboard")}>
-            Continue with Google
-          </button>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => {
+              console.error("Google login failed");
+            }}
+          />
 
           <button style={styles.secondaryButton}>
             Continue with Facebook

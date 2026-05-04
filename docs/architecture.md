@@ -427,3 +427,24 @@ Reason:
 - provides a centralized user workspace
 - prepares UI for authenticated user flow
 - supports future modules without redesigning navigation
+
+### Google Login
+
+The frontend integrates Google login using Google Identity Services through the React OAuth package.
+
+Current behavior:
+
+- user clicks Google login
+- Google returns an ID token
+- frontend stores the token temporarily
+- user is redirected to dashboard
+
+Current limitation:
+
+- backend token validation is not implemented yet
+- api-gateway does not yet enforce authentication
+
+Next step:
+
+- validate Google ID token on backend/gateway
+- create or update user profile in user-service

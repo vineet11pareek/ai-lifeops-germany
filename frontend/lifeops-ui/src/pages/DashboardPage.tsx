@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 const modules = [
   {
     title: "Bureaucracy Assistant",
@@ -17,6 +18,12 @@ const modules = [
 ];
 
 function DashboardPage() {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+      localStorage.removeItem("lifeops_google_id_token");
+      navigate("/");
+    };
   return (
     <main style={styles.page}>
       <section style={styles.header}>
@@ -28,7 +35,9 @@ function DashboardPage() {
           </p>
         </div>
 
-        <button style={styles.logoutButton}>Logout</button>
+        <button style={styles.logoutButton} onClick={handleLogout}>
+          Logout
+        </button>
       </section>
 
       <section style={styles.grid}>
