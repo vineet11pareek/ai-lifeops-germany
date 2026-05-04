@@ -576,3 +576,37 @@ Reason:
 - consistent local and deployment behavior
 - prepares frontend for cloud deployment
 
+## Phase 1 Architecture
+
+Phase 1 introduced the frontend and authenticated user flow.
+
+Current request flow:
+
+```text
+React Frontend
+  → Google Login
+  → stores Google ID token
+  → calls API Gateway with Authorization header
+  → api-gateway routes to user-service
+  → user-service verifies Google ID token
+  → user-service loads or creates user profile
+  → PostgreSQL stores user data
+```
+Current frontend routes:
+```text
+/           → Landing/Login page
+/dashboard  → Protected Dashboard
+```
+Current security behavior:
+
+- frontend protects /dashboard
+- frontend sends Google ID token as Bearer token
+- backend verifies Google ID token
+- unauthenticated or invalid requests return 401 Unauthorized
+
+Current limitation:
+
+- API Gateway forwards token but does not validate it yet
+- Facebook login is only placeholder
+- role-based authorization is not implemented yet
+

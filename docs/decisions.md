@@ -450,3 +450,16 @@ Reason:
 - serves optimized static assets
 - supports React Router fallback
 - matches common production deployment patterns
+
+## Decision 034 — Complete Phase 1 with Google Login and Dashboard
+
+Status: Accepted
+
+Phase 1 is completed once the user can log in with Google and view an authenticated dashboard.
+
+Reason:
+
+- establishes the first real user-facing flow
+- validates frontend-backend integration
+- confirms authenticated profile loading
+- prepares platform for AI modules in later phases

@@ -72,7 +72,9 @@ Reason:
 
 ## Current Status
 
-The project is currently completing Phase 0: Project Foundation.
+The project is currently completing 
+
+## Phase 0: Project Foundation.
 
 Current backend services:
 
@@ -97,3 +99,26 @@ Current capabilities:
 - Swagger API documentation
 - Docker Compose local runtime
 - GitHub Actions CI
+
+## Phase 1 Status
+
+Status: Completed
+
+Phase 1 delivered the first end-to-end user-facing flow:
+
+```text
+Frontend → Google Login → Protected Dashboard → API Gateway → user-service → PostgreSQL
+```
+Current frontend capabilities:
+
+- landing page
+- Google login
+- protected dashboard route
+- logout
+- profile loading from backend
+
+Current backend auth capability:
+
+- frontend sends Google ID token
+- user-service validates token
+- user-service creates/loads user profile
