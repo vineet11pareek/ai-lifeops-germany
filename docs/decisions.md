@@ -424,3 +424,16 @@ Reason:
 - Keeps routing logic centralized
 - Improves frontend maintainability
 - Complements backend token validation
+
+## Decision 032 — Add Frontend CI Pipeline
+
+Status: Accepted
+
+The frontend application has a dedicated GitHub Actions CI workflow.
+
+Reason:
+
+- Validates frontend build on every relevant change
+- Detects TypeScript and bundling errors early
+- Keeps frontend quality aligned with backend CI
+- Prepares for future Docker image build and deployment

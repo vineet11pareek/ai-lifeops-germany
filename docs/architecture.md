@@ -526,3 +526,24 @@ Security note:
 - Frontend route protection is not sufficient for real security.
 - Backend and API Gateway token validation are still required.
 
+### Frontend CI
+
+The frontend application uses GitHub Actions for continuous integration.
+
+Current checks:
+
+- install dependencies using `npm ci`
+- build React/TypeScript application using `npm run build`
+
+The workflow runs on:
+
+- push to `main`
+- pull requests to `main`
+- changes inside `frontend/lifeops-ui/**`
+
+Reason:
+
+- catches TypeScript and build errors early
+- keeps frontend changes validated before deployment
+- aligns frontend with backend CI practices
+

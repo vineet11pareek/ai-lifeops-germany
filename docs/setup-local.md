@@ -496,6 +496,19 @@ After Google Login:
 ```
 Logout clears local token and redirects to landing page.
 
+## Frontend Build Check
+
+Run frontend production build locally:
+
+```bash
+cd frontend/lifeops-ui
+npm run build
+```
+GitHub Actions also runs this build automatically using:
+```text
+.github/workflows/frontend-ci.yml
+```
+
 
 
 
