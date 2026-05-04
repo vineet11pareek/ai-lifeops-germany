@@ -1,19 +1,10 @@
 lifeops:
   services:
     user-service-url: ${USER_SERVICE_URL:http://localhost:8081}
+
 spring:
   application:
     name: api-gateway
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-
-  endpoint:
-    health:
-      show-details: always
 
   cloud:
     gateway:
@@ -25,9 +16,19 @@ management:
               predicates:
                 - Path=/api/users/**
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+  endpoint:
+    health:
+      show-details: always
 
 server:
   port: 8080
+
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG

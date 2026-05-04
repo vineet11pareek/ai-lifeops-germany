@@ -67,3 +67,33 @@ Reason:
 - improves developer onboarding
 - supports microservice ownership
 - improves portfolio readability
+
+---
+
+## Current Status
+
+The project is currently completing Phase 0: Project Foundation.
+
+Current backend services:
+
+- api-gateway
+- user-service
+
+Current infrastructure:
+
+- PostgreSQL
+- Kafka
+- pgAdmin optional
+- Kafka UI optional
+
+Current capabilities:
+
+- user-service REST APIs
+- API Gateway routing
+- PostgreSQL persistence
+- Flyway migrations
+- centralized error handling
+- request validation
+- Swagger API documentation
+- Docker Compose local runtime
+- GitHub Actions CI
