@@ -322,3 +322,30 @@ Reason:
 * trace requests across distributed services
 * simplify debugging
 * prepare for OpenTelemetry tracing later
+
+## API Documentation
+
+user-service exposes OpenAPI documentation using springdoc-openapi.
+
+Available URLs:
+
+```text
+Swagger UI:
+http://localhost:8081/swagger-ui.html
+
+OpenAPI JSON:
+http://localhost:8081/v3/api-docs
+```
+
+Current documented APIs:
+
+* GET /api/users/health
+* GET /api/users/me
+* POST /api/users
+
+Reason:
+
+* improves API discoverability
+* helps frontend and backend collaboration
+* supports manual API testing
+* creates a production-friendly API contract foundation

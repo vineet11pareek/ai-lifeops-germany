@@ -323,4 +323,25 @@ Expected:
 * response contains X-Correlation-Id: test-123
 * logs contain correlationId=test-123
 
+## Swagger / OpenAPI
+
+user-service exposes Swagger UI.
+
+Run user-service and open:
+
+```text
+http://localhost:8081/swagger-ui.html
+```
+
+Raw OpenAPI JSON:
+```Api
+http://localhost:8081/v3/api-docs
+```
+Use Swagger UI to test:
+```Api
+GET /api/users/me
+POST /api/users
+```
+
+
 

@@ -320,3 +320,16 @@ Reason:
 - Improves debugging in distributed systems
 - Can be connected with future OpenTelemetry trace IDs
 - Supports better production support and incident investigation
+
+## Decision 024 — Use OpenAPI for REST API Documentation
+
+Status: Accepted
+
+Backend services will expose OpenAPI documentation.
+
+Reason:
+
+- Provides a standard API contract
+- Makes APIs easier to test and share
+- Helps frontend teams understand backend APIs
+- Improves maintainability and interview presentation
