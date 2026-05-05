@@ -85,9 +85,19 @@ Users can log in with Google, access a protected dashboard, and load authenticat
 
 ## Phase 2 — AI Query Service
 
-- Ask AI questions
-- Store query and response
-- Display history
+Status: In Progress
+
+Goal:
+
+- create ai-service
+- integrate Spring AI
+- process basic AI questions
+- store query history
+- show query history on dashboard
+- prepare async Kafka processing
+
+
+---
 
 ## Phase 3 — Document Analyzer
 

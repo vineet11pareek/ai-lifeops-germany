@@ -60,6 +60,7 @@ Service-level documentation:
 
 - [user-service](backend/user-service/README.md)
 - [api-gateway](backend/api-gateway/README.md)
+- [ai-service](backend/ai-service/README.md)
 
 Reason:
 

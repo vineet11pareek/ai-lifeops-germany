@@ -1,6 +1,7 @@
 lifeops:
   services:
     user-service-url: ${USER_SERVICE_URL:http://localhost:8081}
+    ai-service-url: ${AI_SERVICE_URL:http://localhost:8082}
 
 spring:
   application:
@@ -15,6 +16,10 @@ spring:
               uri: ${lifeops.services.user-service-url}
               predicates:
                 - Path=/api/users/**
+            - id: ai-service
+              uri: ${lifeops.services.ai-service-url}
+              predicates:
+                - Path=/api/ai/**
 
           globalcors:
             cors-configurations:

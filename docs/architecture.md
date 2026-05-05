@@ -372,7 +372,9 @@ Reason:
 - keeps local environment cleaner
 - supports debugging when required
 
-## Frontend
+---
+
+## Phase 1 - Frontend
 
 The frontend application is created using React, TypeScript, and Vite.
 
@@ -609,4 +611,77 @@ Current limitation:
 - API Gateway forwards token but does not validate it yet
 - Facebook login is only placeholder
 - role-based authorization is not implemented yet
+
+---
+
+## Phase 2 — AI Query Service
+
+Phase 2 introduces the first AI capability of the platform.
+
+The `ai-service` is responsible for:
+
+- receiving AI query requests
+- validating user input
+- calling Spring AI
+- returning AI-generated responses
+- storing query history
+- preparing for async Kafka-based AI processing
+
+Initial request flow:
+
+```text
+React Frontend
+  → api-gateway
+  → ai-service
+  → Spring AI
+  → LLM Provider
+```
+Planned APIs:
+```text
+POST /api/ai/queries
+GET  /api/ai/queries
+GET  /api/ai/queries/{id}
+```
+
+Reason:
+
+- separates AI workload from user management
+- allows independent scaling
+- keeps AI provider configuration isolated
+- prepares for future document analysis and Truth Layer modules
+
+
+### ai-service
+
+`ai-service` is introduced as the dedicated service for AI capabilities.
+
+Current responsibility:
+
+- expose AI service boundary
+- provide health endpoint
+- prepare for Spring AI integration
+- prepare for query history persistence
+
+Current endpoint:
+
+```text
+GET /api/ai/health
+```
+Current port:
+```text
+ai-service: 8082
+```
+
+Gateway route:
+```text
+/api/ai/** → ai-service
+```
+Reason:
+
+- separates AI workload from user-service
+- allows independent scaling
+- isolates AI provider configuration
+- prepares for AI query, document analysis, and Truth Layer modules
+
+
 

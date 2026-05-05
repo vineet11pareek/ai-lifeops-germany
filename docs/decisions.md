@@ -463,3 +463,29 @@ Reason:
 - validates frontend-backend integration
 - confirms authenticated profile loading
 - prepares platform for AI modules in later phases
+
+## Decision 035 — Create Dedicated AI Service
+
+Status: Accepted
+
+AI functionality will be implemented in a dedicated `ai-service`.
+
+Reason:
+
+- AI workloads may have higher latency and cost
+- AI service can scale independently
+- provider keys and model configuration stay isolated
+- future modules such as document analysis and Truth Layer can reuse the same AI foundation
+
+## Decision 036 — Add ai-service as Dedicated AI Boundary
+
+Status: Accepted
+
+A new `ai-service` is added as the dedicated backend service for AI capabilities.
+
+Reason:
+
+- keeps AI concerns separate from user management
+- supports independent scaling
+- prepares for Spring AI integration
+- provides reusable foundation for future AI modules

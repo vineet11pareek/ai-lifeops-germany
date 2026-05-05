@@ -34,15 +34,42 @@ services:
     restart: unless-stopped
     environment:
       USER_SERVICE_URL: http://user-service:8081
+      AI_SERVICE_URL: http://ai-service:8082
     ports:
       - "8080:8080"
     depends_on:
       user-service:
         condition: service_healthy
+      ai-service:
+        condition: service_healthy
     networks:
       - lifeops-network
     healthcheck:
       test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  ai-service:
+    build:
+      context: ../../backend/ai-service
+      dockerfile: Dockerfile
+    container_name: lifeops-ai-service
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lifeops_db
+      SPRING_DATASOURCE_USERNAME: lifeops
+      SPRING_DATASOURCE_PASSWORD: lifeops_password
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lifeops-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 10

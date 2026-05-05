@@ -534,6 +534,31 @@ Example:
 GOOGLE_CLIENT_ID=your-google-client-id
 ```
 
+## ai-service
+
+ai-service runs on:
+
+```text
+http://localhost:8082
+```
+Health:
+```text
+http://localhost:8082/api/ai/health
+```
+
+Through API Gateway:
+```text
+http://localhost:8080/api/ai/health
+```
+
+Swagger:
+```text
+http://localhost:8082/swagger-ui.html
+```
+
+
+
+
 
 
 
