@@ -750,3 +750,45 @@ Reason:
 - consistent API errors across services
 - safer production behavior
 - easier debugging and incident investigation
+
+### AI Query Persistence
+
+`ai-service` stores AI query history in PostgreSQL.
+
+Current table:
+
+```text
+ai_queries
+```
+Stored data:
+
+- query ID
+- user ID placeholder
+- question
+- answer
+- status
+- provider
+- model
+- error message
+- created and updated timestamps
+
+Current query statuses:
+```text
+CREATED
+PROCESSING
+COMPLETED
+FAILED
+```
+
+Current endpoints:
+```text
+POST /api/ai/chat
+GET  /api/ai/queries
+```
+
+Reason:
+
+- users can view query history
+- failed AI requests can be audited
+- prepares for async Kafka-based processing
+- supports future dashboard history and analytics

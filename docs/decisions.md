@@ -515,3 +515,30 @@ Reason:
 - prevents internal AI provider errors from leaking to clients
 - improves frontend error handling
 - supports production troubleshooting with correlation IDs
+
+## Decision 039 — Persist AI Query History
+
+Status: Accepted
+
+AI queries and responses are stored in PostgreSQL.
+
+Reason:
+
+- users need query history
+- AI failures should be traceable
+- supports audit and debugging
+- prepares the system for async AI workflows
+
+---
+
+## Decision 040 — Use Service-Specific Flyway History Tables
+
+Status: Accepted
+
+Each service uses its own Flyway schema history table in the shared local PostgreSQL database.
+
+Reason:
+
+- prevents migration version conflicts between services
+- keeps local setup simple
+- prepares for future service-owned schemas or databases

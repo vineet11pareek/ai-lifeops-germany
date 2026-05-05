@@ -18,6 +18,8 @@ spring:
 
   flyway:
     enabled: true
+    table: flyway_schema_history_user_service
+    baseline-on-migrate: true
     locations: classpath:db/migration
 
 info:

@@ -615,6 +615,31 @@ Expected:
 - logs contain correlationId
 - validation errors follow standard error format
 
+## Testing AI Query History
+
+Ask an AI question:
+
+```http
+POST http://localhost:8080/api/ai/chat
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "question": "Explain Anmeldung in Germany in simple English."
+}
+```
+Fetch query history:
+```http
+GET http://localhost:8080/api/ai/queries
+```
+Expected:
+
+- AI response is returned
+- query is stored in PostgreSQL
+- query appears in history API
+
+
 
 
 
