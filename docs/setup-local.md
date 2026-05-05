@@ -586,6 +586,34 @@ Body:
   "question": "Explain Anmeldung in Germany in simple English."
 }
 ```
+## Testing ai-service Errors and Correlation ID
+
+Validation error test:
+
+```http
+POST http://localhost:8080/api/ai/chat
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "question": ""
+}
+```
+
+Correlation ID test:
+```bash
+curl -H "X-Correlation-Id: ai-test-123" \
+  -H "Content-Type: application/json" \
+  -d '{"question":"Explain Anmeldung in simple English"}' \
+  http://localhost:8080/api/ai/chat
+```
+Expected:
+
+- response contains X-Correlation-Id
+- logs contain correlationId
+- validation errors follow standard error format
 
 
 

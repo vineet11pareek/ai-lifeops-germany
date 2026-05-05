@@ -502,3 +502,16 @@ Reason:
 - keeps AI provider logic isolated
 - supports future provider switching
 - prepares for structured outputs, RAG, tools, and observability
+
+## Decision 038 — Standardize Error Handling in ai-service
+
+Status: Accepted
+
+`ai-service` uses centralized exception handling and standard error response format.
+
+Reason:
+
+- keeps API behavior consistent with user-service
+- prevents internal AI provider errors from leaking to clients
+- improves frontend error handling
+- supports production troubleshooting with correlation IDs

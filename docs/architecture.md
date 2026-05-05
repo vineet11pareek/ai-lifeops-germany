@@ -714,3 +714,39 @@ Reason:
 - isolates AI provider usage inside ai-service
 - prepares for query history, async processing, and future RAG
 
+### ai-service Error Handling and Correlation
+
+`ai-service` now uses centralized exception handling and request correlation.
+
+Current behavior:
+
+- validation errors return `400 Bad Request`
+- AI provider failures return `502 Bad Gateway`
+- unexpected errors return safe `500 Internal Server Error`
+- each response includes `correlationId`
+- logs include `correlationId`
+
+Example error response:
+
+```json
+{
+  "timestamp": "2026-05-05T10:30:00Z",
+  "correlationId": "ai-test-123",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Validation failed",
+  "path": "/api/ai/chat",
+  "fieldErrors": [
+    {
+      "field": "question",
+      "message": "Question is required"
+    }
+  ]
+}
+```
+
+Reason:
+
+- consistent API errors across services
+- safer production behavior
+- easier debugging and incident investigation
