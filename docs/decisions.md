@@ -489,3 +489,16 @@ Reason:
 - supports independent scaling
 - prepares for Spring AI integration
 - provides reusable foundation for future AI modules
+
+## Decision 037 — Use Spring AI ChatClient for AI Calls
+
+Status: Accepted
+
+`ai-service` uses Spring AI ChatClient for LLM communication.
+
+Reason:
+
+- Spring-native abstraction over AI providers
+- keeps AI provider logic isolated
+- supports future provider switching
+- prepares for structured outputs, RAG, tools, and observability

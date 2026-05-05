@@ -683,5 +683,34 @@ Reason:
 - isolates AI provider configuration
 - prepares for AI query, document analysis, and Truth Layer modules
 
+### Spring AI Integration
 
+`ai-service` integrates Spring AI with OpenAI as the first model provider.
+
+Current endpoint:
+
+```text
+POST /api/ai/chat
+```
+Current flow:
+```text
+Frontend / API client
+  → api-gateway
+  → ai-service
+  → Spring AI ChatClient
+  → OpenAI model
+  → ai-service response
+```
+Current behavior:
+
+- validates question input
+- sends system prompt + user prompt to model
+- returns answer, provider, and model
+- uses synchronous processing
+
+Reason:
+
+- creates first real AI capability
+- isolates AI provider usage inside ai-service
+- prepares for query history, async processing, and future RAG
 

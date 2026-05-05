@@ -556,6 +556,36 @@ Swagger:
 http://localhost:8082/swagger-ui.html
 ```
 
+## Spring AI Local Setup
+
+`ai-service` requires OpenAI configuration.
+
+Add to:
+
+```text
+infra/local/.env
+```
+```properties
+OPENAI_API_KEY=your-openai-api-key
+OPENAI_CHAT_MODEL=gpt-4o-mini
+```
+
+Run full system:
+```text
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Test AI endpoint through gateway:
+```http
+POST http://localhost:8080/api/ai/chat
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "question": "Explain Anmeldung in Germany in simple English."
+}
+```
 
 
 

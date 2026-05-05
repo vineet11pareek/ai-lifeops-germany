@@ -61,6 +61,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lifeops_db
       SPRING_DATASOURCE_USERNAME: lifeops
       SPRING_DATASOURCE_PASSWORD: lifeops_password
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
     ports:
       - "8082:8082"
     depends_on:
