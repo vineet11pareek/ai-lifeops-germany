@@ -542,3 +542,30 @@ Reason:
 - prevents migration version conflicts between services
 - keeps local setup simple
 - prepares for future service-owned schemas or databases
+
+## Decision 041 — Publish AI Query Completion Events
+
+Status: Accepted
+
+`ai-service` publishes an event when an AI query is completed.
+
+Reason:
+
+- enables future task-service and notification-service integration
+- supports event-driven architecture
+- avoids tight coupling between services
+- prepares for async AI processing
+
+---
+
+## Decision 042 — Use Query ID as Kafka Message Key
+
+Status: Accepted
+
+AI query events use `queryId` as the Kafka message key.
+
+Reason:
+
+- keeps events for the same query ordered within Kafka partitioning
+- provides deterministic event routing
+- supports future query lifecycle events

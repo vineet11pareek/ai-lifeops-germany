@@ -847,3 +847,37 @@ Reason:
 - improves user experience
 - proves AI history persistence works end-to-end
 - prepares for future filtering, pagination, and user-specific query history
+
+### Kafka Foundation for AI Events
+
+`ai-service` now publishes Kafka events after successful AI query completion.
+
+Current topic:
+
+```text
+ai.query.completed
+```
+Current event:
+```text
+AiQueryCompletedEvent
+```
+Current event flow:
+```text
+POST /api/ai/chat
+  → ai-service processes AI request
+  → ai-service stores completed query
+  → ai-service publishes ai.query.completed event
+  → future services can react to the event
+```
+Current Kafka key:
+```text
+queryId
+```
+Reason:
+
+- prepares platform for asynchronous workflows
+- enables future task creation and notifications
+- decouples AI processing from downstream actions
+- supports event-driven architecture
+
+

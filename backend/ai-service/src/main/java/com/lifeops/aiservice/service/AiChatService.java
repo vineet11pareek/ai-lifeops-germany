@@ -3,6 +3,7 @@ package com.lifeops.aiservice.service;
 import com.lifeops.aiservice.dto.AiChatResponse;
 import com.lifeops.aiservice.dto.AiQueryHistoryResponse;
 import com.lifeops.aiservice.entity.AiQuery;
+import com.lifeops.aiservice.event.AiQueryCompletedEvent;
 import com.lifeops.aiservice.exception.AiProcessingException;
 import com.lifeops.aiservice.repository.AiQueryRepository;
 import org.slf4j.Logger;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AiChatService {
@@ -22,13 +25,16 @@ public class AiChatService {
     private final ChatClient chatClient;
     private final String model;
     private final AiQueryRepository aiQueryRepository;
+    private final AiQueryEventPublisher aiQueryEventPublisher;
 
     public AiChatService(ChatClient.Builder chatClientBuilder,
                          @Value("${spring.ai.openai.chat.options.model}") String model,
-                         AiQueryRepository aiQueryRepository){
+                         AiQueryRepository aiQueryRepository,
+                         AiQueryEventPublisher aiQueryEventPublisher){
         this.chatClient = chatClientBuilder.build();
         this.model = model;
         this.aiQueryRepository=aiQueryRepository;
+        this.aiQueryEventPublisher=aiQueryEventPublisher;
     }
 
 
@@ -57,6 +63,15 @@ public class AiChatService {
 
             aiQuery.markCompleted(answer,"OPENAI",model);
             AiQuery savedQuery = aiQueryRepository.saveAndFlush(aiQuery);
+            aiQueryEventPublisher.publish(new AiQueryCompletedEvent(
+                    UUID.randomUUID(),
+                    savedQuery.getId(),
+                    savedQuery.getUserId(),
+                    savedQuery.getQuestion(),
+                    savedQuery.getStatus().name(),
+                    savedQuery.getProvider(),
+                    savedQuery.getModel(),
+                    Instant.now()));
             log.info("AI chat request completed successfully queryId={}", savedQuery.getId());
 
             return toChatResponse(savedQuery);

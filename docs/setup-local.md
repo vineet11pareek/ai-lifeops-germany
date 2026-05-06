@@ -681,6 +681,37 @@ Test:
 - confirm query appears in Recent Queries
 - refresh page and confirm history remains
 
+## Testing AI Kafka Events
+
+Start full system with tools:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Create topic if needed:
+
+```bash
+docker exec -it lifeops-kafka kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic ai.query.completed \
+  --partitions 3 \
+  --replication-factor 1
+```
+
+Ask an AI question:
+```http
+POST http://localhost:8080/api/ai/chat
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "question": "Explain Anmeldung in Germany in simple English."
+}
+```
+
 
 
 
