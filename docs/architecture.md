@@ -821,3 +821,29 @@ Reason:
 - delivers first real AI user interaction
 - keeps frontend connected only to API Gateway
 - validates end-to-end AI flow
+
+### AI Query History UI
+
+The dashboard now displays persisted AI query history from `ai-service`.
+
+Current flow:
+
+```text
+Dashboard
+  → GET /api/ai/queries
+  → api-gateway
+  → ai-service
+  → PostgreSQL
+  → query history displayed in UI
+```
+Current UI behavior:
+
+- recent queries card shows latest AI queries
+- full query history section shows question, answer, status, provider, model, and timestamp
+- history refreshes after a new AI question is submitted
+
+Reason:
+
+- improves user experience
+- proves AI history persistence works end-to-end
+- prepares for future filtering, pagination, and user-specific query history

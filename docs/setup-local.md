@@ -661,6 +661,26 @@ Expected:
 - request goes through api-gateway
 - query is stored in PostgreSQL
 
+## Testing AI Query History in UI
+
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Open:
+```text
+http://localhost:5173
+```
+
+Test:
+
+- login with Google
+- ask an AI question
+- confirm answer appears
+- confirm query appears in Recent Queries
+- refresh page and confirm history remains
+
 
 
 

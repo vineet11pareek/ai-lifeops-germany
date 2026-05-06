@@ -102,6 +102,10 @@ Completed:
 - dashboard AI question form
 - dashboard AI answer display
 - frontend connected to `/api/ai/chat`
+- AI query history API connected to frontend
+- Recent Queries dashboard card updated
+- AI Query History section added
+- query history refreshes after new AI request
 
 ---
 

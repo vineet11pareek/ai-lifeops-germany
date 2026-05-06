@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCurrentUser, type UserResponse } from "../api/userApi";
-import { askAiQuestion, type AiChatResponse } from "../api/aiApi";
+import {
+  askAiQuestion,
+  getAiQueryHistory,
+  type AiChatResponse,
+  type AiQueryHistoryResponse,
+} from "../api/aiApi";
 import { clearAuthToken } from "../auth/authStorage";
 const modules = [
   {
@@ -32,6 +37,10 @@ function DashboardPage() {
     const [isAiLoading, setIsAiLoading] = useState(false);
     const [aiError, setAiError] = useState<string | null>(null);
 
+    const [queryHistory, setQueryHistory] = useState<AiQueryHistoryResponse[]>([]);
+    const [isHistoryLoading, setIsHistoryLoading] = useState(true);
+    const [historyError, setHistoryError] = useState<string | null>(null);
+
     const handleLogout = () => {
       clearAuthToken();
       navigate("/");
@@ -53,11 +62,27 @@ function DashboardPage() {
         const response = await askAiQuestion(question.trim());
         setAiResponse(response);
         setQuestion("");
+        await loadQueryHistory();
       } catch (err) {
         console.error(err);
         setAiError("Unable to process AI request. Please try again.");
       } finally {
         setIsAiLoading(false);
+      }
+    };
+
+    const loadQueryHistory = async () => {
+      try {
+        setIsHistoryLoading(true);
+        setHistoryError(null);
+
+        const history = await getAiQueryHistory();
+        setQueryHistory(history);
+      } catch (err) {
+        console.error(err);
+        setHistoryError("Unable to load query history.");
+      } finally {
+        setIsHistoryLoading(false);
       }
     };
     useEffect(() => {
@@ -74,6 +99,7 @@ function DashboardPage() {
       }
 
       loadUser();
+      loadQueryHistory();
     }, []);
   return (
     <main style={styles.page}>
@@ -113,7 +139,30 @@ function DashboardPage() {
 
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Recent Queries</h2>
-          <p style={styles.emptyText}>No AI queries yet.</p>
+
+          {isHistoryLoading && <p style={styles.emptyText}>Loading query history...</p>}
+
+          {!isHistoryLoading && historyError && (
+            <p style={styles.errorText}>{historyError}</p>
+          )}
+
+          {!isHistoryLoading && !historyError && queryHistory.length === 0 && (
+            <p style={styles.emptyText}>No AI queries yet.</p>
+          )}
+
+          {!isHistoryLoading && !historyError && queryHistory.length > 0 && (
+            <div style={styles.historyList}>
+              {queryHistory.slice(0, 5).map((query) => (
+                <article key={query.id} style={styles.historyItem}>
+                  <p style={styles.historyQuestion}>{query.question}</p>
+                  <p style={styles.historyMeta}>
+                    {query.status} · {query.model ?? "model unknown"} ·{" "}
+                    {new Date(query.createdAt).toLocaleString()}
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
 
         <div style={styles.card}>
@@ -168,6 +217,46 @@ function DashboardPage() {
               </p>
               <h3 style={styles.answerTitle}>Answer</h3>
               <p style={styles.answerText}>{aiResponse.answer}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section style={styles.historySection}>
+        <div style={styles.aiCard}>
+          <h2 style={styles.sectionTitle}>AI Query History</h2>
+
+          {isHistoryLoading && <p style={styles.emptyText}>Loading query history...</p>}
+
+          {!isHistoryLoading && historyError && (
+            <p style={styles.errorText}>{historyError}</p>
+          )}
+
+          {!isHistoryLoading && !historyError && queryHistory.length === 0 && (
+            <p style={styles.emptyText}>No AI queries yet.</p>
+          )}
+
+          {!isHistoryLoading && !historyError && queryHistory.length > 0 && (
+            <div style={styles.fullHistoryList}>
+              {queryHistory.map((query) => (
+                <article key={query.id} style={styles.fullHistoryItem}>
+                  <div style={styles.historyHeader}>
+                    <span style={styles.statusBadge}>{query.status}</span>
+                    <span style={styles.answerMeta}>
+                      {query.provider ?? "provider unknown"} · {query.model ?? "model unknown"} ·{" "}
+                      {new Date(query.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <h3 style={styles.historyQuestionLarge}>{query.question}</h3>
+
+                  {query.answer ? (
+                    <p style={styles.answerText}>{query.answer}</p>
+                  ) : (
+                    <p style={styles.emptyText}>No answer available.</p>
+                  )}
+                </article>
+              ))}
             </div>
           )}
         </div>
@@ -364,6 +453,52 @@ const styles: Record<string, React.CSSProperties> = {
       color: "#334155",
       lineHeight: 1.7,
       whiteSpace: "pre-wrap",
+    },
+    historyList: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "12px",
+    },
+    historyItem: {
+      borderBottom: "1px solid #e2e8f0",
+      paddingBottom: "12px",
+    },
+    historyQuestion: {
+      color: "#0f172a",
+      fontSize: "14px",
+      fontWeight: 600,
+      marginBottom: "6px",
+    },
+    historyMeta: {
+      color: "#64748b",
+      fontSize: "12px",
+    },
+    historySection: {
+      maxWidth: "1180px",
+      margin: "32px auto 0",
+    },
+    fullHistoryList: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "18px",
+    },
+    fullHistoryItem: {
+      background: "#f8fafc",
+      border: "1px solid #e2e8f0",
+      borderRadius: "16px",
+      padding: "20px",
+    },
+    historyHeader: {
+      display: "flex",
+      justifyContent: "space-between",
+      gap: "16px",
+      flexWrap: "wrap",
+      marginBottom: "12px",
+    },
+    historyQuestionLarge: {
+      color: "#0f172a",
+      fontSize: "17px",
+      marginBottom: "12px",
     },
 };
 
