@@ -792,3 +792,32 @@ Reason:
 - failed AI requests can be audited
 - prepares for async Kafka-based processing
 - supports future dashboard history and analytics
+
+### Frontend AI Query Integration
+
+The dashboard now connects to the AI query API through `api-gateway`.
+
+Current flow:
+
+```text
+Dashboard UI
+  → POST /api/ai/chat
+  → api-gateway
+  → ai-service
+  → Spring AI
+  → OpenAI
+  → PostgreSQL query history
+  → response shown on dashboard
+```
+Current UI behavior:
+
+- user enters a question
+- frontend shows loading state
+- AI response is displayed on dashboard
+- errors are shown in user-friendly format
+
+Reason:
+
+- delivers first real AI user interaction
+- keeps frontend connected only to API Gateway
+- validates end-to-end AI flow

@@ -639,6 +639,28 @@ Expected:
 - query is stored in PostgreSQL
 - query appears in history API
 
+## Testing AI from Dashboard
+
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Open:
+```text
+http://localhost:5173
+```
+Login with Google and ask:
+```text
+Explain Anmeldung in Germany in simple English.
+```
+
+Expected:
+
+- AI answer appears on dashboard
+- request goes through api-gateway
+- query is stored in PostgreSQL
+
 
 
 

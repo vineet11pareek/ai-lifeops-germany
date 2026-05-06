@@ -96,6 +96,12 @@ Goal:
 - show query history on dashboard
 - prepare async Kafka processing
 
+Completed:
+
+- frontend AI API client
+- dashboard AI question form
+- dashboard AI answer display
+- frontend connected to `/api/ai/chat`
 
 ---
 

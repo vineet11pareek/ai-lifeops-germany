@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getCurrentUser, type UserResponse } from "../api/userApi";
+import { askAiQuestion, type AiChatResponse } from "../api/aiApi";
 import { clearAuthToken } from "../auth/authStorage";
 const modules = [
   {
@@ -26,9 +27,38 @@ function DashboardPage() {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
+    const [question, setQuestion] = useState("");
+    const [aiResponse, setAiResponse] = useState<AiChatResponse | null>(null);
+    const [isAiLoading, setIsAiLoading] = useState(false);
+    const [aiError, setAiError] = useState<string | null>(null);
+
     const handleLogout = () => {
       clearAuthToken();
       navigate("/");
+    };
+
+    const handleAskAi = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      if (!question.trim()) {
+        setAiError("Please enter a question.");
+        return;
+      }
+
+      try {
+        setIsAiLoading(true);
+        setAiError(null);
+        setAiResponse(null);
+
+        const response = await askAiQuestion(question.trim());
+        setAiResponse(response);
+        setQuestion("");
+      } catch (err) {
+        console.error(err);
+        setAiError("Unable to process AI request. Please try again.");
+      } finally {
+        setIsAiLoading(false);
+      }
     };
     useEffect(() => {
       async function loadUser() {
@@ -94,6 +124,52 @@ function DashboardPage() {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Upcoming Deadlines</h2>
           <p style={styles.emptyText}>No tracked deadlines yet.</p>
+        </div>
+      </section>
+
+      <section style={styles.aiSection}>
+        <div style={styles.aiCard}>
+          <div>
+            <p style={styles.badge}>AI Assistant</p>
+            <h2 style={styles.sectionTitle}>Ask LifeOps AI</h2>
+            <p style={styles.aiDescription}>
+              Ask a question about German bureaucracy, documents, deadlines, or daily life operations.
+            </p>
+          </div>
+
+          <form onSubmit={handleAskAi} style={styles.aiForm}>
+            <textarea
+              value={question}
+              onChange={(event) => setQuestion(event.target.value)}
+              placeholder="Example: Explain Anmeldung in Germany in simple English."
+              style={styles.textarea}
+              rows={5}
+            />
+
+            <button
+              type="submit"
+              style={{
+                ...styles.primaryButton,
+                opacity: isAiLoading ? 0.7 : 1,
+                cursor: isAiLoading ? "not-allowed" : "pointer",
+              }}
+              disabled={isAiLoading}
+            >
+              {isAiLoading ? "Thinking..." : "Ask AI"}
+            </button>
+          </form>
+
+          {aiError && <p style={styles.errorText}>{aiError}</p>}
+
+          {aiResponse && (
+            <div style={styles.answerBox}>
+              <p style={styles.answerMeta}>
+                Status: {aiResponse.status} · Provider: {aiResponse.provider} · Model: {aiResponse.model}
+              </p>
+              <h3 style={styles.answerTitle}>Answer</h3>
+              <p style={styles.answerText}>{aiResponse.answer}</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -227,6 +303,68 @@ const styles: Record<string, React.CSSProperties> = {
   errorText: {
       color: "#dc2626",
   },
+    aiSection: {
+      maxWidth: "1180px",
+      margin: "32px auto 0",
+    },
+    aiCard: {
+      background: "#ffffff",
+      borderRadius: "20px",
+      padding: "28px",
+      boxShadow: "0 12px 36px rgba(15, 23, 42, 0.06)",
+    },
+    aiDescription: {
+      color: "#475569",
+      lineHeight: 1.6,
+      marginBottom: "20px",
+    },
+    aiForm: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "14px",
+    },
+    textarea: {
+      width: "100%",
+      borderRadius: "14px",
+      border: "1px solid #cbd5e1",
+      padding: "14px",
+      fontSize: "15px",
+      fontFamily: "Inter, system-ui, sans-serif",
+      resize: "vertical",
+      boxSizing: "border-box",
+    },
+    primaryButton: {
+      alignSelf: "flex-start",
+      background: "#2563eb",
+      color: "#ffffff",
+      border: "none",
+      borderRadius: "12px",
+      padding: "12px 18px",
+      fontWeight: 700,
+      cursor: "pointer",
+    },
+    answerBox: {
+      marginTop: "24px",
+      background: "#f8fafc",
+      border: "1px solid #e2e8f0",
+      borderRadius: "16px",
+      padding: "20px",
+    },
+    answerMeta: {
+      fontSize: "13px",
+      color: "#64748b",
+      marginBottom: "10px",
+    },
+    answerTitle: {
+      fontSize: "18px",
+      color: "#0f172a",
+      marginBottom: "10px",
+    },
+    answerText: {
+      color: "#334155",
+      lineHeight: 1.7,
+      whiteSpace: "pre-wrap",
+    },
 };
 
 export default DashboardPage;
