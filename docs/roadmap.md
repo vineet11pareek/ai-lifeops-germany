@@ -106,6 +106,11 @@ Completed:
 - Recent Queries dashboard card updated
 - AI Query History section added
 - query history refreshes after new AI request
+- ai-service Docker runtime validated
+- AI chat tested through API Gateway
+- query persistence validated
+- Kafka completion event validated
+- dashboard AI flow validated
 
 ---
 

@@ -902,4 +902,33 @@ Reason:
 - keeps CI fast and deterministic
 - aligns ai-service quality gate with user-service
 
+### ai-service Runtime Validation
+
+`ai-service` is validated inside the full Docker Compose runtime.
+
+Runtime dependencies:
+
+- PostgreSQL for query history
+- Kafka for AI completion events
+- OpenAI provider for model responses
+- API Gateway for external routing
+
+Current validated flow:
+
+```text
+Frontend
+  → api-gateway
+  → ai-service
+  → Spring AI / OpenAI
+  → PostgreSQL
+  → Kafka ai.query.completed
+  → Dashboard history
+```
+Reason:
+
+- validates container networking
+- validates environment-based configuration
+- validates service health checks
+- confirms AI flow works end-to-end
+
 

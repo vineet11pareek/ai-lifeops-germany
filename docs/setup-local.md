@@ -728,8 +728,36 @@ GitHub Actions workflow:
 .github/workflows/ai-service-ci.yml
 ```
 
+## Full AI Runtime Validation
 
+Start full local system:
 
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Validate ai-service:
+```text
+http://localhost:8082/actuator/health
+http://localhost:8080/api/ai/health
+```
+
+Test AI chat through gateway:
+```http
+POST http://localhost:8080/api/ai/chat
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "question": "Explain Anmeldung in Germany in simple English."
+}
+```
+Expected:
+
+- AI response is returned
+- query is stored in PostgreSQL
+- ai.query.completed event is published to Kafka
+- dashboard query history updates
 
 
 
