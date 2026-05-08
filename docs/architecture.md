@@ -880,4 +880,26 @@ Reason:
 - decouples AI processing from downstream actions
 - supports event-driven architecture
 
+### ai-service Testing and CI
+
+`ai-service` includes automated tests for:
+
+- API controller contract
+- validation errors
+- query history response mapping
+
+The CI pipeline runs:
+
+```text
+./mvnw test
+./mvnw clean package -DskipTests
+```
+
+Reason:
+
+- validates AI API contract
+- avoids real OpenAI calls during tests
+- keeps CI fast and deterministic
+- aligns ai-service quality gate with user-service
+
 

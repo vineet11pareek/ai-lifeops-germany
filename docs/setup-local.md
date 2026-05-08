@@ -711,6 +711,25 @@ Body:
   "question": "Explain Anmeldung in Germany in simple English."
 }
 ```
+## Running ai-service Tests
+
+Run tests:
+
+```bash
+cd backend/ai-service
+mvnw.cmd test
+```
+Expected:
+```text
+BUILD SUCCESS
+```
+GitHub Actions workflow:
+```text
+.github/workflows/ai-service-ci.yml
+```
+
+
+
 
 
 

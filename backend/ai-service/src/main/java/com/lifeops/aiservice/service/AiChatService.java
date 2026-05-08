@@ -23,6 +23,7 @@ public class AiChatService {
     private static Logger log = LoggerFactory.getLogger(AiChatService.class);
 
     private final ChatClient chatClient;
+    private final AiQueryMapper aiQueryMapper;
     private final String model;
     private final AiQueryRepository aiQueryRepository;
     private final AiQueryEventPublisher aiQueryEventPublisher;
@@ -30,11 +31,13 @@ public class AiChatService {
     public AiChatService(ChatClient.Builder chatClientBuilder,
                          @Value("${spring.ai.openai.chat.options.model}") String model,
                          AiQueryRepository aiQueryRepository,
-                         AiQueryEventPublisher aiQueryEventPublisher){
+                         AiQueryEventPublisher aiQueryEventPublisher,
+                         AiQueryMapper aiQueryMapper){
         this.chatClient = chatClientBuilder.build();
         this.model = model;
         this.aiQueryRepository=aiQueryRepository;
         this.aiQueryEventPublisher=aiQueryEventPublisher;
+        this.aiQueryMapper=aiQueryMapper;
     }
 
 
@@ -74,7 +77,7 @@ public class AiChatService {
                     Instant.now()));
             log.info("AI chat request completed successfully queryId={}", savedQuery.getId());
 
-            return toChatResponse(savedQuery);
+            return aiQueryMapper.toChatResponse(savedQuery);
 
         } catch (Exception exception) {
             log.error("AI chat request failed queryId={}", aiQuery.getId(),exception);
@@ -92,31 +95,8 @@ public class AiChatService {
     public List<AiQueryHistoryResponse> getRecentQueries(){
         return aiQueryRepository.findTop20ByOrderByCreatedAtDesc()
                 .stream()
-                .map(this::toHistoryResponse )
+                .map(aiQueryMapper::toHistoryResponse )
                 .toList();
     }
 
-    private AiChatResponse toChatResponse(AiQuery aiQuery) {
-        return new AiChatResponse(
-                aiQuery.getId(),
-                aiQuery.getQuestion(),
-                aiQuery.getAnswer(),
-                aiQuery.getStatus().name(),
-                aiQuery.getProvider(),
-                aiQuery.getModel(),
-                aiQuery.getCreatedAt()
-        );
-    }
-
-    private AiQueryHistoryResponse toHistoryResponse(AiQuery aiQuery) {
-        return new AiQueryHistoryResponse(
-                aiQuery.getId(),
-                aiQuery.getQuestion(),
-                aiQuery.getAnswer(),
-                aiQuery.getStatus().name(),
-                aiQuery.getProvider(),
-                aiQuery.getModel(),
-                aiQuery.getCreatedAt()
-        );
-    }
 }

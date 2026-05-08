@@ -569,3 +569,30 @@ Reason:
 - keeps events for the same query ordered within Kafka partitioning
 - provides deterministic event routing
 - supports future query lifecycle events
+
+## Decision 043 — Mock AI Provider Interactions in Tests
+
+Status: Accepted
+
+Automated tests for `ai-service` do not call the real AI provider.
+
+Reason:
+
+- avoids external dependency in CI
+- prevents API cost during tests
+- keeps tests deterministic
+- improves build reliability
+
+---
+
+## Decision 044 — Add Dedicated CI for ai-service
+
+Status: Accepted
+
+`ai-service` has its own GitHub Actions CI workflow.
+
+Reason:
+
+- validates AI service independently
+- keeps service-specific quality gates clear
+- supports microservice-level CI ownership
