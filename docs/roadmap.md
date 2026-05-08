@@ -51,6 +51,7 @@ Phase 0 established the production-grade foundation of the platform.
 
 
 ## Phase 1 — Login + Dashboard
+Goal:
 
 - create frontend application
 - add login page
@@ -58,7 +59,7 @@ Phase 0 established the production-grade foundation of the platform.
 - integrate Google OAuth
 - connect frontend with api-gateway
 
-## Phase 1 Completion Summary
+### Phase 1 Completion Summary
 
 Phase 1 established the first user-facing flow of the platform.
 
@@ -85,8 +86,6 @@ Users can log in with Google, access a protected dashboard, and load authenticat
 
 ## Phase 2 — AI Query Service
 
-Status: In Progress
-
 Goal:
 
 - create ai-service
@@ -96,21 +95,29 @@ Goal:
 - show query history on dashboard
 - prepare async Kafka processing
 
+### Phase 2 Completion Summary
+
+Phase 2 introduced the first real AI capability of the platform.
+
 Completed:
 
-- frontend AI API client
-- dashboard AI question form
-- dashboard AI answer display
-- frontend connected to `/api/ai/chat`
-- AI query history API connected to frontend
-- Recent Queries dashboard card updated
-- AI Query History section added
-- query history refreshes after new AI request
-- ai-service Docker runtime validated
-- AI chat tested through API Gateway
-- query persistence validated
-- Kafka completion event validated
-- dashboard AI flow validated
+- Dedicated `ai-service`
+- Spring AI integration
+- OpenAI model configuration
+- AI chat API
+- AI query persistence in PostgreSQL
+- AI query history API
+- Dashboard AI question form
+- Dashboard query history UI
+- Kafka foundation for AI completion events
+- `ai.query.completed` event publishing
+- Error handling and correlation ID in `ai-service`
+- Tests and CI for `ai-service`
+- Docker runtime validation
+
+Result:
+
+Users can ask AI questions from the dashboard, receive answers, and view persisted query history. The system also publishes AI completion events to Kafka for future task and notification workflows.
 
 ---
 

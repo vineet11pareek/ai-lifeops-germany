@@ -123,3 +123,20 @@ Current backend auth capability:
 - frontend sends Google ID token
 - user-service validates token
 - user-service creates/loads user profile
+
+## Phase 2 Status
+
+Status: Completed
+
+Phase 2 delivered the first AI capability:
+
+```text
+Dashboard → API Gateway → ai-service → Spring AI/OpenAI → PostgreSQL → Kafka
+```
+Current AI capabilities:
+
+- ask AI question from dashboard
+- receive AI answer
+- store query history
+- display query history in dashboard
+- publish AI completion event to Kafka

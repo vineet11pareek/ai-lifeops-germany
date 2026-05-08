@@ -596,3 +596,16 @@ Reason:
 - validates AI service independently
 - keeps service-specific quality gates clear
 - supports microservice-level CI ownership
+
+## Decision 045 — Complete Phase 2 with Synchronous AI Query Flow
+
+Status: Accepted
+
+Phase 2 is completed with a synchronous AI query flow and persisted query history.
+
+Reason:
+
+- validates the first real AI capability
+- keeps initial user experience simple
+- creates foundation for async processing later
+- confirms frontend, gateway, AI service, database, and Kafka integration

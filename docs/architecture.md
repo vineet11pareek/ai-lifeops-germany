@@ -931,4 +931,45 @@ Reason:
 - validates service health checks
 - confirms AI flow works end-to-end
 
+## Phase 2 Architecture
+
+Phase 2 introduced `ai-service` as the dedicated AI capability boundary.
+
+Current AI request flow:
+
+```text
+React Dashboard
+  → POST /api/ai/chat
+  → api-gateway
+  → ai-service
+  → Spring AI ChatClient
+  → OpenAI model
+  → ai_queries table
+  → ai.query.completed Kafka topic
+  → dashboard query history
+```
+Current AI APIs:
+```text
+POST /api/ai/chat
+GET  /api/ai/queries
+GET  /api/ai/health
+```
+
+Current persistence:
+```text
+ai_queries
+```
+Current Kafka topic:
+```text
+ai.query.completed
+```
+
+Current limitations:
+
+- AI query history is not yet filtered by authenticated user
+- AI processing is still synchronous
+- Kafka is used only for completion event publishing
+- no retry/DLQ handling yet for AI event publishing
+- no cost tracking or rate limiting yet
+
 
