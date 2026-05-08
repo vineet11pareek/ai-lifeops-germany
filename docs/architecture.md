@@ -1009,3 +1009,34 @@ Reason:
 - prepares for PDF upload and OCR later
 - supports Germany-specific bureaucracy assistant use cases
 
+### document-service
+
+`document-service` is introduced as the dedicated service for document analysis workflows.
+
+Current responsibility:
+
+- expose document service boundary
+- provide health endpoint
+- prepare for document metadata persistence
+- prepare for AI-based document analysis
+
+Current endpoint:
+
+```text
+GET /api/documents/health
+```
+
+Current port:
+```text
+document-service: 8083
+```
+Gateway route:
+```text
+/api/documents/** → document-service
+```
+Reason:
+
+- separates document lifecycle from AI provider logic
+- prepares for future PDF upload and OCR
+- supports Germany-specific bureaucracy assistant workflows
+

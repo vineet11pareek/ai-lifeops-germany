@@ -61,6 +61,7 @@ Service-level documentation:
 - [user-service](backend/user-service/README.md)
 - [api-gateway](backend/api-gateway/README.md)
 - [ai-service](backend/ai-service/README.md)
+- [document-service](backend/document-service/README.md)
 
 Reason:
 
@@ -101,6 +102,8 @@ Current capabilities:
 - Docker Compose local runtime
 - GitHub Actions CI
 
+---
+
 ## Phase 1 Status
 
 Status: Completed
@@ -124,6 +127,8 @@ Current backend auth capability:
 - user-service validates token
 - user-service creates/loads user profile
 
+---
+
 ## Phase 2 Status
 
 Status: Completed
@@ -140,3 +145,5 @@ Current AI capabilities:
 - store query history
 - display query history in dashboard
 - publish AI completion event to Kafka
+
+---

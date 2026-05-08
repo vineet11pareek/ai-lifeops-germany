@@ -705,3 +705,21 @@ Reason:
 - prepares for future file upload, OCR, and storage
 - keeps ai-service focused on AI provider interaction
 - supports independent scaling and ownership
+
+---
+
+## Decision 048 — Add document-service as Dedicated Document Boundary
+
+Status: Accepted
+
+A new `document-service` is added as the dedicated backend service for document workflows.
+
+Reason:
+
+- keeps document lifecycle separate from AI provider logic
+- supports future file upload and OCR workflows
+- allows independent scaling and ownership
+- keeps the platform modular
+
+---
+

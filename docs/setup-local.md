@@ -759,6 +759,32 @@ Expected:
 - ai.query.completed event is published to Kafka
 - dashboard query history updates
 
+---
+
+## document-service
+
+document-service runs on:
+
+```text
+http://localhost:8083
+```
+Health:
+```text
+http://localhost:8083/api/documents/health
+```
+Through API Gateway:
+```text
+http://localhost:8080/api/documents/health
+```
+Swagger:
+```text
+http://localhost:8083/swagger-ui.html
+```
+
+
+
+
+
 
 
 
