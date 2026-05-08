@@ -13,6 +13,8 @@ Reason:
 - Good for portfolio and interview demonstration
 - CI/CD can be managed centrally
 
+---
+
 ## Decision 002 — Start Small, Scale Later
 
 Status: Accepted
@@ -29,6 +31,8 @@ Reason:
 - Avoid overengineering
 - Build working user journey first
 - Add Kafka and async processing after basic flow works
+
+---
 
 ## Decision 003 — Start with user-service
 
@@ -86,6 +90,8 @@ Reason:
 - Avoids service discovery complexity at the beginning
 - Can later evolve to Docker DNS, Eureka, Kubernetes service names, or service mesh
 
+---
+
 ## Decision 007 — Use PostgreSQL as Primary Database
 
 Status: Accepted
@@ -128,6 +134,8 @@ Reason:
 - Encourages explicit topic management
 - Closer to production behavior
 
+---
+
 ## Decision 010 — Use Flyway for Database Migrations
 
 Status: Accepted
@@ -155,6 +163,8 @@ Reason:
 - Ensures entity mappings match the database schema
 - Keeps Flyway as the source of truth for schema creation
 
+---
+
 ## Decision 012 — Use Layered Package Structure
 
 Status: Accepted
@@ -177,6 +187,8 @@ Reason:
 - Easier maintenance
 - Better alignment with production Spring Boot applications
 
+---
+
 ## Decision 013 — Use Instant for Timestamps
 
 Status: Accepted
@@ -189,6 +201,8 @@ Reason:
 - Avoids timezone-related bugs
 - Suitable for distributed systems
 - Works well with PostgreSQL TIMESTAMP WITH TIME ZONE
+
+---
 
 ## Decision 014 — Use Centralized Exception Handling
 
@@ -203,6 +217,8 @@ Reason:
 - Prevents raw stack traces from being exposed
 - Improves frontend integration
 - Aligns with production API design
+
+---
 
 ## Decision 015 — Use Standard API Response Wrapper
 
@@ -230,6 +246,8 @@ Reason:
 - Keeps validation close to input model
 - Improves API reliability and security
 
+---
+
 ## Decision 017 — Add Tests Before CI/CD
 
 Status: Accepted
@@ -241,6 +259,8 @@ Reason:
 - CI pipeline should validate real behavior
 - Prevents broken code from being merged
 - Supports production-grade development workflow
+
+---
 
 ## Decision 018 — Use GitHub Actions for CI
 
@@ -254,6 +274,8 @@ Reason:
 - Easy to configure per service
 - Supports test, build, Docker image creation, and deployment workflows
 - Good fit for portfolio and production-style development
+
+---
 
 ## Decision 019 — Dockerize Backend Services
 
@@ -282,6 +304,8 @@ Reason:
 - Enables local, Docker, CI, and cloud deployment with the same code
 - Supports twelve-factor application principles
 
+---
+
 ## Decision 021 — Use Multi-Stage Docker Builds
 
 Status: Accepted
@@ -294,6 +318,8 @@ Reason:
 - Reduces final image size
 - Improves build repeatability
 - Makes Docker builds suitable for CI/CD pipelines
+
+---
 
 ## Decision 022 — Use Spring Boot Actuator for Health Checks
 
@@ -308,6 +334,8 @@ Reason:
 - Prepares services for Kubernetes readiness and liveness probes
 - Helps monitoring and alerting systems verify service health
 
+---
+
 ## Decision 023 — Use Correlation ID for Request Tracking
 
 Status: Accepted
@@ -320,6 +348,8 @@ Reason:
 - Improves debugging in distributed systems
 - Can be connected with future OpenTelemetry trace IDs
 - Supports better production support and incident investigation
+
+---
 
 ## Decision 024 — Use OpenAPI for REST API Documentation
 
@@ -334,6 +364,8 @@ Reason:
 - Helps frontend teams understand backend APIs
 - Improves maintainability and interview presentation
 
+---
+
 ## Decision 025 — Use Docker Compose Profiles for Local Tools
 
 Status: Accepted
@@ -346,6 +378,8 @@ Reason:
 - Separates runtime services from debugging tools
 - Improves developer experience
 - Keeps local setup closer to production thinking
+
+---
 
 ## Decision 026 — Maintain Service-Level README Files
 
@@ -360,6 +394,8 @@ Reason:
 - Supports microservice ownership
 - Improves maintainability and onboarding
 
+---
+
 ## Decision 027 — Use React with TypeScript for Frontend
 
 Status: Accepted
@@ -372,6 +408,8 @@ Reason:
 - Strong typing with TypeScript
 - Good ecosystem support
 - Easy integration with OAuth and API Gateway
+
+---
 
 ## Decision 028 — Use Google OAuth as First Login Provider
 
@@ -386,6 +424,8 @@ Reason:
 - suitable for fast onboarding
 - prepares the platform for future Facebook login
 
+---
+
 ## Decision 029 — Frontend Communicates Only Through API Gateway
 
 Status: Accepted
@@ -398,6 +438,8 @@ Reason:
 - centralizes routing
 - prepares for authentication and authorization enforcement
 - aligns with microservice architecture patterns
+
+---
 
 ## Decision 030 — Verify Google ID Token on Backend
 
@@ -412,6 +454,8 @@ Reason:
 - prevents unauthorized access using fake tokens
 - aligns with secure authentication practice
 
+---
+
 ## Decision 031 — Use Frontend Protected Routes
 
 Status: Accepted
@@ -424,6 +468,8 @@ Reason:
 - Keeps routing logic centralized
 - Improves frontend maintainability
 - Complements backend token validation
+
+---
 
 ## Decision 032 — Add Frontend CI Pipeline
 
@@ -438,6 +484,8 @@ Reason:
 - Keeps frontend quality aligned with backend CI
 - Prepares for future Docker image build and deployment
 
+---
+
 ## Decision 033 — Serve Frontend with Nginx Container
 
 Status: Accepted
@@ -450,6 +498,8 @@ Reason:
 - serves optimized static assets
 - supports React Router fallback
 - matches common production deployment patterns
+
+---
 
 ## Decision 034 — Complete Phase 1 with Google Login and Dashboard
 
@@ -464,6 +514,8 @@ Reason:
 - confirms authenticated profile loading
 - prepares platform for AI modules in later phases
 
+---
+
 ## Decision 035 — Create Dedicated AI Service
 
 Status: Accepted
@@ -476,6 +528,8 @@ Reason:
 - AI service can scale independently
 - provider keys and model configuration stay isolated
 - future modules such as document analysis and Truth Layer can reuse the same AI foundation
+
+---
 
 ## Decision 036 — Add ai-service as Dedicated AI Boundary
 
@@ -490,6 +544,8 @@ Reason:
 - prepares for Spring AI integration
 - provides reusable foundation for future AI modules
 
+---
+
 ## Decision 037 — Use Spring AI ChatClient for AI Calls
 
 Status: Accepted
@@ -503,6 +559,8 @@ Reason:
 - supports future provider switching
 - prepares for structured outputs, RAG, tools, and observability
 
+---
+
 ## Decision 038 — Standardize Error Handling in ai-service
 
 Status: Accepted
@@ -515,6 +573,8 @@ Reason:
 - prevents internal AI provider errors from leaking to clients
 - improves frontend error handling
 - supports production troubleshooting with correlation IDs
+
+---
 
 ## Decision 039 — Persist AI Query History
 
@@ -543,6 +603,8 @@ Reason:
 - keeps local setup simple
 - prepares for future service-owned schemas or databases
 
+---
+
 ## Decision 041 — Publish AI Query Completion Events
 
 Status: Accepted
@@ -569,6 +631,8 @@ Reason:
 - keeps events for the same query ordered within Kafka partitioning
 - provides deterministic event routing
 - supports future query lifecycle events
+
+---
 
 ## Decision 043 — Mock AI Provider Interactions in Tests
 
@@ -597,6 +661,8 @@ Reason:
 - keeps service-specific quality gates clear
 - supports microservice-level CI ownership
 
+---
+
 ## Decision 045 — Complete Phase 2 with Synchronous AI Query Flow
 
 Status: Accepted
@@ -609,3 +675,33 @@ Reason:
 - keeps initial user experience simple
 - creates foundation for async processing later
 - confirms frontend, gateway, AI service, database, and Kafka integration
+
+---
+
+## Decision 046 — Start Document Analyzer with Text Input
+
+Status: Accepted
+
+The first Document Analyzer version will analyze pasted document text instead of PDF/image upload.
+
+Reason:
+
+- validates analysis workflow faster
+- avoids early OCR/file-storage complexity
+- allows prompt and response format to stabilize first
+- PDF and OCR support can be added after the core analysis flow works
+
+---
+
+## Decision 047 — Create Dedicated document-service
+
+Status: Accepted
+
+Document analysis is handled by a dedicated `document-service`.
+
+Reason:
+
+- document lifecycle has its own business model and statuses
+- prepares for future file upload, OCR, and storage
+- keeps ai-service focused on AI provider interaction
+- supports independent scaling and ownership

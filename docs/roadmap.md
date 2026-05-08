@@ -123,10 +123,18 @@ Users can ask AI questions from the dashboard, receive answers, and view persist
 
 ## Phase 3 — Document Analyzer
 
-- Upload PDF or image
-- Extract text
-- Analyze document
-- Extract actions and deadlines
+Status: In Progress
+
+Goal:
+
+- create document-service
+- store document metadata
+- analyze pasted document text
+- extract summary, deadlines, risks, and actions
+- show document analysis in dashboard
+- prepare for future PDF/OCR support
+
+---
 
 ## Phase 4 — Task Approval Layer
 

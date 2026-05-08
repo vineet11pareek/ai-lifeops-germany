@@ -931,7 +931,7 @@ Reason:
 - validates service health checks
 - confirms AI flow works end-to-end
 
-## Phase 2 Architecture
+### Phase 2 Architecture
 
 Phase 2 introduced `ai-service` as the dedicated AI capability boundary.
 
@@ -972,4 +972,40 @@ Current limitations:
 - no retry/DLQ handling yet for AI event publishing
 - no cost tracking or rate limiting yet
 
+
+---
+
+## Phase 3 — Document Analyzer
+
+Phase 3 introduces the Document Analyzer module.
+
+Initial MVP scope:
+
+- user submits document title and text content
+- system analyzes content using AI
+- system extracts summary, actions, deadlines, risk level, and next step
+- analysis result is stored and shown to the user
+
+Initial flow:
+
+```text
+React Dashboard
+  → api-gateway
+  → document-service
+  → ai-service
+  → Spring AI / OpenAI
+  → document-service stores result
+  → dashboard displays analysis
+```
+Planned document-service APIs:
+```text
+POST /api/documents/analyze
+GET  /api/documents
+GET  /api/documents/{id}
+```
+
+Reason:
+- separates document lifecycle from AI provider logic
+- prepares for PDF upload and OCR later
+- supports Germany-specific bureaucracy assistant use cases
 
