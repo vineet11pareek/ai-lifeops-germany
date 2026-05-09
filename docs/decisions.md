@@ -723,3 +723,18 @@ Reason:
 
 ---
 
+## Decision 049 — Persist Document Metadata Before AI Analysis
+
+Status: Accepted
+
+Documents are stored before AI analysis is added.
+
+Reason:
+
+- each document receives a stable ID
+- document lifecycle can be tracked
+- failed analysis can still be linked to original input
+- prepares for async document analysis later
+
+---
+

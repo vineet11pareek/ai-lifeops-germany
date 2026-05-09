@@ -1040,3 +1040,55 @@ Reason:
 - prepares for future PDF upload and OCR
 - supports Germany-specific bureaucracy assistant workflows
 
+### Document Metadata Persistence
+
+`document-service` now persists document metadata in PostgreSQL.
+
+Current table:
+
+```text
+documents
+```
+Current stored fields:
+
+- document ID
+- user ID placeholder
+- title
+- content
+- summary placeholder
+- deadline placeholder
+- required action placeholder
+- risk level
+- suggested next step placeholder
+- status
+- timestamps
+
+Current document statuses:
+```text
+RECEIVED
+ANALYZING
+ANALYZED
+FAILED
+```
+
+Current risk levels:
+```text
+LOW
+MEDIUM
+HIGH
+UNKNOWN
+```
+
+Current APIs:
+```text
+POST /api/documents
+GET  /api/documents
+GET  /api/documents/{id}
+```
+
+Reason:
+
+- gives documents a persisted lifecycle
+- prepares for AI analysis
+- prepares for dashboard document history
+- supports auditability and future file upload

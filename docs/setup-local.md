@@ -781,7 +781,29 @@ Swagger:
 http://localhost:8083/swagger-ui.html
 ```
 
+### Testing Document Metadata APIs
 
+Create document:
+
+```http
+POST http://localhost:8080/api/documents
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+Fetch recent documents:
+```http
+GET http://localhost:8080/api/documents
+```
+Fetch document by ID:
+```http
+GET http://localhost:8080/api/documents/{id}
+```
 
 
 
