@@ -1092,3 +1092,38 @@ Reason:
 - prepares for AI analysis
 - prepares for dashboard document history
 - supports auditability and future file upload
+
+### Text-Based Document Analysis
+
+`document-service` now supports text-based document analysis.
+
+Current endpoint:
+
+```text
+POST /api/documents/analyze
+```
+Current flow:
+```text
+Frontend/API client
+  → api-gateway
+  → document-service
+  → ai-service
+  → Spring AI/OpenAI
+  → document-service parses structured JSON
+  → document-service stores analysis result
+```
+
+Extracted fields:
+
+- summary
+- deadline text
+- required action
+- risk level
+- suggested next step
+
+Reason:
+
+- validates the document analysis product flow
+- keeps document lifecycle in document-service
+- keeps AI provider interaction in ai-service
+- prepares for future PDF/OCR support

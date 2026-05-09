@@ -83,6 +83,22 @@ public class Document {
         this.status = DocumentStatus.FAILED;
     }
 
+    public void updateAnalysis(
+            String summary,
+            String deadlineText,
+            String requiredAction,
+            RiskLevel riskLevel,
+            String suggestedNextStep
+    ) {
+        markAnalyzed(
+                summary,
+                deadlineText,
+                requiredAction,
+                riskLevel,
+                suggestedNextStep
+        );
+    }
+
     @PrePersist
     public void prePersist() {
         Instant now = Instant.now();

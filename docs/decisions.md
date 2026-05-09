@@ -738,3 +738,18 @@ Reason:
 
 ---
 
+## Decision 050 — Delegate AI Reasoning to ai-service
+
+Status: Accepted
+
+`document-service` calls `ai-service` for document analysis instead of calling the AI provider directly.
+
+Reason:
+
+- keeps AI provider logic centralized
+- avoids duplicating Spring AI logic in every service
+- keeps document-service focused on document lifecycle
+- supports future reuse by Truth Layer and task modules
+
+---
+

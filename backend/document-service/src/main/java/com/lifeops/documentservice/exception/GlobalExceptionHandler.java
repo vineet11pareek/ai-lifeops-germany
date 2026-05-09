@@ -73,6 +73,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
+    @ExceptionHandler(DocumentAnalysisException.class)
+    public ResponseEntity<ApiErrorResponse> handleDocumentAnalysisException(DocumentAnalysisException exception,HttpServletRequest request){
+        ApiErrorResponse response = new ApiErrorResponse(
+                Instant.now(),
+                getCorrelationId(),
+                HttpStatus.BAD_GATEWAY.value(),
+                HttpStatus.BAD_GATEWAY.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(response);
+    }
+
     private String getCorrelationId(){
         return MDC.get(CorrelationConstants.CORRELATION_ID_MDC_KEY);
     }

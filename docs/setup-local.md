@@ -805,6 +805,33 @@ Fetch document by ID:
 GET http://localhost:8080/api/documents/{id}
 ```
 
+### Testing Text-Based Document Analysis
+
+Run full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Analyze document:
+```http
+POST http://localhost:8080/api/documents/analyze
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+
+Expected:
+
+- document is stored
+- AI analysis is generated
+- document status becomes ANALYZED
+- summary, deadline, action, risk, and next step are returned
 
 
 

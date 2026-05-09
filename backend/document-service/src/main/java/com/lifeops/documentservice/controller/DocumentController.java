@@ -1,8 +1,10 @@
 package com.lifeops.documentservice.controller;
 
+import com.lifeops.documentservice.dto.AnalyzeDocumentRequest;
 import com.lifeops.documentservice.dto.ApiResponse;
 import com.lifeops.documentservice.dto.CreateDocumentRequest;
 import com.lifeops.documentservice.dto.DocumentResponse;
+import com.lifeops.documentservice.dto.ai.AiApiResponse;
 import com.lifeops.documentservice.service.DocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,6 +60,18 @@ public class DocumentController {
         return ApiResponse.success(
                 "Documents fetched successfully",
                 documentService.getRecentDocuments()
+        );
+    }
+
+    @PostMapping("/analyze")
+    @Operation(
+            summary = "Analyze document text",
+            description = "Stores document text and analyzes it using AI to extract summary, deadline, action, risk, and next step."
+    )
+    public ApiResponse<DocumentResponse> analyzeDocument(@Valid @RequestBody AnalyzeDocumentRequest request){
+        return ApiResponse.success(
+                "Document analyze successfully",
+                documentService.analyzeDocument(request)
         );
     }
 }
