@@ -833,6 +833,33 @@ Expected:
 - document status becomes ANALYZED
 - summary, deadline, action, risk, and next step are returned
 
+### Testing Structured Document Analysis
+
+Test ai-service structured endpoint:
+
+```http
+POST http://localhost:8080/api/ai/document-analysis
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+Test full document-service flow:
+```text
+POST http://localhost:8080/api/documents/analyze
+Content-Type: application/json
+```
+Expected:
+
+- ai-service returns structured analysis
+- document-service stores the result
+- document status becomes ANALYZED
+
 
 
 

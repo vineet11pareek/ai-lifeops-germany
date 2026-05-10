@@ -1127,3 +1127,36 @@ Reason:
 - keeps document lifecycle in document-service
 - keeps AI provider interaction in ai-service
 - prepares for future PDF/OCR support
+
+### Structured Document Analysis Endpoint
+
+`ai-service` now exposes a dedicated structured document analysis endpoint.
+
+Endpoint:
+
+```text
+POST /api/ai/document-analysis
+```
+Current flow:
+```text
+document-service
+  → POST /api/ai/document-analysis
+  → ai-service prompt + model call
+  → ai-service parses and normalizes structured response
+  → document-service stores analysis result
+```
+
+Returned fields:
+
+summary
+- deadlineText
+- requiredAction
+- riskLevel
+- suggestedNextStep
+
+Reason:
+
+- avoids using generic chat endpoint for business workflows
+- gives document-service a stable structured contract
+- keeps prompt engineering inside ai-service
+- improves reliability and testability

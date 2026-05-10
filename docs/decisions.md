@@ -753,3 +753,18 @@ Reason:
 
 ---
 
+## Decision 051 — Use Dedicated Structured Endpoint for Document Analysis
+
+Status: Accepted
+
+Document analysis uses a dedicated `ai-service` endpoint instead of the generic chat API.
+
+Reason:
+
+- generic chat output is not reliable enough for workflow automation
+- document-service needs structured data
+- prompt and parsing logic should stay inside ai-service
+- improves service contract clarity
+
+---
+
