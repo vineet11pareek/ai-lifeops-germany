@@ -134,6 +134,13 @@ Goal:
 - show document analysis in dashboard
 - prepare for future PDF/OCR support
 
+Completed:
+
+- frontend document API client
+- dashboard Document Analyzer form
+- document analysis result display
+- structured summary/deadline/action/risk output in UI
+
 ---
 
 ## Phase 4 — Task Approval Layer

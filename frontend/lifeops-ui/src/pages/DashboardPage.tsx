@@ -7,12 +7,16 @@ import {
   type AiChatResponse,
   type AiQueryHistoryResponse,
 } from "../api/aiApi";
+import {
+  analyzeDocument,
+  type DocumentAnalysisResponse,
+} from "../api/documentApi";
 import { clearAuthToken } from "../auth/authStorage";
 const modules = [
   {
     title: "Bureaucracy Assistant",
     description: "Analyze German official letters, deadlines, and required actions.",
-    status: "Planned",
+    status: "Available",
   },
   {
     title: "Truth Layer",
@@ -40,6 +44,14 @@ function DashboardPage() {
     const [queryHistory, setQueryHistory] = useState<AiQueryHistoryResponse[]>([]);
     const [isHistoryLoading, setIsHistoryLoading] = useState(true);
     const [historyError, setHistoryError] = useState<string | null>(null);
+
+
+    const [documentTitle, setDocumentTitle] = useState("");
+    const [documentContent, setDocumentContent] = useState("");
+    const [documentAnalysis, setDocumentAnalysis] =
+      useState<DocumentAnalysisResponse | null>(null);
+    const [isDocumentLoading, setIsDocumentLoading] = useState(false);
+    const [documentError, setDocumentError] = useState<string | null>(null);
 
     const handleLogout = () => {
       clearAuthToken();
@@ -83,6 +95,42 @@ function DashboardPage() {
         setHistoryError("Unable to load query history.");
       } finally {
         setIsHistoryLoading(false);
+      }
+    };
+
+    const handleAnalyzeDocument = async (
+      event: React.FormEvent<HTMLFormElement>
+    ) => {
+      event.preventDefault();
+
+      if (!documentTitle.trim()) {
+        setDocumentError("Please enter a document title.");
+        return;
+      }
+
+      if (!documentContent.trim()) {
+        setDocumentError("Please paste the document content.");
+        return;
+      }
+
+      try {
+        setIsDocumentLoading(true);
+        setDocumentError(null);
+        setDocumentAnalysis(null);
+
+        const result = await analyzeDocument(
+          documentTitle.trim(),
+          documentContent.trim()
+        );
+
+        setDocumentAnalysis(result);
+        setDocumentTitle("");
+        setDocumentContent("");
+      } catch (err) {
+        console.error(err);
+        setDocumentError("Unable to analyze document. Please try again.");
+      } finally {
+        setIsDocumentLoading(false);
       }
     };
     useEffect(() => {
@@ -221,6 +269,90 @@ function DashboardPage() {
           )}
         </div>
       </section>
+
+      <section style={styles.documentSection}>
+        <div style={styles.aiCard}>
+          <div>
+            <p style={styles.badge}>Document Analyzer</p>
+            <h2 style={styles.sectionTitle}>Analyze a German Letter or Document</h2>
+            <p style={styles.aiDescription}>
+              Paste the text from an official letter, contract, or notice. LifeOps will extract
+              the summary, deadline, required action, risk level, and suggested next step.
+            </p>
+          </div>
+
+          <form onSubmit={handleAnalyzeDocument} style={styles.aiForm}>
+            <input
+              value={documentTitle}
+              onChange={(event) => setDocumentTitle(event.target.value)}
+              placeholder="Example: Letter from Finanzamt"
+              style={styles.input}
+            />
+
+            <textarea
+              value={documentContent}
+              onChange={(event) => setDocumentContent(event.target.value)}
+              placeholder="Paste document text here..."
+              style={styles.textarea}
+              rows={8}
+            />
+
+            <button
+              type="submit"
+              style={{
+                ...styles.primaryButton,
+                opacity: isDocumentLoading ? 0.7 : 1,
+                cursor: isDocumentLoading ? "not-allowed" : "pointer",
+              }}
+              disabled={isDocumentLoading}
+            >
+              {isDocumentLoading ? "Analyzing..." : "Analyze Document"}
+            </button>
+          </form>
+
+          {documentError && <p style={styles.errorText}>{documentError}</p>}
+
+          {documentAnalysis && (
+            <div style={styles.analysisBox}>
+              <div style={styles.historyHeader}>
+                <span style={styles.statusBadge}>{documentAnalysis.status}</span>
+                <span style={styles.answerMeta}>
+                  Risk: {documentAnalysis.riskLevel ?? "UNKNOWN"} ·{" "}
+                  {new Date(documentAnalysis.createdAt).toLocaleString()}
+                </span>
+              </div>
+
+              <h3 style={styles.answerTitle}>{documentAnalysis.title}</h3>
+
+              <div style={styles.analysisGrid}>
+                <div style={styles.analysisItem}>
+                  <strong>Summary</strong>
+                  <p>{documentAnalysis.summary ?? "No summary available."}</p>
+                </div>
+
+                <div style={styles.analysisItem}>
+                  <strong>Deadline</strong>
+                  <p>{documentAnalysis.deadlineText ?? "No clear deadline found."}</p>
+                </div>
+
+                <div style={styles.analysisItem}>
+                  <strong>Required Action</strong>
+                  <p>{documentAnalysis.requiredAction ?? "No clear action required."}</p>
+                </div>
+
+                <div style={styles.analysisItem}>
+                  <strong>Suggested Next Step</strong>
+                  <p>
+                    {documentAnalysis.suggestedNextStep ??
+                      "Review the document carefully and take action if needed."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
 
       <section style={styles.historySection}>
         <div style={styles.aiCard}>
@@ -499,6 +631,40 @@ const styles: Record<string, React.CSSProperties> = {
       color: "#0f172a",
       fontSize: "17px",
       marginBottom: "12px",
+    },
+    documentSection: {
+      maxWidth: "1180px",
+      margin: "32px auto 0",
+    },
+    input: {
+      width: "100%",
+      borderRadius: "14px",
+      border: "1px solid #cbd5e1",
+      padding: "14px",
+      fontSize: "15px",
+      fontFamily: "Inter, system-ui, sans-serif",
+      boxSizing: "border-box",
+    },
+    analysisBox: {
+      marginTop: "24px",
+      background: "#f8fafc",
+      border: "1px solid #e2e8f0",
+      borderRadius: "16px",
+      padding: "20px",
+    },
+    analysisGrid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+      gap: "16px",
+      marginTop: "16px",
+    },
+    analysisItem: {
+      background: "#ffffff",
+      borderRadius: "14px",
+      border: "1px solid #e2e8f0",
+      padding: "16px",
+      color: "#334155",
+      lineHeight: 1.6,
     },
 };
 

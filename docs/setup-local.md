@@ -860,6 +860,32 @@ Expected:
 - document-service stores the result
 - document status becomes ANALYZED
 
+## Testing Document Analyzer UI
+
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Open:
+```text
+http://localhost:5173
+```
+Test Document:
+```text
+Title:
+Letter from Finanzamt
+
+Content:
+Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein.
+```
+
+Expected:
+
+- document is analyzed
+- status becomes ANALYZED
+- summary, deadline, action, risk, and next step are displayed
+
 
 
 

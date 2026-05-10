@@ -1160,3 +1160,29 @@ Reason:
 - gives document-service a stable structured contract
 - keeps prompt engineering inside ai-service
 - improves reliability and testability
+
+### Frontend Document Analyzer UI
+
+The dashboard now includes a Document Analyzer section.
+
+Current UI behavior:
+
+- user enters document title
+- user pastes document text
+- frontend calls `POST /api/documents/analyze`
+- document-service stores the document and analysis result
+- structured output is displayed on dashboard
+
+Displayed fields:
+
+- summary
+- deadline
+- required action
+- risk level
+- suggested next step
+
+Reason:
+
+- turns document analysis into a user-facing feature
+- provides structured actionable output
+- differentiates the platform from generic AI chatbots
