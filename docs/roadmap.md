@@ -140,6 +140,10 @@ Completed:
 - dashboard Document Analyzer form
 - document analysis result display
 - structured summary/deadline/action/risk output in UI
+- document history API connected to frontend
+- Document Analysis History section added
+- Upcoming Deadlines card uses extracted document deadlines
+- document history refreshes after new analysis
 
 ---
 

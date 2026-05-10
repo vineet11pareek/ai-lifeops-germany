@@ -1186,3 +1186,31 @@ Reason:
 - turns document analysis into a user-facing feature
 - provides structured actionable output
 - differentiates the platform from generic AI chatbots
+
+### Document Analysis History UI
+
+The dashboard now displays persisted document analysis history.
+
+Current flow:
+
+```text
+Dashboard
+  → GET /api/documents
+  → api-gateway
+  → document-service
+  → PostgreSQL
+  → document history displayed in UI
+```
+
+Current UI behavior:
+
+- document history loads when dashboard opens
+- history refreshes after a new document analysis
+- extracted deadlines appear in Upcoming Deadlines
+- previous summary, deadline, action, risk, and next step remain visible after refresh
+
+Reason:
+
+- users can revisit previous document analyses
+- extracted deadlines become visible on the dashboard
+- prepares for future task approval workflow

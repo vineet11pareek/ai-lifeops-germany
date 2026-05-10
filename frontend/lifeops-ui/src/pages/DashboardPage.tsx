@@ -9,6 +9,7 @@ import {
 } from "../api/aiApi";
 import {
   analyzeDocument,
+  getDocumentHistory,
   type DocumentAnalysisResponse,
 } from "../api/documentApi";
 import { clearAuthToken } from "../auth/authStorage";
@@ -52,6 +53,9 @@ function DashboardPage() {
       useState<DocumentAnalysisResponse | null>(null);
     const [isDocumentLoading, setIsDocumentLoading] = useState(false);
     const [documentError, setDocumentError] = useState<string | null>(null);
+    const [documentHistory, setDocumentHistory] = useState<DocumentAnalysisResponse[]>([]);
+    const [isDocumentHistoryLoading, setIsDocumentHistoryLoading] = useState(true);
+    const [documentHistoryError, setDocumentHistoryError] = useState<string | null>(null);
 
     const handleLogout = () => {
       clearAuthToken();
@@ -126,6 +130,7 @@ function DashboardPage() {
         setDocumentAnalysis(result);
         setDocumentTitle("");
         setDocumentContent("");
+        await loadDocumentHistory();
       } catch (err) {
         console.error(err);
         setDocumentError("Unable to analyze document. Please try again.");
@@ -133,6 +138,22 @@ function DashboardPage() {
         setIsDocumentLoading(false);
       }
     };
+
+    const loadDocumentHistory = async () => {
+      try {
+        setIsDocumentHistoryLoading(true);
+        setDocumentHistoryError(null);
+
+        const history = await getDocumentHistory();
+        setDocumentHistory(history);
+      } catch (err) {
+        console.error(err);
+        setDocumentHistoryError("Unable to load document history.");
+      } finally {
+        setIsDocumentHistoryLoading(false);
+      }
+    };
+
     useEffect(() => {
       async function loadUser() {
         try {
@@ -148,6 +169,7 @@ function DashboardPage() {
 
       loadUser();
       loadQueryHistory();
+      loadDocumentHistory();
     }, []);
   return (
     <main style={styles.page}>
@@ -215,13 +237,46 @@ function DashboardPage() {
 
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Pending Tasks</h2>
-          <p style={styles.emptyText}>No pending approvals.</p>
+          <p style={styles.emptyText}>
+            Task approval workflow will be added in the next phase.
+          </p>
         </div>
 
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Upcoming Deadlines</h2>
-          <p style={styles.emptyText}>No tracked deadlines yet.</p>
-        </div>
+       <div style={styles.card}>
+         <h2 style={styles.cardTitle}>Upcoming Deadlines</h2>
+
+         {isDocumentHistoryLoading && (
+           <p style={styles.emptyText}>Loading deadlines...</p>
+         )}
+
+         {!isDocumentHistoryLoading && documentHistoryError && (
+           <p style={styles.errorText}>{documentHistoryError}</p>
+         )}
+
+         {!isDocumentHistoryLoading &&
+           !documentHistoryError &&
+           documentHistory.filter(
+             (document) =>
+               document.deadlineText &&
+               document.deadlineText !== "No clear deadline found"
+           ).length === 0 && <p style={styles.emptyText}>No tracked deadlines yet.</p>}
+
+         {!isDocumentHistoryLoading &&
+           !documentHistoryError &&
+           documentHistory
+             .filter(
+               (document) =>
+                 document.deadlineText &&
+                 document.deadlineText !== "No clear deadline found"
+             )
+             .slice(0, 3)
+             .map((document) => (
+               <article key={document.id} style={styles.historyItem}>
+                 <p style={styles.historyQuestion}>{document.title}</p>
+                 <p style={styles.historyMeta}>{document.deadlineText}</p>
+               </article>
+             ))}
+       </div>
       </section>
 
       <section style={styles.aiSection}>
@@ -350,6 +405,71 @@ function DashboardPage() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      <section style={styles.documentSection}>
+        <div style={styles.aiCard}>
+          <h2 style={styles.sectionTitle}>Document Analysis History</h2>
+
+          {isDocumentHistoryLoading && (
+            <p style={styles.emptyText}>Loading document history...</p>
+          )}
+
+          {!isDocumentHistoryLoading && documentHistoryError && (
+            <p style={styles.errorText}>{documentHistoryError}</p>
+          )}
+
+          {!isDocumentHistoryLoading &&
+            !documentHistoryError &&
+            documentHistory.length === 0 && (
+              <p style={styles.emptyText}>No analyzed documents yet.</p>
+            )}
+
+          {!isDocumentHistoryLoading &&
+            !documentHistoryError &&
+            documentHistory.length > 0 && (
+              <div style={styles.fullHistoryList}>
+                {documentHistory.map((document) => (
+                  <article key={document.id} style={styles.fullHistoryItem}>
+                    <div style={styles.historyHeader}>
+                      <span style={styles.statusBadge}>{document.status}</span>
+                      <span style={styles.answerMeta}>
+                        Risk: {document.riskLevel ?? "UNKNOWN"} ·{" "}
+                        {new Date(document.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+
+                    <h3 style={styles.historyQuestionLarge}>{document.title}</h3>
+
+                    <div style={styles.analysisGrid}>
+                      <div style={styles.analysisItem}>
+                        <strong>Summary</strong>
+                        <p>{document.summary ?? "No summary available."}</p>
+                      </div>
+
+                      <div style={styles.analysisItem}>
+                        <strong>Deadline</strong>
+                        <p>{document.deadlineText ?? "No clear deadline found."}</p>
+                      </div>
+
+                      <div style={styles.analysisItem}>
+                        <strong>Required Action</strong>
+                        <p>{document.requiredAction ?? "No clear action required."}</p>
+                      </div>
+
+                      <div style={styles.analysisItem}>
+                        <strong>Suggested Next Step</strong>
+                        <p>
+                          {document.suggestedNextStep ??
+                            "Review the document carefully and take action if needed."}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
         </div>
       </section>
 

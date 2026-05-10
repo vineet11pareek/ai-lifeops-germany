@@ -34,3 +34,11 @@ export async function analyzeDocument(
 
   return response.data.data;
 }
+
+export async function getDocumentHistory(): Promise<DocumentAnalysisResponse[]> {
+  const response = await apiClient.get<ApiResponse<DocumentAnalysisResponse[]>>(
+    "/api/documents"
+  );
+
+  return response.data.data;
+}

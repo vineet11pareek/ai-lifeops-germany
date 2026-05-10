@@ -860,7 +860,7 @@ Expected:
 - document-service stores the result
 - document status becomes ANALYZED
 
-## Testing Document Analyzer UI
+### Testing Document Analyzer UI
 
 Run backend:
 
@@ -886,6 +886,22 @@ Expected:
 - status becomes ANALYZED
 - summary, deadline, action, risk, and next step are displayed
 
+### Testing Document Analysis History
+
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Test:
+
+- login with Google
+- analyze a document
+- confirm result appears
+- refresh dashboard
+- confirm document appears in Document Analysis History
+- confirm extracted deadline appears in Upcoming Deadlines if available
 
 
 
