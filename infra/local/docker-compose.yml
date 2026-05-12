@@ -94,12 +94,15 @@ services:
       SPRING_DATASOURCE_USERNAME: lifeops
       SPRING_DATASOURCE_PASSWORD: lifeops_password
       AI_SERVICE_URL: http://ai-service:8082
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - "8083:8083"
     depends_on:
       postgres:
         condition: service_healthy
       ai-service:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
     networks:
       - lifeops-network

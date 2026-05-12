@@ -903,6 +903,36 @@ Test:
 - confirm document appears in Document Analysis History
 - confirm extracted deadline appears in Upcoming Deadlines if available
 
+### Testing Document Kafka Events
+
+Start full system with tools:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Create topic if needed:
+```bash
+docker exec -it lifeops-kafka kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic document.analyzed \
+  --partitions 3 \
+  --replication-factor 1
+```
+
+Analyze document:
+```http
+POST http://localhost:8080/api/documents/analyze
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+
 
 
 

@@ -768,3 +768,32 @@ Reason:
 
 ---
 
+## Decision 052 — Publish Document Analyzed Events
+
+Status: Accepted
+
+`document-service` publishes an event after successful document analysis.
+
+Reason:
+
+- enables future task-service and notification-service workflows
+- avoids direct coupling between document-service and downstream services
+- supports event-driven architecture
+- prepares for approval-based task creation
+
+---
+
+## Decision 053 — Use Document ID as Kafka Message Key
+
+Status: Accepted
+
+Document analysis events use `documentId` as the Kafka message key.
+
+Reason:
+
+- keeps events for the same document ordered within Kafka partitioning
+- provides deterministic event routing
+- supports future document lifecycle event processing
+
+---
+

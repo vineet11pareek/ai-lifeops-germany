@@ -7,6 +7,7 @@ import com.lifeops.documentservice.dto.DocumentAnalysisResult;
 import com.lifeops.documentservice.dto.DocumentResponse;
 import com.lifeops.documentservice.entity.Document;
 import com.lifeops.documentservice.entity.RiskLevel;
+import com.lifeops.documentservice.event.DocumentAnalyzedEvent;
 import com.lifeops.documentservice.exception.DocumentNotFoundException;
 import com.lifeops.documentservice.repository.DocumentRepository;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,11 +27,16 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private final DocumentMapper documentMapper;
     private final AiServiceClient aiServiceClient;
+    private final DocumentEventPublisher documentEventPublisher;
 
-    public DocumentService(DocumentRepository documentRepository, DocumentMapper documentMapper,AiServiceClient aiServiceClient) {
+    public DocumentService(DocumentRepository documentRepository,
+                           DocumentMapper documentMapper,
+                           AiServiceClient aiServiceClient,
+                           DocumentEventPublisher documentEventPublisher) {
         this.documentRepository = documentRepository;
         this.documentMapper = documentMapper;
         this.aiServiceClient=aiServiceClient;
+        this.documentEventPublisher=documentEventPublisher;
     }
 
     @Transactional
@@ -91,6 +98,18 @@ public class DocumentService {
             );
 
             Document analyzedDocument = documentRepository.save(savedDocument);
+            documentEventPublisher.publish(new DocumentAnalyzedEvent(
+                    UUID.randomUUID(),
+                    analyzedDocument.getId(),
+                    analyzedDocument.getUserId(),
+                    analyzedDocument.getTitle(),
+                    analyzedDocument.getSummary(),
+                    analyzedDocument.getDeadlineText(),
+                    analyzedDocument.getRequiredAction(),
+                    analyzedDocument.getRiskLevel() != null ? analyzedDocument.getRiskLevel().name() : "UNKNOWN",
+                    analyzedDocument.getStatus().name(),
+                    Instant.now()
+            ));
             log.info("Document analyzed successfully documentId: {}",savedDocument.getId());
             return documentMapper.toResponse(savedDocument);
         } catch (Exception exception) {

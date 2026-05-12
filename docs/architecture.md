@@ -1214,3 +1214,37 @@ Reason:
 - users can revisit previous document analyses
 - extracted deadlines become visible on the dashboard
 - prepares for future task approval workflow
+
+### Kafka Foundation for Document Analysis
+
+`document-service` now publishes Kafka events when a document is successfully analyzed.
+
+Current topic:
+
+```text
+document.analyzed
+```
+Current event:
+```text
+DocumentAnalyzedEvent
+```
+
+Current flow:
+```text
+POST /api/documents/analyze
+  → document-service stores document
+  → document-service calls ai-service
+  → document-service stores analysis result
+  → document-service publishes document.analyzed event
+```
+
+Current Kafka key:
+```text
+Current Kafka key:
+```
+Reason:
+
+- prepares for task-service integration
+- prepares for notification/reminder workflows
+- decouples document analysis from downstream actions
+- supports event-driven architecture
