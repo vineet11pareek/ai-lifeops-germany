@@ -1274,3 +1274,32 @@ Reason:
 - keeps tests fast and deterministic
 - aligns document-service quality gate with other backend services
 
+### document-service Runtime Validation
+
+`document-service` is validated inside the full Docker Compose runtime.
+
+Runtime dependencies:
+
+- PostgreSQL for document persistence
+- ai-service for structured AI analysis
+- Kafka for document analyzed events
+- API Gateway for external routing
+
+Current validated flow:
+
+```text
+Frontend
+  → api-gateway
+  → document-service
+  → ai-service
+  → Spring AI / OpenAI
+  → PostgreSQL
+  → Kafka document.analyzed
+  → Dashboard document history
+```
+Reason:
+
+- validates container networking
+- validates environment-based service URLs
+- validates health checks
+- confirms document analyzer works end-to-end

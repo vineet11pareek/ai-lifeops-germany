@@ -950,7 +950,39 @@ GitHub Actions workflow:
 ```text
 .github/workflows/document-service-ci.yml
 ```
+### Full Document Runtime Validation
 
+Start full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Validate document-service:
+```text
+http://localhost:8083/actuator/health
+http://localhost:8080/api/documents/health
+```
+Analyze document through gateway:
+```http
+POST http://localhost:8080/api/documents/analyze
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+
+Expected:
+
+- document is analyzed
+- result is stored in PostgreSQL
+- document.analyzed event is published to Kafka
+- dashboard document history updates
 
 
 

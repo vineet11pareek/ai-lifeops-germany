@@ -144,6 +144,11 @@ Completed:
 - Document Analysis History section added
 - Upcoming Deadlines card uses extracted document deadlines
 - document history refreshes after new analysis
+- document-service Docker runtime validated
+- document analysis tested through API Gateway
+- document persistence validated
+- document.analyzed Kafka event validated
+- frontend document analyzer flow validated
 
 ---
 
