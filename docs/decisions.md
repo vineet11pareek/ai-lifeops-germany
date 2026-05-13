@@ -826,3 +826,18 @@ Reason:
 
 ---
 
+## Decision 056 — Complete Phase 3 with Text-Based Document Analyzer
+
+Status: Accepted
+
+Phase 3 is completed with a text-based Document Analyzer.
+
+Reason:
+
+- validates the main user value before adding PDF/OCR complexity
+- enables structured summary, deadline, action, risk, and next step extraction
+- creates a foundation for future Bureaucracy Assistant workflows
+- prepares the platform for task approval and reminder features
+
+---
+

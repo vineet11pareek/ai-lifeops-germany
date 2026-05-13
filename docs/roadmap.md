@@ -134,21 +134,26 @@ Goal:
 - show document analysis in dashboard
 - prepare for future PDF/OCR support
 
+### Phase 3 Completion Summary
+
+Phase 3 introduced the Document Analyzer module.
+
 Completed:
 
-- frontend document API client
-- dashboard Document Analyzer form
-- document analysis result display
-- structured summary/deadline/action/risk output in UI
-- document history API connected to frontend
-- Document Analysis History section added
-- Upcoming Deadlines card uses extracted document deadlines
-- document history refreshes after new analysis
-- document-service Docker runtime validated
-- document analysis tested through API Gateway
-- document persistence validated
-- document.analyzed Kafka event validated
-- frontend document analyzer flow validated
+- Dedicated `document-service`
+- Document metadata persistence
+- Text-based document analysis API
+- Structured document analysis endpoint in `ai-service`
+- Frontend Document Analyzer UI
+- Document Analysis History UI
+- Upcoming Deadlines from analyzed documents
+- Kafka foundation for `document.analyzed` events
+- Tests and CI for `document-service`
+- Docker runtime validation
+
+Result:
+
+Users can paste German/EU document text, receive structured AI analysis, and revisit document history from the dashboard.
 
 ---
 

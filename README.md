@@ -147,3 +147,23 @@ Current AI capabilities:
 - publish AI completion event to Kafka
 
 ---
+
+## Phase 3 Status
+
+Status: Completed
+
+Phase 3 delivered the Document Analyzer capability:
+
+```text
+Dashboard → API Gateway → document-service → ai-service → PostgreSQL → Kafka
+```
+Current document capabilities:
+
+- analyze pasted document text
+- extract summary
+- extract deadline
+- extract required action 
+- classify risk level
+- suggest next step
+- store document history
+- display extracted deadlines on dashboard

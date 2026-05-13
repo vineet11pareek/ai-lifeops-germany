@@ -1303,3 +1303,55 @@ Reason:
 - validates environment-based service URLs
 - validates health checks
 - confirms document analyzer works end-to-end
+
+### Phase 3 Architecture
+
+Phase 3 introduced `document-service` as the dedicated document workflow boundary.
+
+Current document request flow:
+
+```text
+React Dashboard
+  → POST /api/documents/analyze
+  → api-gateway
+  → document-service
+  → POST /api/ai/document-analysis
+  → ai-service
+  → Spring AI/OpenAI
+  → document-service stores result
+  → documents table
+  → document.analyzed Kafka topic
+  → dashboard document history
+```
+
+Current document APIs:
+```text
+GET  /api/documents/health
+POST /api/documents
+GET  /api/documents
+GET  /api/documents/{id}
+POST /api/documents/analyze
+```
+Current AI document endpoint:
+```text
+POST /api/ai/document-analysis
+```
+Current persistence:
+```text
+documents
+```
+Current Kafka topic:
+```text
+document.analyzed
+```
+Current limitations:
+
+- document history is not yet filtered by authenticated user 
+- only pasted text is supported
+- PDF upload is not implemented yet
+- OCR is not implemented yet
+- document analysis is still synchronous
+- no retry/DLQ handling yet for document analysis events
+
+---
+
