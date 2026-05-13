@@ -62,6 +62,7 @@ Service-level documentation:
 - [api-gateway](backend/api-gateway/README.md)
 - [ai-service](backend/ai-service/README.md)
 - [document-service](backend/document-service/README.md)
+- [task-service](backend/task-service/README.md)
 
 Reason:
 

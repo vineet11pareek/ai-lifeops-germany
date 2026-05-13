@@ -159,9 +159,18 @@ Users can paste German/EU document text, receive structured AI analysis, and rev
 
 ## Phase 4 — Task Approval Layer
 
-- Create task proposals
-- Approve, reject, or edit task
-- Track task status
+Status: In Progress
+
+Goal:
+
+- create task-service
+- consume document analyzed events
+- create task proposals
+- show pending tasks on dashboard
+- allow approve/reject decisions
+- prepare for future task execution agents
+
+---
 
 ## Phase 5 — Truth Layer
 

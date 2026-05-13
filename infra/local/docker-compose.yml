@@ -36,6 +36,7 @@ services:
       USER_SERVICE_URL: http://user-service:8081
       AI_SERVICE_URL: http://ai-service:8082
       DOCUMENT_SERVICE_URL: http://document-service:8083
+      TASK_SERVICE_URL: http://task-service:8084
     ports:
       - "8080:8080"
     depends_on:
@@ -44,6 +45,8 @@ services:
       ai-service:
         condition: service_healthy
       document-service:
+        condition: service_healthy
+      task-service:
         condition: service_healthy
     networks:
       - lifeops-network
@@ -108,6 +111,33 @@ services:
       - lifeops-network
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8083/actuator/health || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  task-service:
+    build:
+      context: ../../backend/task-service
+      dockerfile: Dockerfile
+    container_name: lifeops-task-service
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lifeops_db
+      SPRING_DATASOURCE_USERNAME: lifeops
+      SPRING_DATASOURCE_PASSWORD: lifeops_password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - lifeops-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8084/actuator/health || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 10

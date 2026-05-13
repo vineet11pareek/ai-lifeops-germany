@@ -984,6 +984,32 @@ Expected:
 - document.analyzed event is published to Kafka
 - dashboard document history updates
 
+---
+
+## task-service
+
+task-service runs on:
+
+```text
+http://localhost:8084
+```
+Health:
+```text
+http://localhost:8084/api/tasks/health
+```
+
+
+Through API Gateway:
+```text
+http://localhost:8080/api/tasks/health
+```
+Swagger:
+```text
+http://localhost:8084/swagger-ui.html
+```
+
+
+
 
 
 

@@ -1355,3 +1355,75 @@ Current limitations:
 
 ---
 
+## Phase 4 — Task Approval Layer
+
+Phase 4 introduces the Task Approval Layer.
+
+The goal is to convert AI-detected actions into user-approved task proposals.
+
+Initial flow:
+
+```text
+document-service
+  → publishes document.analyzed event
+  → Kafka
+  → task-service consumes event
+  → task-service creates task proposal
+  → dashboard displays pending task
+  → user approves or rejects
+```
+
+Initial task-service responsibilities:
+
+- consume document.analyzed events 
+- create task proposals 
+- store task status 
+- expose task APIs 
+- support approve/reject workflow
+
+Planned APIs:
+```text
+GET  /api/tasks
+GET  /api/tasks/pending
+GET  /api/tasks/{id}
+POST /api/tasks/{id}/approve
+POST /api/tasks/{id}/reject
+```
+
+Reason:
+
+- converts AI analysis into actionable workflows 
+- keeps user approval in the loop
+- prepares for future task execution agents
+- differentiates the platform from generic AI chatbots
+
+### task-service
+
+`task-service` is introduced as the dedicated service for task proposals and approval workflows.
+
+Current responsibility:
+
+- expose task service boundary
+- provide health endpoint
+- prepare for task persistence
+- prepare to consume `document.analyzed` events
+
+Current endpoint:
+
+```text
+GET /api/tasks/health
+```
+Current port:
+```text
+task-service: 8084
+```
+Gateway route:
+```text
+/api/tasks/** → task-service
+```
+Reason:
+
+- separates task approval lifecycle from document analysis 
+- prepares for human-in-the-loop workflows
+- supports future execution agents
+- keeps platform modular

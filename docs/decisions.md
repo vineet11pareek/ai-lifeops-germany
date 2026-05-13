@@ -841,3 +841,48 @@ Reason:
 
 ---
 
+## Decision 057 — Introduce Human-in-the-Loop Task Approval
+
+Status: Accepted
+
+AI-detected actions will become task proposals that require user approval.
+
+Reason:
+
+- avoids unsafe autonomous execution
+- keeps user in control
+- supports legal and administrative workflows
+- creates a foundation for future execution agents
+
+---
+
+## Decision 058 — Use Kafka for Task Proposal Creation
+
+Status: Accepted
+
+Task proposals will be created from Kafka events such as `document.analyzed`.
+
+Reason:
+
+- keeps document-service decoupled from task-service
+- supports event-driven workflows
+- allows future services to react to the same event
+- improves scalability and maintainability
+
+---
+
+## Decision 059 — Add task-service as Dedicated Task Approval Boundary
+
+Status: Accepted
+
+A new `task-service` is added as the dedicated backend service for task proposals and approval workflows.
+
+Reason:
+
+- separates task lifecycle from document analysis
+- supports human-in-the-loop approval
+- prepares for future task execution agents
+- allows independent scaling and ownership
+
+---
+
