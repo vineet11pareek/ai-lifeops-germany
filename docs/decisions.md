@@ -797,3 +797,32 @@ Reason:
 
 ---
 
+## Decision 054 — Mock Downstream AI and Kafka in document-service Tests
+
+Status: Accepted
+
+`document-service` tests mock downstream AI and Kafka interactions.
+
+Reason:
+
+- avoids external dependencies in CI
+- prevents flaky tests
+- keeps tests fast
+- validates document-service behavior independently
+
+---
+
+## Decision 055 — Add Dedicated CI for document-service
+
+Status: Accepted
+
+`document-service` has its own GitHub Actions CI workflow.
+
+Reason:
+
+- validates document-service independently
+- supports microservice-level quality gates
+- keeps service ownership clear
+
+---
+

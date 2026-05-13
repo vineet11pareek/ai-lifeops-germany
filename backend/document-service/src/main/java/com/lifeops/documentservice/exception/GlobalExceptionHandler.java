@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
                 getCorrelationId(),
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                exception.getMessage(),
+                "Validation failed",
                 request.getRequestURI(),
                 fieldErrorResponses
 

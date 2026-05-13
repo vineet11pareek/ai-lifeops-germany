@@ -30,7 +30,7 @@ public class DocumentController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(
             summary = "Create document metadata",
             description = "Stores document title and content with RECIEVED status."
@@ -70,7 +70,7 @@ public class DocumentController {
     )
     public ApiResponse<DocumentResponse> analyzeDocument(@Valid @RequestBody AnalyzeDocumentRequest request){
         return ApiResponse.success(
-                "Document analyze successfully",
+                "Document analyzed successfully",
                 documentService.analyzeDocument(request)
         );
     }

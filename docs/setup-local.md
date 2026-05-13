@@ -933,6 +933,25 @@ Body:
 }
 ```
 
+### Running document-service Tests
+
+Run tests:
+
+```bash
+cd backend/document-service
+mvnw.cmd test
+```
+
+Expected:
+```text
+BUILD SUCCESS
+```
+GitHub Actions workflow:
+```text
+.github/workflows/document-service-ci.yml
+```
+
+
 
 
 

@@ -1248,3 +1248,29 @@ Reason:
 - prepares for notification/reminder workflows
 - decouples document analysis from downstream actions
 - supports event-driven architecture
+
+### document-service Testing and CI
+
+`document-service` includes automated tests for:
+
+- document response mapping
+- document metadata creation
+- document analysis lifecycle
+- document analyzed event publishing
+- controller API contracts
+- validation errors
+
+The CI pipeline runs:
+
+```text
+./mvnw test
+./mvnw clean package -DskipTests
+```
+
+Reason:
+
+- validates document workflow behavior
+- avoids real AI/Kafka/PostgreSQL dependencies in CI
+- keeps tests fast and deterministic
+- aligns document-service quality gate with other backend services
+
