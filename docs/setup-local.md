@@ -1093,6 +1093,27 @@ Expected:
 - task proposal is created
 - task appears with WAITING_FOR_APPROVAL status
 
+### Testing Task Approval APIs
+
+Fetch pending tasks:
+
+```http
+GET http://localhost:8080/api/tasks/pending
+```
+Approve task:
+```http
+POST http://localhost:8080/api/tasks/{taskId}/approve
+```
+
+Reject task:
+```http
+POST http://localhost:8080/api/tasks/{taskId}/reject
+```
+Invalid repeated approval/rejection returns:
+```text
+409 Conflict
+```
+
 
 
 

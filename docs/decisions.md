@@ -942,3 +942,21 @@ Reason:
 - Kafka can redeliver messages
 - duplicate document events should not create duplicate tasks
 - application-level checks and database uniqueness provide stronger protection
+
+---
+
+## Decision 064 — Require Explicit User Approval for Tasks
+
+Status: Accepted
+
+Task proposals must be explicitly approved or rejected by the user.
+
+Reason:
+
+- AI should not execute sensitive actions automatically
+- users remain in control of legal and administrative decisions
+- approval status creates auditability
+- prepares for safe task execution in future phases
+
+---
+

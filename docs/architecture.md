@@ -1516,3 +1516,30 @@ Reason:
 - prevents duplicate tasks from repeated Kafka delivery
 - converts AI-detected actions into user approval workflow
 - prepares dashboard pending task UI
+
+### Task Approval APIs
+
+`task-service` now supports approve and reject operations.
+
+Current approval APIs:
+
+```text
+POST /api/tasks/{id}/approve
+POST /api/tasks/{id}/reject
+```
+Current allowed transition:
+```text
+WAITING_FOR_APPROVAL → APPROVED
+WAITING_FOR_APPROVAL → REJECTED
+```
+
+Invalid transitions return:
+```text
+409 Conflict
+```
+Reason:
+
+- keeps user in control
+- prevents unsafe autonomous execution
+- creates audit trail for user decisions
+- prepares for future task execution agents

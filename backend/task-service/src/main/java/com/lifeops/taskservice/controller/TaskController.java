@@ -5,10 +5,7 @@ import com.lifeops.taskservice.dto.TaskResponse;
 import com.lifeops.taskservice.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -50,6 +47,24 @@ public class TaskController {
                 taskService.getTaskById(id)
         );
 
+    }
+
+    @PostMapping("/{id}/approve")
+    @Operation(summary = "Approve task", description = "Approves a task waiting for user approval.")
+    public ApiResponse<TaskResponse> approveTask(@PathVariable UUID id){
+        return ApiResponse.success(
+                "Task approved successfully",
+                taskService.approveTask(id)
+        );
+    }
+
+    @PostMapping("/{id}/reject")
+    @Operation(summary = "Reject task", description = "Reject a task waiting for user approval.")
+    public ApiResponse<TaskResponse> rejectTask(@PathVariable UUID id){
+        return ApiResponse.success(
+                "Task reject successfully",
+                taskService.rejectTask(id)
+        );
     }
 
 }

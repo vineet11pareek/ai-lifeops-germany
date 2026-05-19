@@ -98,6 +98,28 @@ public class TaskService {
 
     }
 
+    @Transactional
+    public TaskResponse approveTask(UUID id){
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        task.approve();
+        Task savedTask = taskRepository.save(task);
+        return taskMapper.toResponse(savedTask);
+    }
+
+    @Transactional
+    public TaskResponse rejectTask(UUID id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        task.reject();
+
+        Task savedTask = taskRepository.save(task);
+
+        return taskMapper.toResponse(savedTask);
+    }
+
     private String safeValue(String value, String fallback) {
         if (value == null || value.isBlank()) {
             return fallback;

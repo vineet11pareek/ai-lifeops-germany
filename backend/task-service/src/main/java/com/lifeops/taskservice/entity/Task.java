@@ -1,5 +1,6 @@
 package com.lifeops.taskservice.entity;
 
+import com.lifeops.taskservice.exception.InvalidTaskStateException;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -74,11 +75,17 @@ public class Task {
     }
 
     public void approve(){
+        if(this.status != TaskStatus.WAITING_FOR_APPROVAL){
+            throw new InvalidTaskStateException("Only tasks waiting for approval can be approved");
+        }
         this.status = TaskStatus.APPROVED;
         this.approvedAt = Instant.now();
     }
 
     public void reject(){
+        if(this.status != TaskStatus.WAITING_FOR_APPROVAL){
+            throw new InvalidTaskStateException("Only tasks waiting for approval can be rejected");
+        }
         this.status = TaskStatus.REJECTED;
         this.rejectedAt = Instant.now();
     }

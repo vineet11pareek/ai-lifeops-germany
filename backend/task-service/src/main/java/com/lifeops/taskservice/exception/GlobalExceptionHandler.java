@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -68,6 +69,20 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(InvalidTaskStateException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidTaskStateException(InvalidTaskStateException exception, HttpServletRequest request){
+        ApiErrorResponse response = new ApiErrorResponse(
+                Instant.now(),
+                getCorrelationId(),
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     private String getCorrelationId(){
