@@ -45,3 +45,11 @@ export async function rejectTask(taskId: string): Promise<TaskResponse> {
 
   return response.data.data;
 }
+
+export async function getTaskHistory(): Promise<TaskResponse[]> {
+  const response = await apiClient.get<ApiResponse<TaskResponse[]>>(
+    "/api/tasks"
+  );
+
+  return response.data.data;
+}

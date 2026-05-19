@@ -1570,3 +1570,30 @@ Reason:
 - gives users control over AI-generated actions
 - completes first human-in-the-loop workflow
 - prepares for future task execution agents
+
+### Frontend Task History UI
+
+The dashboard now displays task history from `task-service`.
+
+Current flow:
+
+```text
+Dashboard
+  → GET /api/tasks
+  → api-gateway
+  → task-service
+  → PostgreSQL
+  → task history displayed
+```
+Current UI behavior:
+
+- task history loads on dashboard open
+- task history refreshes after document analysis
+- task history refreshes after approve/reject decision
+- approved and rejected decisions remain visible for auditability
+
+Reason:
+
+- provides transparency for user decisions
+- supports auditability of AI-generated task proposals
+- prepares for future task execution history

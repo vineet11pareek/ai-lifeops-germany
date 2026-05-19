@@ -15,6 +15,7 @@ import {
 import {
   approveTask,
   getPendingTasks,
+  getTaskHistory,
   rejectTask,
   type TaskResponse,
 } from "../api/taskApi";
@@ -67,6 +68,10 @@ function DashboardPage() {
     const [isTaskLoading, setIsTaskLoading] = useState(true);
     const [taskError, setTaskError] = useState<string | null>(null);
     const [taskActionId, setTaskActionId] = useState<string | null>(null);
+
+    const [taskHistory, setTaskHistory] = useState<TaskResponse[]>([]);
+    const [isTaskHistoryLoading, setIsTaskHistoryLoading] = useState(true);
+    const [taskHistoryError, setTaskHistoryError] = useState<string | null>(null);
 
     const handleLogout = () => {
       clearAuthToken();
@@ -143,6 +148,7 @@ function DashboardPage() {
         setDocumentContent("");
         await loadDocumentHistory();
         await loadPendingTasks();
+        await loadTaskHistory();
       } catch (err) {
         console.error(err);
         setDocumentError("Unable to analyze document. Please try again.");
@@ -188,6 +194,7 @@ function DashboardPage() {
 
         await approveTask(taskId);
         await loadPendingTasks();
+        await loadTaskHistory();
       } catch (err) {
         console.error(err);
         setTaskError("Unable to approve task.");
@@ -203,11 +210,27 @@ function DashboardPage() {
 
         await rejectTask(taskId);
         await loadPendingTasks();
+        await loadTaskHistory();
       } catch (err) {
         console.error(err);
         setTaskError("Unable to reject task.");
       } finally {
         setTaskActionId(null);
+      }
+    };
+
+    const loadTaskHistory = async () => {
+      try {
+        setIsTaskHistoryLoading(true);
+        setTaskHistoryError(null);
+
+        const tasks = await getTaskHistory();
+        setTaskHistory(tasks);
+      } catch (err) {
+        console.error(err);
+        setTaskHistoryError("Unable to load task history.");
+      } finally {
+        setIsTaskHistoryLoading(false);
       }
     };
 
@@ -228,7 +251,9 @@ function DashboardPage() {
       loadQueryHistory();
       loadDocumentHistory();
       loadPendingTasks();
+      loadTaskHistory();
     }, []);
+
   return (
     <main style={styles.page}>
       <section style={styles.header}>
@@ -555,6 +580,76 @@ function DashboardPage() {
                     >
                       Reject
                     </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section style={styles.documentSection}>
+        <div style={styles.aiCard}>
+          <h2 style={styles.sectionTitle}>Task History</h2>
+
+          {isTaskHistoryLoading && (
+            <p style={styles.emptyText}>Loading task history...</p>
+          )}
+
+          {!isTaskHistoryLoading && taskHistoryError && (
+            <p style={styles.errorText}>{taskHistoryError}</p>
+          )}
+
+          {!isTaskHistoryLoading && !taskHistoryError && taskHistory.length === 0 && (
+            <p style={styles.emptyText}>No task history yet.</p>
+          )}
+
+          {!isTaskHistoryLoading && !taskHistoryError && taskHistory.length > 0 && (
+            <div style={styles.fullHistoryList}>
+              {taskHistory.map((task) => (
+                <article key={task.id} style={styles.fullHistoryItem}>
+                  <div style={styles.historyHeader}>
+                    <span style={styles.statusBadge}>{task.status}</span>
+                    <span style={styles.answerMeta}>
+                      Risk: {task.riskLevel ?? "UNKNOWN"} ·{" "}
+                      {new Date(task.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <h3 style={styles.historyQuestionLarge}>{task.title}</h3>
+
+                  <div style={styles.analysisGrid}>
+                    <div style={styles.analysisItem}>
+                      <strong>Description</strong>
+                      <p>{task.description ?? "No description available."}</p>
+                    </div>
+
+                    <div style={styles.analysisItem}>
+                      <strong>Recommended Action</strong>
+                      <p>
+                        {task.recommendedAction ??
+                          "Review and decide whether action is needed."}
+                      </p>
+                    </div>
+
+                    <div style={styles.analysisItem}>
+                      <strong>Decision</strong>
+                      <p>
+                        {task.status === "APPROVED" && task.approvedAt
+                          ? `Approved at ${new Date(task.approvedAt).toLocaleString()}`
+                          : task.status === "REJECTED" && task.rejectedAt
+                          ? `Rejected at ${new Date(task.rejectedAt).toLocaleString()}`
+                          : "Waiting for user decision"}
+                      </p>
+                    </div>
+
+                    <div style={styles.analysisItem}>
+                      <strong>Source</strong>
+                      <p>
+                        {task.sourceType}
+                        {task.sourceId ? ` · ${task.sourceId}` : ""}
+                      </p>
+                    </div>
                   </div>
                 </article>
               ))}

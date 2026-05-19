@@ -178,6 +178,11 @@ Completed:
 - approve task action
 - reject task action
 - pending tasks refresh after document analysis and approval decision
+- frontend task history API integration
+- Task History dashboard section
+- approved tasks remain visible in history
+- rejected tasks remain visible in history
+- task history refreshes after user decisions
 
 ---
 
