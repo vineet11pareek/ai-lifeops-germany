@@ -1,18 +1,14 @@
-package com.lifeops.userservice.dto;
-
-import lombok.Builder;
+package com.lifeops.taskservice.dto;
 
 import java.time.Instant;
 
 public record ApiResponse<T>(
-        Instant timestamp,
+        Instant timeStamp,
         boolean success,
         String message,
         T data
 ) {
-
     public static <T> ApiResponse<T> success(String message, T data){
-
         return new ApiResponse<>(
                 Instant.now(),
                 true,

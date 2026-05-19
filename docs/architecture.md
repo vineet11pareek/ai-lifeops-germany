@@ -1427,3 +1427,42 @@ Reason:
 - prepares for human-in-the-loop workflows
 - supports future execution agents
 - keeps platform modular
+
+### Task Persistence
+
+`task-service` now persists task proposals in PostgreSQL.
+
+Current table:
+
+```text
+tasks
+```
+Current task statuses:
+```text
+PROPOSED
+WAITING_FOR_APPROVAL
+APPROVED
+REJECTED
+CANCELLED
+```
+Current task source types:
+```text
+DOCUMENT_ANALYSIS
+AI_QUERY
+CONTRACT
+TRUTH_LAYER
+MANUAL
+```
+Current APIs:
+```text
+GET /api/tasks
+GET /api/tasks/pending
+GET /api/tasks/{id}
+```
+
+Reason:
+
+- gives AI-suggested actions a persistent lifecycle
+- prepares for event-based task creation
+- prepares for approve/reject workflow
+- supports dashboard pending tasks

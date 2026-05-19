@@ -1008,6 +1008,29 @@ Swagger:
 http://localhost:8084/swagger-ui.html
 ```
 
+### Testing Task APIs
+
+Run full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Fetch recent tasks:
+```text
+GET http://localhost:8080/api/tasks
+```
+Fetch pending tasks:
+```text
+GET http://localhost:8080/api/tasks/pending
+```
+Expected initially:
+```json
+{
+  "success": true,
+  "data": []
+}
+```
 
 
 

@@ -886,3 +886,18 @@ Reason:
 
 ---
 
+## Decision 060 — Persist Task Proposals
+
+Status: Accepted
+
+Task proposals are persisted in PostgreSQL.
+
+Reason:
+
+- approval workflow requires durable state
+- users need to view pending and historical tasks
+- future execution agents require task lifecycle tracking
+- supports auditability and transparency
+
+---
+
