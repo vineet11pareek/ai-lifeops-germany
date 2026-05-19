@@ -901,3 +901,18 @@ Reason:
 
 ---
 
+## Decision 061 — task-service Consumes document.analyzed Events
+
+Status: Accepted
+
+`task-service` consumes `document.analyzed` Kafka events.
+
+Reason:
+
+- allows task proposals to be created from analyzed documents
+- keeps document-service independent from task-service
+- supports event-driven architecture
+- prepares for approval workflow automation
+
+---
+

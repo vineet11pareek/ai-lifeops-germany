@@ -1032,6 +1032,36 @@ Expected initially:
 }
 ```
 
+### Testing document.analyzed Consumption
+
+Start full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Analyze a document:
+```http
+POST http://localhost:8080/api/documents/analyze
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+Check task-service logs:
+```text
+docker logs lifeops-task-service
+```
+Expected:
+```text
+Received document analyzed event
+```
+
+
 
 
 

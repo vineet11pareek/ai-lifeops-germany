@@ -1466,3 +1466,28 @@ Reason:
 - prepares for event-based task creation
 - prepares for approve/reject workflow
 - supports dashboard pending tasks
+
+### Consuming Document Analyzed Events
+
+`task-service` now consumes `document.analyzed` Kafka events.
+
+Current event flow:
+
+```text
+document-service
+  → publishes document.analyzed
+  → Kafka topic document.analyzed
+  → task-service consumes event
+  → task-service logs received document analysis
+```
+Current consumer group:
+```text
+task-service
+```
+
+Reason:
+
+- decouples task-service from document-service
+- prepares automatic task proposal creation
+- supports event-driven workflows
+- allows future retry and DLQ handling
