@@ -170,6 +170,15 @@ Goal:
 - allow approve/reject decisions
 - prepare for future task execution agents
 
+Completed:
+
+- frontend task API client
+- pending tasks dashboard card
+- Pending Task Approvals section
+- approve task action
+- reject task action
+- pending tasks refresh after document analysis and approval decision
+
 ---
 
 ## Phase 5 — Truth Layer

@@ -1113,7 +1113,23 @@ Invalid repeated approval/rejection returns:
 ```text
 409 Conflict
 ```
+### Testing Pending Task UI
 
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Test:
+
+- login with Google
+- analyze a document
+- confirm task appears in Pending Task Approvals
+- approve task
+- confirm it disappears from pending list
+- analyze another document
+- reject task
+- confirm it disappears from pending list
 
 
 

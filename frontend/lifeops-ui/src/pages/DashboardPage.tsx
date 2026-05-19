@@ -12,7 +12,14 @@ import {
   getDocumentHistory,
   type DocumentAnalysisResponse,
 } from "../api/documentApi";
+import {
+  approveTask,
+  getPendingTasks,
+  rejectTask,
+  type TaskResponse,
+} from "../api/taskApi";
 import { clearAuthToken } from "../auth/authStorage";
+
 const modules = [
   {
     title: "Bureaucracy Assistant",
@@ -56,6 +63,10 @@ function DashboardPage() {
     const [documentHistory, setDocumentHistory] = useState<DocumentAnalysisResponse[]>([]);
     const [isDocumentHistoryLoading, setIsDocumentHistoryLoading] = useState(true);
     const [documentHistoryError, setDocumentHistoryError] = useState<string | null>(null);
+    const [pendingTasks, setPendingTasks] = useState<TaskResponse[]>([]);
+    const [isTaskLoading, setIsTaskLoading] = useState(true);
+    const [taskError, setTaskError] = useState<string | null>(null);
+    const [taskActionId, setTaskActionId] = useState<string | null>(null);
 
     const handleLogout = () => {
       clearAuthToken();
@@ -131,6 +142,7 @@ function DashboardPage() {
         setDocumentTitle("");
         setDocumentContent("");
         await loadDocumentHistory();
+        await loadPendingTasks();
       } catch (err) {
         console.error(err);
         setDocumentError("Unable to analyze document. Please try again.");
@@ -154,6 +166,51 @@ function DashboardPage() {
       }
     };
 
+    const loadPendingTasks = async () => {
+      try {
+        setIsTaskLoading(true);
+        setTaskError(null);
+
+        const tasks = await getPendingTasks();
+        setPendingTasks(tasks);
+      } catch (err) {
+        console.error(err);
+        setTaskError("Unable to load pending tasks.");
+      } finally {
+        setIsTaskLoading(false);
+      }
+    };
+
+    const handleApproveTask = async (taskId: string) => {
+      try {
+        setTaskActionId(taskId);
+        setTaskError(null);
+
+        await approveTask(taskId);
+        await loadPendingTasks();
+      } catch (err) {
+        console.error(err);
+        setTaskError("Unable to approve task.");
+      } finally {
+        setTaskActionId(null);
+      }
+    };
+
+    const handleRejectTask = async (taskId: string) => {
+      try {
+        setTaskActionId(taskId);
+        setTaskError(null);
+
+        await rejectTask(taskId);
+        await loadPendingTasks();
+      } catch (err) {
+        console.error(err);
+        setTaskError("Unable to reject task.");
+      } finally {
+        setTaskActionId(null);
+      }
+    };
+
     useEffect(() => {
       async function loadUser() {
         try {
@@ -170,6 +227,7 @@ function DashboardPage() {
       loadUser();
       loadQueryHistory();
       loadDocumentHistory();
+      loadPendingTasks();
     }, []);
   return (
     <main style={styles.page}>
@@ -237,9 +295,27 @@ function DashboardPage() {
 
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Pending Tasks</h2>
-          <p style={styles.emptyText}>
-            Task approval workflow will be added in the next phase.
-          </p>
+
+          {isTaskLoading && <p style={styles.emptyText}>Loading pending tasks...</p>}
+
+          {!isTaskLoading && taskError && <p style={styles.errorText}>{taskError}</p>}
+
+          {!isTaskLoading && !taskError && pendingTasks.length === 0 && (
+            <p style={styles.emptyText}>No pending approvals.</p>
+          )}
+
+          {!isTaskLoading && !taskError && pendingTasks.length > 0 && (
+            <div style={styles.historyList}>
+              {pendingTasks.slice(0, 3).map((task) => (
+                <article key={task.id} style={styles.historyItem}>
+                  <p style={styles.historyQuestion}>{task.title}</p>
+                  <p style={styles.historyMeta}>
+                    {task.riskLevel ?? "UNKNOWN"} · {task.status}
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
 
        <div style={styles.card}>
@@ -403,6 +479,85 @@ function DashboardPage() {
                   </p>
                 </div>
               </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section style={styles.documentSection}>
+        <div style={styles.aiCard}>
+          <h2 style={styles.sectionTitle}>Pending Task Approvals</h2>
+
+          {isTaskLoading && <p style={styles.emptyText}>Loading pending tasks...</p>}
+
+          {!isTaskLoading && taskError && <p style={styles.errorText}>{taskError}</p>}
+
+          {!isTaskLoading && !taskError && pendingTasks.length === 0 && (
+            <p style={styles.emptyText}>No pending task approvals.</p>
+          )}
+
+          {!isTaskLoading && !taskError && pendingTasks.length > 0 && (
+            <div style={styles.fullHistoryList}>
+              {pendingTasks.map((task) => (
+                <article key={task.id} style={styles.fullHistoryItem}>
+                  <div style={styles.historyHeader}>
+                    <span style={styles.statusBadge}>{task.status}</span>
+                    <span style={styles.answerMeta}>
+                      Risk: {task.riskLevel ?? "UNKNOWN"} ·{" "}
+                      {new Date(task.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <h3 style={styles.historyQuestionLarge}>{task.title}</h3>
+
+                  <div style={styles.analysisGrid}>
+                    <div style={styles.analysisItem}>
+                      <strong>Description</strong>
+                      <p>{task.description ?? "No description available."}</p>
+                    </div>
+
+                    <div style={styles.analysisItem}>
+                      <strong>Recommended Action</strong>
+                      <p>
+                        {task.recommendedAction ??
+                          "Review and decide whether action is needed."}
+                      </p>
+                    </div>
+
+                    <div style={styles.analysisItem}>
+                      <strong>Source</strong>
+                      <p>
+                        {task.sourceType}
+                        {task.sourceId ? ` · ${task.sourceId}` : ""}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div style={styles.taskActions}>
+                    <button
+                      style={{
+                        ...styles.approveButton,
+                        opacity: taskActionId === task.id ? 0.7 : 1,
+                      }}
+                      disabled={taskActionId === task.id}
+                      onClick={() => handleApproveTask(task.id)}
+                    >
+                      {taskActionId === task.id ? "Processing..." : "Approve"}
+                    </button>
+
+                    <button
+                      style={{
+                        ...styles.rejectButton,
+                        opacity: taskActionId === task.id ? 0.7 : 1,
+                      }}
+                      disabled={taskActionId === task.id}
+                      onClick={() => handleRejectTask(task.id)}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </article>
+              ))}
             </div>
           )}
         </div>
@@ -785,6 +940,31 @@ const styles: Record<string, React.CSSProperties> = {
       padding: "16px",
       color: "#334155",
       lineHeight: 1.6,
+    },
+
+    taskActions: {
+      display: "flex",
+      gap: "12px",
+      marginTop: "18px",
+      flexWrap: "wrap",
+    },
+    approveButton: {
+      background: "#16a34a",
+      color: "#ffffff",
+      border: "none",
+      borderRadius: "12px",
+      padding: "10px 16px",
+      fontWeight: 700,
+      cursor: "pointer",
+    },
+    rejectButton: {
+      background: "#ffffff",
+      color: "#dc2626",
+      border: "1px solid #fecaca",
+      borderRadius: "12px",
+      padding: "10px 16px",
+      fontWeight: 700,
+      cursor: "pointer",
     },
 };
 

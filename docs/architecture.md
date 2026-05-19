@@ -1543,3 +1543,30 @@ Reason:
 - prevents unsafe autonomous execution
 - creates audit trail for user decisions
 - prepares for future task execution agents
+
+### Frontend Pending Task Approval UI
+
+The dashboard now displays pending task approvals from `task-service`.
+
+Current flow:
+
+```text
+Dashboard
+  → GET /api/tasks/pending
+  → api-gateway
+  → task-service
+  → PostgreSQL
+  → pending tasks displayed
+```
+Approval flow:
+```text
+User clicks Approve/Reject
+  → POST /api/tasks/{id}/approve or /reject
+  → task-service updates status
+  → dashboard refreshes pending tasks
+```
+Reason:
+
+- gives users control over AI-generated actions
+- completes first human-in-the-loop workflow
+- prepares for future task execution agents
