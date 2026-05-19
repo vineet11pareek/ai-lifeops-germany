@@ -916,3 +916,29 @@ Reason:
 
 ---
 
+## Decision 062 — Create Task Proposals from Document Analysis Events
+
+Status: Accepted
+
+`task-service` creates task proposals when it consumes `document.analyzed` events.
+
+Reason:
+
+- converts AI document analysis into actionable workflow
+- keeps user approval in the loop
+- avoids direct coupling between document-service and task-service
+- prepares for future task execution agents
+
+---
+
+## Decision 063 — Enforce Task Idempotency by Source
+
+Status: Accepted
+
+Task proposals are idempotent based on `(source_type, source_id)`.
+
+Reason:
+
+- Kafka can redeliver messages
+- duplicate document events should not create duplicate tasks
+- application-level checks and database uniqueness provide stronger protection

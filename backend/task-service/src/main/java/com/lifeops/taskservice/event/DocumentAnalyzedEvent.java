@@ -3,7 +3,7 @@ package com.lifeops.taskservice.event;
 import java.time.Instant;
 import java.util.UUID;
 
-public record DocumentEventAnalyzed(
+public record DocumentAnalyzedEvent(
         UUID eventId,
         UUID documentId,
         UUID userId,

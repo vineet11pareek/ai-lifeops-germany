@@ -2,7 +2,7 @@ package com.lifeops.taskservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lifeops.taskservice.event.DocumentEventAnalyzed;
+import com.lifeops.taskservice.event.DocumentAnalyzedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,9 +13,11 @@ public class DocumentAnalyzedEventConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(DocumentAnalyzedEventConsumer.class);
     private final ObjectMapper objectMapper;
+    private final TaskService taskService;
 
-    public DocumentAnalyzedEventConsumer(ObjectMapper objectMapper) {
+    public DocumentAnalyzedEventConsumer(ObjectMapper objectMapper, TaskService taskService) {
         this.objectMapper = objectMapper;
+        this.taskService = taskService;
     }
 
     @KafkaListener(
@@ -24,7 +26,7 @@ public class DocumentAnalyzedEventConsumer {
     )
     public void consume(String rawEvent){
         try {
-            DocumentEventAnalyzed event = objectMapper.readValue(rawEvent, DocumentEventAnalyzed.class);
+            DocumentAnalyzedEvent event = objectMapper.readValue(rawEvent, DocumentAnalyzedEvent.class);
             log.info(
                     "Received document analyzed event eventId={}, documentId={}, title={}, riskLevel={}, status={}",
                     event.eventId(),
@@ -33,8 +35,10 @@ public class DocumentAnalyzedEventConsumer {
                     event.riskLevel(),
                     event.status()
             );
+           taskService.createTaskFromDocumentAnalyzedEvent(event);
         } catch (JsonProcessingException e) {
-            log.error("Deserialisation of an event having issue");
+            //TODO: create a custom exception and handle from global exception, instead of only log and ignore
+            log.error("Deserialisation of an event having issue",e);
         }
 
     }

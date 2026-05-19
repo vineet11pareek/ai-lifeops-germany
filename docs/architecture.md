@@ -1491,3 +1491,28 @@ Reason:
 - prepares automatic task proposal creation
 - supports event-driven workflows
 - allows future retry and DLQ handling
+
+### Task Proposal Creation from Document Analysis
+
+`task-service` now creates task proposals from `document.analyzed` Kafka events.
+
+Current flow:
+
+```text
+document-service
+  → publishes document.analyzed
+  → Kafka
+  → task-service consumes event
+  → task-service creates task proposal
+  → task status = WAITING_FOR_APPROVAL
+```
+Idempotency strategy:
+
+- application checks whether a task already exists for the source document
+- database enforces uniqueness on (source_type, source_id)
+
+Reason:
+
+- prevents duplicate tasks from repeated Kafka delivery
+- converts AI-detected actions into user approval workflow
+- prepares dashboard pending task UI
