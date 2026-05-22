@@ -1623,4 +1623,34 @@ Reason:
 - avoids real Kafka/PostgreSQL dependencies in CI
 - keeps service tests fast and deterministic
 
+### task-service Runtime Validation
 
+`task-service` is validated inside the full Docker Compose runtime.
+
+Runtime dependencies:
+
+- PostgreSQL for task persistence
+- Kafka for consuming `document.analyzed`
+- API Gateway for external routing
+- Frontend dashboard for approval workflow
+
+Current validated flow:
+
+```text
+Frontend
+  → api-gateway
+  → document-service
+  → ai-service
+  → document-service publishes document.analyzed
+  → Kafka
+  → task-service consumes event
+  → task-service creates task proposal
+  → dashboard shows pending task
+  → user approves/rejects
+  → task history updates
+```
+Reason:
+
+- validates event-driven service integration
+- validates container networking
+- confirms human-in-the-loop workflow works end-to-end

@@ -183,6 +183,12 @@ Completed:
 - approved tasks remain visible in history
 - rejected tasks remain visible in history
 - task history refreshes after user decisions
+- task-service Docker runtime validated
+- document.analyzed event consumption validated
+- task proposal creation validated
+- approve/reject APIs validated
+- frontend pending task approval flow validated
+- task history validation completed
 
 ---
 

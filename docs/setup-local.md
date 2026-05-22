@@ -1148,7 +1148,51 @@ GitHub Actions workflow:
 ```text
 .github/workflows/task-service-ci.yml
 ```
+### Full Task Runtime Validation
 
+Start full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Validate task-service:
+```text
+http://localhost:8084/actuator/health
+http://localhost:8080/api/tasks/health
+```
+
+Create task proposal by analyzing a document:
+```http
+POST http://localhost:8080/api/documents/analyze
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "title": "Letter from Finanzamt",
+  "content": "Sehr geehrte Damen und Herren, bitte reichen Sie die fehlenden Unterlagen bis zum 15.06.2026 ein."
+}
+```
+Fetch pending tasks:
+```http
+GET http://localhost:8080/api/tasks/pending
+```
+Approve task:
+```http
+POST http://localhost:8080/api/tasks/{taskId}/approve
+```
+Reject task:
+```http
+POST http://localhost:8080/api/tasks/{taskId}/reject
+```
+Expected:
+
+- document.analyzed event is consumed
+- task proposal is created
+- task can be approved or rejected
+- frontend task history updates
 
 
 
