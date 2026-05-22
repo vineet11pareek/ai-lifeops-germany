@@ -1654,3 +1654,57 @@ Reason:
 - validates event-driven service integration
 - validates container networking
 - confirms human-in-the-loop workflow works end-to-end
+
+
+### Phase 4 Architecture
+
+Phase 4 introduced `task-service` as the dedicated task approval workflow boundary.
+
+Current task flow:
+
+```text
+React Dashboard
+  → document-service analyzes document
+  → document-service publishes document.analyzed
+  → Kafka topic document.analyzed
+  → task-service consumes event
+  → task-service creates task proposal
+  → tasks table
+  → dashboard shows pending approval
+  → user approves/rejects
+  → dashboard task history updates
+```
+Current task APIs:
+```text
+GET  /api/tasks/health
+GET  /api/tasks
+GET  /api/tasks/pending
+GET  /api/tasks/{id}
+POST /api/tasks/{id}/approve
+POST /api/tasks/{id}/reject
+```
+
+Current persistence:
+```text
+tasks
+```
+
+Current Kafka input topic:
+```text
+document.analyzed
+```
+Current task statuses:
+```text
+PROPOSED
+WAITING_FOR_APPROVAL
+APPROVED
+REJECTED
+CANCELLED
+```
+Current limitations:
+
+- task history is not yet filtered by authenticated user
+- approved tasks are not executed yet
+- no task execution agent yet
+- no retry/DLQ strategy for task event consumption yet
+- no notification/reminder integration yet

@@ -989,3 +989,18 @@ Reason:
 
 ---
 
+## Decision 067 — Complete Phase 4 with Human Approval Workflow
+
+Status: Accepted
+
+Phase 4 is completed once AI-generated task proposals can be created, approved, rejected, and tracked in history.
+
+Reason:
+
+- establishes human-in-the-loop workflow
+- keeps AI-generated actions safe
+- prepares for future task execution agents
+- differentiates the platform from generic chatbot applications
+
+---
+

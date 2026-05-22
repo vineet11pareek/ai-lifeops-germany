@@ -168,3 +168,22 @@ Current document capabilities:
 - suggest next step
 - store document history
 - display extracted deadlines on dashboard
+
+## Phase 4 Status
+
+Status: Completed
+
+Phase 4 delivered the Task Approval Layer:
+
+```text
+document-service → Kafka → task-service → dashboard approval workflow
+```
+Current task capabilities:
+
+- consume document analyzed events
+- create task proposals
+- show pending tasks
+- approve tasks
+- reject tasks
+- show task history
+- prevent duplicate task creation by source

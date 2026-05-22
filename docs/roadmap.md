@@ -172,23 +172,20 @@ Goal:
 
 Completed:
 
-- frontend task API client
-- pending tasks dashboard card
-- Pending Task Approvals section
-- approve task action
-- reject task action
-- pending tasks refresh after document analysis and approval decision
-- frontend task history API integration
-- Task History dashboard section
-- approved tasks remain visible in history
-- rejected tasks remain visible in history
-- task history refreshes after user decisions
-- task-service Docker runtime validated
-- document.analyzed event consumption validated
-- task proposal creation validated
-- approve/reject APIs validated
-- frontend pending task approval flow validated
-- task history validation completed
+- Dedicated `task-service`
+- Task persistence and statuses
+- Kafka consumer for `document.analyzed`
+- Automatic task proposal creation
+- Task idempotency by `(source_type, source_id)`
+- Approve/reject APIs
+- Frontend pending task approval UI
+- Frontend task history UI
+- Tests and CI for `task-service`
+- Docker runtime validation
+
+Result:
+
+AI-detected document actions now become user-approved task proposals. Users can approve or reject tasks from the dashboard, and decisions remain visible in task history.
 
 ---
 
