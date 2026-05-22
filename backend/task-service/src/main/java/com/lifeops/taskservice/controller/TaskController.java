@@ -34,7 +34,7 @@ public class TaskController {
     @Operation(summary = "Get pending tasks", description = " Return tasks waiting for user approval.")
     public ApiResponse<List<TaskResponse>> getPendingTasks(){
         return ApiResponse.success(
-                "Pending tasks fetch successfully",
+                "Pending tasks fetched successfully",
                 taskService.getPendingTask()
         );
     }
@@ -62,7 +62,7 @@ public class TaskController {
     @Operation(summary = "Reject task", description = "Reject a task waiting for user approval.")
     public ApiResponse<TaskResponse> rejectTask(@PathVariable UUID id){
         return ApiResponse.success(
-                "Task reject successfully",
+                "Task rejected successfully",
                 taskService.rejectTask(id)
         );
     }

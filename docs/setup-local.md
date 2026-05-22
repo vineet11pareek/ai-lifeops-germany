@@ -1131,6 +1131,23 @@ Test:
 - reject task
 - confirm it disappears from pending list
 
+### Running task-service Tests
+
+Run tests:
+
+```bash
+cd backend/task-service
+mvnw.cmd test
+```
+
+Expected:
+```text
+BUILD SUCCESS
+```
+GitHub Actions workflow:
+```text
+.github/workflows/task-service-ci.yml
+```
 
 
 

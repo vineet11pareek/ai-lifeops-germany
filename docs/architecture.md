@@ -1597,3 +1597,30 @@ Reason:
 - provides transparency for user decisions
 - supports auditability of AI-generated task proposals
 - prepares for future task execution history
+
+### task-service Testing and CI
+
+`task-service` includes automated tests for:
+
+- task response mapping
+- recent and pending task queries
+- approve/reject lifecycle
+- invalid state transitions
+- idempotent task creation from document events
+- Kafka consumer delegation
+- controller API contracts
+
+The CI pipeline runs:
+
+```text
+./mvnw test
+./mvnw clean package -DskipTests
+```
+Reason:
+
+- protects the approval workflow
+- validates task proposal creation
+- avoids real Kafka/PostgreSQL dependencies in CI
+- keeps service tests fast and deterministic
+
+

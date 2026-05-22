@@ -960,3 +960,32 @@ Reason:
 
 ---
 
+## Decision 065 — Mock Kafka and Persistence in task-service Tests
+
+Status: Accepted
+
+`task-service` tests mock Kafka event handling and repository interactions.
+
+Reason:
+
+- avoids infrastructure dependency in CI
+- keeps tests deterministic
+- validates business logic independently
+- supports fast feedback during development
+
+---
+
+## Decision 066 — Add Dedicated CI for task-service
+
+Status: Accepted
+
+`task-service` has its own GitHub Actions CI workflow.
+
+Reason:
+
+- validates task-service independently
+- supports microservice-level ownership
+- keeps approval workflow quality checks visible
+
+---
+
