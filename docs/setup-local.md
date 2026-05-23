@@ -1216,6 +1216,31 @@ Swagger:
 http://localhost:8085/swagger-ui.html
 ```
 
+### Testing Truth Analysis Persistence APIs
+
+Create truth analysis request:
+
+```http
+POST http://localhost:8080/api/truth
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "title": "Online claim about Bürgergeld",
+  "content": "A viral post says everyone can get Bürgergeld without eligibility checks."
+}
+```
+Fetch recent truth analyses:
+```text
+GET http://localhost:8080/api/truth
+```
+
+Fetch truth analysis by ID:
+```text
+GET http://localhost:8080/api/truth/{id}
+```
+
 
 
 

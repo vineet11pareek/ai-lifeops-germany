@@ -1742,3 +1742,54 @@ Reason:
 - prepares for content credibility scoring
 - prepares for future URL/source retrieval
 - keeps platform modular
+
+### Truth Analysis Persistence
+
+`truth-service` now persists truth analysis requests in PostgreSQL.
+
+Current table:
+
+```text
+truth_analyses
+```
+Current stored fields:
+
+- analysis ID
+- user ID placeholder
+- title
+- content
+- claim summary placeholder
+- trust score placeholder
+- risk level
+- explanation placeholder
+- suggested verification steps placeholder
+- status
+- timestamps
+
+Current statuses:
+```text
+RECEIVED
+ANALYZING
+ANALYZED
+FAILED
+```
+Current risk levels:
+```text
+LOW
+MEDIUM
+HIGH
+UNKNOWN
+```
+Current APIs:
+```text
+POST /api/truth
+GET  /api/truth
+GET  /api/truth/{id}
+```
+
+Reason:
+
+- gives each truth check a persisted lifecycle
+- prepares for AI credibility analysis
+- prepares for dashboard truth history
+- supports auditability and future evidence retrieval

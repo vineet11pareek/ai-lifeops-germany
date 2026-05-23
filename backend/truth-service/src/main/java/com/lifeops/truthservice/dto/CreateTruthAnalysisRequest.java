@@ -1,0 +1,16 @@
+package com.lifeops.truthservice.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record CreateTruthAnalysisRequest(
+
+        @NotBlank(message = "Title is required")
+        @Size(max = 255,message = "Title must not exceed 255 characters")
+        String title,
+
+        @NotBlank(message = "Content is required")
+        @Size(max = 20000,message = "content must not exceed 255 characters")
+        String content
+) {
+}

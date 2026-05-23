@@ -1049,3 +1049,18 @@ Reason:
 
 ---
 
+## Decision 071 — Persist Truth Analysis Requests Before AI Analysis
+
+Status: Accepted
+
+Truth analysis requests are stored before AI credibility analysis is added.
+
+Reason:
+
+- each request receives a stable ID
+- analysis lifecycle can be tracked
+- failed analysis can still be linked to original input
+- prepares for async truth analysis later
+
+---
+
