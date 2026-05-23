@@ -1004,3 +1004,48 @@ Reason:
 
 ---
 
+## Decision 068 — Start Truth Layer with Pasted Text
+
+Status: Accepted
+
+The first Truth Layer version will analyze pasted content instead of crawling URLs.
+
+Reason:
+
+- validates analysis workflow faster
+- avoids early web crawling complexity
+- avoids dependency on unstable external pages
+- lets the trust scoring format stabilize first
+
+---
+
+## Decision 069 — Create Dedicated truth-service
+
+Status: Accepted
+
+Truth analysis is handled by a dedicated `truth-service`.
+
+Reason:
+
+- truth analysis has its own lifecycle, scoring, and history
+- prepares for future URL extraction and source verification
+- keeps ai-service focused on AI provider interaction
+- keeps the platform modular
+
+---
+
+## Decision 070 — Add truth-service as Dedicated Truth Layer Boundary
+
+Status: Accepted
+
+A new `truth-service` is added as the dedicated backend service for Truth Layer workflows.
+
+Reason:
+
+- separates credibility analysis from generic AI chat
+- supports independent lifecycle and history
+- prepares for future URL and evidence retrieval
+- keeps the system modular and scalable
+
+---
+

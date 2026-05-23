@@ -63,6 +63,7 @@ Service-level documentation:
 - [ai-service](backend/ai-service/README.md)
 - [document-service](backend/document-service/README.md)
 - [task-service](backend/task-service/README.md)
+- [truth-service](backend/truth-service/README.md)
 
 Reason:
 

@@ -4,6 +4,7 @@ lifeops:
     ai-service-url: ${AI_SERVICE_URL:http://localhost:8082}
     document-service-url: ${DOCUMENT_SERVICE_URL:http://localhost:8083}
     task-service-url: ${TASK_SERVICE_URL:http://localhost:8084}
+    truth-service-url: ${TRUTH_SERVICE_URL:http://localhost:8085}
 
 spring:
   application:
@@ -30,6 +31,10 @@ spring:
               uri: ${lifeops.services.task-service-url}
               predicates:
                 - Path=/api/tasks/**
+            - id: truth-service
+              uri: ${lifeops.services.truth-service-url}
+              predicates:
+                - Path=/api/truth/**
 
           globalcors:
             cors-configurations:

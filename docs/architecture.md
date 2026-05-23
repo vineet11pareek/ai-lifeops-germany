@@ -1708,3 +1708,37 @@ Current limitations:
 - no task execution agent yet
 - no retry/DLQ strategy for task event consumption yet
 - no notification/reminder integration yet
+
+
+## truth-service
+
+`truth-service` is introduced as the dedicated service for Truth Layer workflows.
+
+Current responsibility:
+
+- expose truth service boundary
+- provide health endpoint
+- prepare for truth analysis persistence
+- prepare for AI-based credibility analysis
+
+Current endpoint:
+
+```text
+GET /api/truth/health
+```
+Current Port:
+```text
+truth-service: 8085
+```
+
+Gateway route:
+```text
+/api/truth/** → truth-service
+```
+
+Reason:
+
+- separates truth analysis lifecycle from generic AI chat
+- prepares for content credibility scoring
+- prepares for future URL/source retrieval
+- keeps platform modular

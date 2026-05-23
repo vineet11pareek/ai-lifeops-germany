@@ -37,6 +37,7 @@ services:
       AI_SERVICE_URL: http://ai-service:8082
       DOCUMENT_SERVICE_URL: http://document-service:8083
       TASK_SERVICE_URL: http://task-service:8084
+      TRUTH_SERVICE_URL: http://truth-service:8085
     ports:
       - "8080:8080"
     depends_on:
@@ -47,6 +48,8 @@ services:
       document-service:
         condition: service_healthy
       task-service:
+        condition: service_healthy
+      truth-service:
         condition: service_healthy
     networks:
       - lifeops-network
@@ -138,6 +141,30 @@ services:
       - lifeops-network
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8084/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  truth-service:
+    build:
+      context: ../../backend/truth-service
+      dockerfile: Dockerfile
+    container_name: lifeops-truth-service
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lifeops_db
+      SPRING_DATASOURCE_USERNAME: lifeops
+      SPRING_DATASOURCE_PASSWORD: lifeops_password
+    ports:
+      - "8085:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lifeops-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8085/actuator/health || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 10

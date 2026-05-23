@@ -123,8 +123,6 @@ Users can ask AI questions from the dashboard, receive answers, and view persist
 
 ## Phase 3 — Document Analyzer
 
-Status: In Progress
-
 Goal:
 
 - create document-service
@@ -159,8 +157,6 @@ Users can paste German/EU document text, receive structured AI analysis, and rev
 
 ## Phase 4 — Task Approval Layer
 
-Status: In Progress
-
 Goal:
 
 - create task-service
@@ -191,7 +187,15 @@ AI-detected document actions now become user-approved task proposals. Users can 
 
 ## Phase 5 — Truth Layer
 
-- Analyze URL or text
-- Extract claims
-- Compare sources
-- Generate credibility score
+Status: In Progress
+
+Goal:
+
+- create truth-service
+- analyze pasted internet content
+- extract claim summary
+- calculate trust score
+- classify risk level
+- suggest verification steps
+- show truth analysis history
+- prepare for future URL/evidence retrieval

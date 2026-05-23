@@ -1194,6 +1194,30 @@ Expected:
 - task can be approved or rejected
 - frontend task history updates
 
+## truth-service
+
+truth-service runs on:
+
+```text
+http://localhost:8085
+```
+Health:
+```text
+http://localhost:8085/api/truth/health
+```
+
+Through API gateway:
+```text
+http://localhost:8080/api/truth/health
+```
+
+Swagger:
+```text
+http://localhost:8085/swagger-ui.html
+```
+
+
+
 
 
 
