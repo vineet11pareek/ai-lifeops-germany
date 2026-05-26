@@ -1319,6 +1319,23 @@ Expected:
 - status becomes ANALYZED
 - trust score, risk level, claim summary, explanation, and verification steps are displayed
 
+### Testing Truth Analysis History UI
+
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Test:
+
+- login with Google
+- analyze a truth claim
+- confirm result appears
+- confirm truth check appears in dashboard card
+- refresh dashboard
+- confirm analysis remains in Truth Analysis History
+
 
 
 

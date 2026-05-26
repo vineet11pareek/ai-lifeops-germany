@@ -206,3 +206,7 @@ Completed:
 - dashboard Truth Layer form
 - truth analysis result display
 - structured claim/trust/risk output in UI
+- truth history API connected to frontend
+- Truth Checks dashboard card added
+- Truth Analysis History section added
+- truth history refreshes after new analysis

@@ -22,6 +22,7 @@ import {
 
 import {
   analyzeTruth,
+  getTruthHistory,
   type TruthAnalysisResponse,
 } from "../api/truthApi";
 
@@ -90,6 +91,10 @@ function DashboardPage() {
       useState<TruthAnalysisResponse | null>(null);
     const [isTruthLoading, setIsTruthLoading] = useState(false);
     const [truthError, setTruthError] = useState<string | null>(null);
+
+    const [truthHistory, setTruthHistory] = useState<TruthAnalysisResponse[]>([]);
+    const [isTruthHistoryLoading, setIsTruthHistoryLoading] = useState(true);
+    const [truthHistoryError, setTruthHistoryError] = useState<string | null>(null);
 
     const handleLogout = () => {
       clearAuthToken();
@@ -280,11 +285,27 @@ function DashboardPage() {
         setTruthAnalysis(result);
         setTruthTitle("");
         setTruthContent("");
+        await loadTruthHistory();
       } catch (err) {
         console.error(err);
         setTruthError("Unable to analyze content credibility. Please try again.");
       } finally {
         setIsTruthLoading(false);
+      }
+    };
+
+    const loadTruthHistory = async () => {
+      try {
+        setIsTruthHistoryLoading(true);
+        setTruthHistoryError(null);
+
+        const history = await getTruthHistory();
+        setTruthHistory(history);
+      } catch (err) {
+        console.error(err);
+        setTruthHistoryError("Unable to load truth analysis history.");
+      } finally {
+        setIsTruthHistoryLoading(false);
       }
     };
 
@@ -306,6 +327,7 @@ function DashboardPage() {
       loadDocumentHistory();
       loadPendingTasks();
       loadTaskHistory();
+      loadTruthHistory();
     }, []);
 
   return (
@@ -431,6 +453,40 @@ function DashboardPage() {
                  <p style={styles.historyMeta}>{document.deadlineText}</p>
                </article>
              ))}
+       </div>
+
+       <div style={styles.card}>
+         <h2 style={styles.cardTitle}>Truth Checks</h2>
+
+         {isTruthHistoryLoading && (
+           <p style={styles.emptyText}>Loading truth checks...</p>
+         )}
+
+         {!isTruthHistoryLoading && truthHistoryError && (
+           <p style={styles.errorText}>{truthHistoryError}</p>
+         )}
+
+         {!isTruthHistoryLoading &&
+           !truthHistoryError &&
+           truthHistory.length === 0 && (
+             <p style={styles.emptyText}>No truth checks yet.</p>
+           )}
+
+         {!isTruthHistoryLoading &&
+           !truthHistoryError &&
+           truthHistory.length > 0 && (
+             <div style={styles.historyList}>
+               {truthHistory.slice(0, 3).map((item) => (
+                 <article key={item.id} style={styles.historyItem}>
+                   <p style={styles.historyQuestion}>{item.title}</p>
+                   <p style={styles.historyMeta}>
+                     Trust: {item.trustScore ?? "N/A"}/100 · Risk:{" "}
+                     {item.riskLevel ?? "UNKNOWN"}
+                   </p>
+                 </article>
+               ))}
+             </div>
+           )}
        </div>
       </section>
 
@@ -650,6 +706,78 @@ function DashboardPage() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      <section style={styles.documentSection}>
+        <div style={styles.aiCard}>
+          <h2 style={styles.sectionTitle}>Truth Analysis History</h2>
+
+          {isTruthHistoryLoading && (
+            <p style={styles.emptyText}>Loading truth analysis history...</p>
+          )}
+
+          {!isTruthHistoryLoading && truthHistoryError && (
+            <p style={styles.errorText}>{truthHistoryError}</p>
+          )}
+
+          {!isTruthHistoryLoading &&
+            !truthHistoryError &&
+            truthHistory.length === 0 && (
+              <p style={styles.emptyText}>No truth analyses yet.</p>
+            )}
+
+          {!isTruthHistoryLoading &&
+            !truthHistoryError &&
+            truthHistory.length > 0 && (
+              <div style={styles.fullHistoryList}>
+                {truthHistory.map((item) => (
+                  <article key={item.id} style={styles.fullHistoryItem}>
+                    <div style={styles.historyHeader}>
+                      <span style={styles.statusBadge}>{item.status}</span>
+                      <span style={styles.answerMeta}>
+                        Risk: {item.riskLevel ?? "UNKNOWN"} · Trust Score:{" "}
+                        {item.trustScore ?? "N/A"}/100 ·{" "}
+                        {new Date(item.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+
+                    <h3 style={styles.historyQuestionLarge}>{item.title}</h3>
+
+                    <div style={styles.analysisGrid}>
+                      <div style={styles.analysisItem}>
+                        <strong>Claim Summary</strong>
+                        <p>{item.claimSummary ?? "No claim summary available."}</p>
+                      </div>
+
+                      <div style={styles.analysisItem}>
+                        <strong>Trust Score</strong>
+                        <p>
+                          {item.trustScore ?? "N/A"}/100
+                          <br />
+                          <small>
+                            0 = very unreliable, 50 = uncertain, 100 = highly reliable
+                          </small>
+                        </p>
+                      </div>
+
+                      <div style={styles.analysisItem}>
+                        <strong>Explanation</strong>
+                        <p>{item.explanation ?? "No explanation available."}</p>
+                      </div>
+
+                      <div style={styles.analysisItem}>
+                        <strong>Verification Steps</strong>
+                        <p>
+                          {item.suggestedVerificationSteps ??
+                            "Check official or trusted sources before acting."}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
         </div>
       </section>
 

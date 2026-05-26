@@ -34,3 +34,11 @@ export async function analyzeTruth(
 
   return response.data.data;
 }
+
+export async function getTruthHistory(): Promise<TruthAnalysisResponse[]> {
+  const response = await apiClient.get<ApiResponse<TruthAnalysisResponse[]>>(
+    "/api/truth"
+  );
+
+  return response.data.data;
+}

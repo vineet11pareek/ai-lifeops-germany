@@ -1887,4 +1887,30 @@ Reason:
 - provides structured credibility analysis
 - helps users verify questionable online information
 
+### Truth Analysis History UI
 
+The dashboard now displays persisted Truth Layer analysis history.
+
+Current flow:
+
+```text
+Dashboard
+  → GET /api/truth
+  → api-gateway
+  → truth-service
+  → PostgreSQL
+  → truth history displayed in UI
+```
+
+Current UI behavior:
+
+- truth history loads when dashboard opens
+- history refreshes after new truth analysis
+- latest checks appear in dashboard summary card
+- full history shows claim summary, trust score, risk level, explanation, and verification steps
+
+Reason:
+
+- users can revisit previous credibility checks
+- improves transparency and reuse
+- prepares for future URL/source evidence history
