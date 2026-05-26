@@ -1793,3 +1793,36 @@ Reason:
 - prepares for AI credibility analysis
 - prepares for dashboard truth history
 - supports auditability and future evidence retrieval
+
+### Structured Truth Analysis Endpoint
+
+`ai-service` now exposes a dedicated structured Truth Layer endpoint.
+
+Endpoint:
+
+```text
+POST /api/ai/truth-analysis
+```
+Current flow:
+```text
+truth-service or API client
+  → POST /api/ai/truth-analysis
+  → ai-service prompt + model call
+  → ai-service parses and normalizes structured response
+  → structured truth result returned
+```
+
+Returned fields:
+
+- claimSummary
+- trustScore
+- riskLevel
+- explanation
+- suggestedVerificationSteps
+
+Reason:
+
+- avoids generic chat output for credibility workflows
+- gives truth-service a stable structured contract
+- keeps prompt engineering inside ai-service
+- supports future evidence/source retrieval workflows

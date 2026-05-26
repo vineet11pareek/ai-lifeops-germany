@@ -1064,3 +1064,18 @@ Reason:
 
 ---
 
+## Decision 072 — Use Dedicated Structured Endpoint for Truth Analysis
+
+Status: Accepted
+
+Truth analysis uses a dedicated `ai-service` endpoint instead of the generic chat API.
+
+Reason:
+
+- generic chat output is not reliable enough for credibility workflows
+- truth-service needs structured trust score and risk data
+- prompt and parsing logic should stay inside ai-service
+- improves service contract clarity and testability
+
+---
+

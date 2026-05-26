@@ -1240,7 +1240,28 @@ Fetch truth analysis by ID:
 ```text
 GET http://localhost:8080/api/truth/{id}
 ```
+### Testing Structured Truth Analysis
 
+Test ai-service structured Truth Layer endpoint:
+
+```http
+POST http://localhost:8080/api/ai/truth-analysis
+Content-Type: application/json
+```
+Body:
+```json
+{
+  "title": "Online claim about Bürgergeld",
+  "content": "A viral post says everyone in Germany can get Bürgergeld without eligibility checks."
+}
+```
+
+Expected:
+
+- claim summary is returned
+- trust score between 0 and 100 is returned
+- risk level is returned
+- explanation and verification steps are returned
 
 
 
