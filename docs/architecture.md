@@ -1826,3 +1826,37 @@ Reason:
 - gives truth-service a stable structured contract
 - keeps prompt engineering inside ai-service
 - supports future evidence/source retrieval workflows
+
+### Truth Analysis API
+
+`truth-service` now supports AI-based credibility analysis.
+
+Current endpoint:
+
+```text
+POST /api/truth/analyze
+```
+
+Current flow:
+```text
+Frontend/API client
+  → api-gateway
+  → truth-service
+  → ai-service /api/ai/truth-analysis
+  → Spring AI/OpenAI
+  → truth-service stores structured result
+```
+
+Stored output:
+
+- claim summary
+- trust score
+- risk level
+- explanation
+- suggested verification steps
+
+Reason:
+
+- keeps truth analysis lifecycle in truth-service
+- keeps AI prompting inside ai-service
+- provides structured credibility analysis result

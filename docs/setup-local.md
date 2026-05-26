@@ -1263,6 +1263,36 @@ Expected:
 - risk level is returned
 - explanation and verification steps are returned
 
+## Testing Truth Analysis API
+
+Run full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+
+Analyze content:
+```http
+POST http://localhost:8080/api/truth/analyze
+Content-Type: application/json
+```
+
+Body:
+```json
+{
+  "title": "Online claim about Bürgergeld",
+  "content": "A viral post says everyone in Germany can get Bürgergeld without eligibility checks."
+}
+```
+
+Expected:
+
+- claim summary is returned
+- trust score is returned
+- risk level is returned
+- analysis is stored
+- status becomes ANALYZED
+
 
 
 

@@ -1,5 +1,6 @@
 package com.lifeops.truthservice.controller;
 
+import com.lifeops.truthservice.dto.AnalyzeTruthRequest;
 import com.lifeops.truthservice.dto.ApiResponse;
 import com.lifeops.truthservice.dto.CreateTruthAnalysisRequest;
 import com.lifeops.truthservice.dto.TruthAnalysisResponse;
@@ -62,6 +63,21 @@ public class TruthAnalysisController {
         return ApiResponse.success(
                 "Truth analysis fetched successfully",
                 truthAnalysisService.getAnalysisById(id)
+        );
+    }
+
+
+    @PostMapping("/analyze")
+    @Operation(
+            summary = "Analyze content credibility",
+            description = "Stores content and analyzes credibility using AI."
+    )
+    public ApiResponse<TruthAnalysisResponse> analyzeTruth(
+            @Valid @RequestBody AnalyzeTruthRequest request
+    ) {
+        return ApiResponse.success(
+                "Truth analysis completed successfully",
+                truthAnalysisService.analyzeTruth(request)
         );
     }
 }

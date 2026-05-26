@@ -1079,3 +1079,18 @@ Reason:
 
 ---
 
+## Decision 073 — Delegate Truth Reasoning to ai-service
+
+Status: Accepted
+
+`truth-service` calls `ai-service` for structured credibility analysis.
+
+Reason:
+
+- keeps AI provider logic centralized
+- avoids duplicating prompt logic across services
+- keeps truth-service focused on lifecycle and persistence
+- supports reuse by future verification workflows
+
+---
+
