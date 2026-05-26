@@ -1293,6 +1293,32 @@ Expected:
 - analysis is stored
 - status becomes ANALYZED
 
+### Testing Truth Layer UI
+
+Run backend:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Open:
+```text
+http://localhost:5173
+```
+Test:
+```text
+Title:
+Online claim about Bürgergeld
+
+Content:
+A viral post says everyone in Germany can get Bürgergeld without eligibility checks.
+```
+
+Expected:
+
+- truth analysis is completed
+- status becomes ANALYZED
+- trust score, risk level, claim summary, explanation, and verification steps are displayed
+
 
 
 

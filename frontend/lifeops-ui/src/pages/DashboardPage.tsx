@@ -19,6 +19,12 @@ import {
   rejectTask,
   type TaskResponse,
 } from "../api/taskApi";
+
+import {
+  analyzeTruth,
+  type TruthAnalysisResponse,
+} from "../api/truthApi";
+
 import { clearAuthToken } from "../auth/authStorage";
 
 const modules = [
@@ -37,6 +43,11 @@ const modules = [
     description: "Review AI-created task proposals before execution.",
     status: "Planned",
   },
+    {
+      title: "Truth Layer",
+      description: "Verify internet content, detect claims, and assess credibility.",
+      status: "Available",
+    }
 ];
 
 function DashboardPage() {
@@ -72,6 +83,13 @@ function DashboardPage() {
     const [taskHistory, setTaskHistory] = useState<TaskResponse[]>([]);
     const [isTaskHistoryLoading, setIsTaskHistoryLoading] = useState(true);
     const [taskHistoryError, setTaskHistoryError] = useState<string | null>(null);
+
+    const [truthTitle, setTruthTitle] = useState("");
+    const [truthContent, setTruthContent] = useState("");
+    const [truthAnalysis, setTruthAnalysis] =
+      useState<TruthAnalysisResponse | null>(null);
+    const [isTruthLoading, setIsTruthLoading] = useState(false);
+    const [truthError, setTruthError] = useState<string | null>(null);
 
     const handleLogout = () => {
       clearAuthToken();
@@ -231,6 +249,42 @@ function DashboardPage() {
         setTaskHistoryError("Unable to load task history.");
       } finally {
         setIsTaskHistoryLoading(false);
+      }
+    };
+
+    const handleAnalyzeTruth = async (
+      event: React.FormEvent<HTMLFormElement>
+    ) => {
+      event.preventDefault();
+
+      if (!truthTitle.trim()) {
+        setTruthError("Please enter a title.");
+        return;
+      }
+
+      if (!truthContent.trim()) {
+        setTruthError("Please paste the content or claim.");
+        return;
+      }
+
+      try {
+        setIsTruthLoading(true);
+        setTruthError(null);
+        setTruthAnalysis(null);
+
+        const result = await analyzeTruth(
+          truthTitle.trim(),
+          truthContent.trim()
+        );
+
+        setTruthAnalysis(result);
+        setTruthTitle("");
+        setTruthContent("");
+      } catch (err) {
+        console.error(err);
+        setTruthError("Unable to analyze content credibility. Please try again.");
+      } finally {
+        setIsTruthLoading(false);
       }
     };
 
@@ -501,6 +555,96 @@ function DashboardPage() {
                   <p>
                     {documentAnalysis.suggestedNextStep ??
                       "Review the document carefully and take action if needed."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section style={styles.documentSection}>
+        <div style={styles.aiCard}>
+          <div>
+            <p style={styles.badge}>Truth Layer</p>
+            <h2 style={styles.sectionTitle}>Check Online Content Credibility</h2>
+            <p style={styles.aiDescription}>
+              Paste an online claim, social media post, or message. LifeOps will summarize
+              the claim, estimate credibility risk, and suggest verification steps.
+            </p>
+          </div>
+
+          <form onSubmit={handleAnalyzeTruth} style={styles.aiForm}>
+            <input
+              value={truthTitle}
+              onChange={(event) => setTruthTitle(event.target.value)}
+              placeholder="Example: Online claim about Bürgergeld"
+              style={styles.input}
+            />
+
+            <textarea
+              value={truthContent}
+              onChange={(event) => setTruthContent(event.target.value)}
+              placeholder="Paste online content or claim here..."
+              style={styles.textarea}
+              rows={7}
+            />
+
+            <button
+              type="submit"
+              style={{
+                ...styles.primaryButton,
+                opacity: isTruthLoading ? 0.7 : 1,
+                cursor: isTruthLoading ? "not-allowed" : "pointer",
+              }}
+              disabled={isTruthLoading}
+            >
+              {isTruthLoading ? "Checking..." : "Analyze Credibility"}
+            </button>
+          </form>
+
+          {truthError && <p style={styles.errorText}>{truthError}</p>}
+
+          {truthAnalysis && (
+            <div style={styles.analysisBox}>
+              <div style={styles.historyHeader}>
+                <span style={styles.statusBadge}>{truthAnalysis.status}</span>
+                <span style={styles.answerMeta}>
+                  Risk: {truthAnalysis.riskLevel ?? "UNKNOWN"} · Trust Score:{" "}
+                  {truthAnalysis.trustScore ?? "N/A"}/100 ·{" "}
+                  {new Date(truthAnalysis.createdAt).toLocaleString()}
+                </span>
+              </div>
+
+              <h3 style={styles.answerTitle}>{truthAnalysis.title}</h3>
+
+              <div style={styles.analysisGrid}>
+                <div style={styles.analysisItem}>
+                  <strong>Claim Summary</strong>
+                  <p>{truthAnalysis.claimSummary ?? "No claim summary available."}</p>
+                </div>
+
+                <div style={styles.analysisItem}>
+                  <strong>Trust Score</strong>
+                  <p>
+                    {truthAnalysis.trustScore ?? "N/A"}/100
+                    <br />
+                    <small>
+                      0 = very unreliable, 50 = uncertain, 100 = highly reliable
+                    </small>
+                  </p>
+                </div>
+
+                <div style={styles.analysisItem}>
+                  <strong>Explanation</strong>
+                  <p>{truthAnalysis.explanation ?? "No explanation available."}</p>
+                </div>
+
+                <div style={styles.analysisItem}>
+                  <strong>Verification Steps</strong>
+                  <p>
+                    {truthAnalysis.suggestedVerificationSteps ??
+                      "Check official or trusted sources before acting."}
                   </p>
                 </div>
               </div>

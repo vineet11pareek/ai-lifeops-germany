@@ -199,3 +199,10 @@ Goal:
 - suggest verification steps
 - show truth analysis history
 - prepare for future URL/evidence retrieval
+
+Completed:
+
+- frontend truth API client
+- dashboard Truth Layer form
+- truth analysis result display
+- structured claim/trust/risk output in UI

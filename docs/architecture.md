@@ -1860,3 +1860,31 @@ Reason:
 - keeps truth analysis lifecycle in truth-service
 - keeps AI prompting inside ai-service
 - provides structured credibility analysis result
+
+### Frontend Truth Layer UI
+
+The dashboard now includes a Truth Layer section.
+
+Current UI behavior:
+
+- user enters title
+- user pastes online content or claim
+- frontend calls `POST /api/truth/analyze`
+- truth-service stores the analysis result
+- structured credibility output is displayed on dashboard
+
+Displayed fields:
+
+- claim summary
+- trust score
+- risk level
+- explanation
+- suggested verification steps
+
+Reason:
+
+- turns Truth Layer into a user-facing feature
+- provides structured credibility analysis
+- helps users verify questionable online information
+
+
