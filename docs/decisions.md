@@ -1094,3 +1094,18 @@ Reason:
 
 ---
 
+## Decision 074 — Publish Truth Analyzed Events
+
+Status: Accepted
+
+`truth-service` publishes an event after successful truth analysis.
+
+Reason:
+
+- enables future task/warning workflows
+- decouples Truth Layer from downstream services
+- supports event-driven architecture
+- prepares for notifications when content is high-risk
+
+---
+

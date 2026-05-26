@@ -1914,3 +1914,33 @@ Reason:
 - users can revisit previous credibility checks
 - improves transparency and reuse
 - prepares for future URL/source evidence history
+
+### Kafka Foundation for Truth Analysis
+
+`truth-service` now publishes Kafka events when content credibility analysis is completed.
+
+Current topic:
+
+```text
+truth.analyzed
+```
+Current event:
+```text
+TruthAnalyzedEvent
+```
+
+
+Current flow:
+```text
+POST /api/truth/analyze
+→ truth-service stores request
+→ truth-service calls ai-service
+→ truth-service stores analysis result
+→ truth-service publishes truth.analyzed event
+```
+
+Reason:
+
+- prepares future warning/task workflows
+- allows notification-service or task-service to react to risky claims
+- keeps truth-service decoupled from downstream services

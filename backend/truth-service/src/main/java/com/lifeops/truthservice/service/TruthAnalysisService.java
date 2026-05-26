@@ -6,6 +6,7 @@ import com.lifeops.truthservice.dto.TruthAnalysisResponse;
 import com.lifeops.truthservice.dto.TruthAnalysisResult;
 import com.lifeops.truthservice.entity.RiskLevel;
 import com.lifeops.truthservice.entity.TruthAnalysis;
+import com.lifeops.truthservice.event.TruthAnalyzedEvent;
 import com.lifeops.truthservice.exception.TruthAnalysisNotFoundException;
 import com.lifeops.truthservice.repository.TruthAnalysisRepository;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,11 +26,13 @@ public class TruthAnalysisService {
     private final TruthAnalysisRepository truthAnalysisRepository;
     private final TruthAnalysisMapper truthAnalysisMapper;
     private final AiServiceClient aiServiceClient;
+    private final TruthEventPublisher truthEventPublisher;
 
-    public TruthAnalysisService(TruthAnalysisRepository truthAnalysisRepository, TruthAnalysisMapper truthAnalysisMapper, AiServiceClient aiServiceClient) {
+    public TruthAnalysisService(TruthAnalysisRepository truthAnalysisRepository, TruthAnalysisMapper truthAnalysisMapper, AiServiceClient aiServiceClient, TruthEventPublisher truthEventPublisher) {
         this.truthAnalysisRepository = truthAnalysisRepository;
         this.truthAnalysisMapper = truthAnalysisMapper;
         this.aiServiceClient = aiServiceClient;
+        this.truthEventPublisher = truthEventPublisher;
     }
 
     @Transactional
@@ -95,6 +99,17 @@ public class TruthAnalysisService {
             );
 
             TruthAnalysis analyzed = truthAnalysisRepository.save(savedAnalysis);
+            truthEventPublisher.publish(new TruthAnalyzedEvent(
+                    UUID.randomUUID(),
+                    analyzed.getId(),
+                    analyzed.getUserId(),
+                    analyzed.getTitle(),
+                    analyzed.getClaimSummary(),
+                    analyzed.getTrustScore(),
+                    analyzed.getRiskLevel() != null ? analyzed.getRiskLevel().name() : "UNKNOWN",
+                    analyzed.getStatus().name(),
+                    Instant.now()
+            ));
 
             log.info("Truth analysis completed successfully analysisId={}", analyzed.getId());
 

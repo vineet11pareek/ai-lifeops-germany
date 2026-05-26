@@ -1336,6 +1336,32 @@ Test:
 - refresh dashboard
 - confirm analysis remains in Truth Analysis History
 
+## Testing Truth Kafka Events
+
+Create topic if needed:
+
+```bash
+docker exec -it lifeops-kafka kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic truth.analyzed \
+  --partitions 3 \
+  --replication-factor 1
+```
+
+Analyze content:
+```http
+POST http://localhost:8080/api/truth/analyze
+Content-Type: application/json
+```
+
+Check topic:
+```text
+truth.analyzed
+```
+
+
+
 
 
 
