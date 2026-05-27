@@ -210,3 +210,9 @@ Completed:
 - Truth Checks dashboard card added
 - Truth Analysis History section added
 - truth history refreshes after new analysis
+- truth-service Docker runtime validated
+- truth analysis tested through API Gateway
+- truth persistence validated
+- truth.analyzed Kafka event validated
+- frontend Truth Layer flow validated
+- truth history validation completed

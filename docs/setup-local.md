@@ -1381,7 +1381,32 @@ GitHub Actions workflow:
 .github/workflows/truth-service-ci.yml
 ```
 
+### Full Truth Layer Runtime Validation
 
+Start full system:
+
+```bash
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
+Validate truth-service:
+```text
+http://localhost:8085/actuator/health
+http://localhost:8080/api/truth/health
+```
+Analyze content:
+```http
+POST http://localhost:8080/api/truth/analyze
+Content-Type: application/json
+```
+
+
+Expected:
+
+- truth analysis is completed
+- result is stored in PostgreSQL
+- truth.analyzed event is published to Kafka
+- dashboard Truth Layer result appears
+- truth history updates
 
 
 

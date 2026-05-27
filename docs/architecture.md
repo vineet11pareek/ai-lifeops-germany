@@ -1969,3 +1969,34 @@ Reason:
 - validates Truth Layer workflow behavior
 - avoids real AI/Kafka/PostgreSQL dependencies in CI
 - keeps tests fast and deterministic
+
+### truth-service Runtime Validation
+
+`truth-service` is validated inside the full Docker Compose runtime.
+
+Runtime dependencies:
+
+- PostgreSQL for truth analysis persistence
+- ai-service for structured credibility analysis
+- Kafka for truth analyzed events
+- API Gateway for external routing
+- Frontend dashboard for user interaction
+
+Current validated flow:
+
+```text
+Frontend
+  → api-gateway
+  → truth-service
+  → ai-service
+  → Spring AI/OpenAI
+  → PostgreSQL
+  → Kafka truth.analyzed
+  → Dashboard truth history
+```
+Reason:
+
+- validates container networking
+- validates service-to-service communication
+- validates environment-based configuration
+- confirms Truth Layer works end-to-end
