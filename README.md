@@ -188,3 +188,23 @@ Current task capabilities:
 - reject tasks
 - show task history
 - prevent duplicate task creation by source
+
+## Phase 5 Status
+
+Status: Completed
+
+Phase 5 delivered the Truth Layer capability:
+
+```text
+Dashboard → API Gateway → truth-service → ai-service → PostgreSQL → Kafka
+```
+Current Truth Layer capabilities:
+
+- analyze pasted online content
+- extract claim summary
+- generate trust score
+- classify risk level
+- explain credibility concern
+- suggest verification steps
+- store truth analysis history
+- publish truth.analyzed events

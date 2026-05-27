@@ -202,17 +202,16 @@ Goal:
 
 Completed:
 
-- frontend truth API client
-- dashboard Truth Layer form
-- truth analysis result display
-- structured claim/trust/risk output in UI
-- truth history API connected to frontend
-- Truth Checks dashboard card added
-- Truth Analysis History section added
-- truth history refreshes after new analysis
-- truth-service Docker runtime validated
-- truth analysis tested through API Gateway
-- truth persistence validated
-- truth.analyzed Kafka event validated
-- frontend Truth Layer flow validated
-- truth history validation completed
+- Dedicated `truth-service`
+- Truth analysis persistence
+- Structured truth analysis endpoint in `ai-service`
+- Truth analysis API in `truth-service`
+- Frontend Truth Layer UI
+- Truth Analysis History UI
+- Kafka foundation for `truth.analyzed` events
+- Tests and CI for `truth-service`
+- Docker runtime validation
+
+Result:
+
+Users can paste online content or claims, receive structured credibility analysis, and revisit previous truth checks from the dashboard.

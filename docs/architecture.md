@@ -2000,3 +2000,53 @@ Reason:
 - validates service-to-service communication
 - validates environment-based configuration
 - confirms Truth Layer works end-to-end
+
+### Phase 5 Architecture
+
+Phase 5 introduced `truth-service` as the dedicated Truth Layer workflow boundary.
+
+Current truth analysis flow:
+
+```text
+React Dashboard
+  → POST /api/truth/analyze
+  → api-gateway
+  → truth-service
+  → POST /api/ai/truth-analysis
+  → ai-service
+  → Spring AI/OpenAI
+  → truth-service stores result
+  → truth_analyses table
+  → truth.analyzed Kafka topic
+  → dashboard truth history
+```
+
+Current truth APIs:
+```text
+GET  /api/truth/health
+POST /api/truth
+GET  /api/truth
+GET  /api/truth/{id}
+POST /api/truth/analyze
+```
+Current AI truth endpoint:
+```text
+POST /api/ai/truth-analysis
+```
+Current persistence:
+```text
+truth_analyses
+```
+Current Kafka topic:
+```text
+truth.analyzed
+```
+Current limitations:
+
+- truth history is not yet filtered by authenticated user
+- only pasted text is supported
+- live URL crawling is not implemented yet
+- external source verification is not implemented yet
+- no fact-checking provider integration yet
+- truth analysis is still synchronous
+- no retry/DLQ handling yet for truth analysis events

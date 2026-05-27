@@ -1138,3 +1138,18 @@ Reason:
 
 ---
 
+## Decision 077 — Complete Phase 5 with Pasted-Text Truth Layer
+
+Status: Accepted
+
+Phase 5 is completed with pasted-text truth analysis.
+
+Reason:
+
+- validates the Truth Layer workflow before URL crawling complexity
+- gives users structured credibility analysis
+- stores truth analysis history
+- prepares for future evidence retrieval and source verification
+
+---
+
