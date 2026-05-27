@@ -1360,7 +1360,26 @@ Check topic:
 truth.analyzed
 ```
 
+### Running truth-service Tests
 
+Run tests:
+
+```bash
+cd backend/truth-service
+mvnw.cmd test
+```
+
+Expected:
+
+```text
+BUILD SUCCESS
+```
+
+GitHub Actions workflow:
+
+```text
+.github/workflows/truth-service-ci.yml
+```
 
 
 

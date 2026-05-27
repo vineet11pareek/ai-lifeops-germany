@@ -1944,3 +1944,28 @@ Reason:
 - prepares future warning/task workflows
 - allows notification-service or task-service to react to risky claims
 - keeps truth-service decoupled from downstream services
+
+
+### truth-service Testing and CI
+
+`truth-service` includes automated tests for:
+
+- truth analysis response mapping
+- create truth request workflow
+- AI truth analysis workflow with mocked ai-service
+- truth analyzed event publishing
+- controller API contracts
+- validation errors
+
+The CI pipeline runs:
+
+```text
+./mvnw test
+./mvnw clean package -DskipTests
+```
+
+Reason:
+
+- validates Truth Layer workflow behavior
+- avoids real AI/Kafka/PostgreSQL dependencies in CI
+- keeps tests fast and deterministic

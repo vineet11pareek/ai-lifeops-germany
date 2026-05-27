@@ -1109,3 +1109,32 @@ Reason:
 
 ---
 
+## Decision 075 — Mock AI and Kafka in truth-service Tests
+
+Status: Accepted
+
+`truth-service` tests mock downstream AI and Kafka interactions.
+
+Reason:
+
+- avoids external dependencies in CI
+- prevents flaky tests
+- keeps tests fast
+- validates truth-service behavior independently
+
+---
+
+## Decision 076 — Add Dedicated CI for truth-service
+
+Status: Accepted
+
+`truth-service` has its own GitHub Actions CI workflow.
+
+Reason:
+
+- validates truth-service independently
+- supports microservice-level quality gates
+- keeps Truth Layer workflow checks visible\
+
+---
+
