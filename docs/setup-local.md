@@ -1408,6 +1408,35 @@ Expected:
 - dashboard Truth Layer result appears
 - truth history updates
 
+### Testing Gateway Authentication
+
+Private APIs should reject requests without token:
+
+```http
+GET http://localhost:8080/api/truth
+```
+Expected:
+```text
+401 Unauthorized
+```
+
+
+Health remains public:
+```text
+GET http://localhost:8080/actuator/health
+```
+Expected:
+```text
+200 OK
+```
+Frontend login should still work because frontend sends:
+```text
+Authorization: Bearer <google_id_token>
+```
+Required local config:
+```text
+GOOGLE_CLIENT_ID=your-google-client-id
+```
 
 
 

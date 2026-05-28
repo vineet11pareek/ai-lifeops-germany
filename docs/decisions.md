@@ -1153,3 +1153,44 @@ Reason:
 
 ---
 
+## Decision 078 — Enforce Authentication at API Gateway
+
+Status: Accepted
+
+Authentication will be enforced at API Gateway before requests reach backend services.
+
+Reason:
+
+- API Gateway is the system entry point
+- prevents unauthenticated backend access
+- centralizes token validation
+- reduces duplicated security code across services
+- prepares for future authorization and rate limiting
+
+Alternative considered:
+
+Each backend service validates Google ID tokens independently.
+
+Reason rejected:
+
+- duplicates authentication logic
+- increases maintenance effort
+- creates risk of inconsistent validation behavior
+- makes provider changes harder
+
+---
+
+## Decision 079 — Validate Google ID Token Audience at Gateway
+
+Status: Accepted
+
+The API Gateway validates that the Google ID token audience matches the configured application client ID.
+
+Reason:
+
+- ensures token was issued for this application
+- prevents accepting tokens meant for another app
+- strengthens gateway-level authentication
+
+---
+

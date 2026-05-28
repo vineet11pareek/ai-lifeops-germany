@@ -6,9 +6,22 @@ lifeops:
     task-service-url: ${TASK_SERVICE_URL:http://localhost:8084}
     truth-service-url: ${TRUTH_SERVICE_URL:http://localhost:8085}
 
+# Google OAuth
+  security:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+
 spring:
   application:
     name: api-gateway
+
+# OAuth2 Resource Server - Google ID Token Validation
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+
 
   cloud:
     gateway:
@@ -37,10 +50,11 @@ spring:
                 - Path=/api/truth/**
 
           globalcors:
+            add-to-simple-url-handler-mapping: true
             cors-configurations:
               "[/**]":
                 allowedOrigins:
-                  - http://localhost:5173
+                  - "http://localhost:5173"
                 allowedMethods:
                   - GET
                   - POST

@@ -38,6 +38,7 @@ services:
       DOCUMENT_SERVICE_URL: http://document-service:8083
       TASK_SERVICE_URL: http://task-service:8084
       TRUTH_SERVICE_URL: http://truth-service:8085
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
       - "8080:8080"
     depends_on:

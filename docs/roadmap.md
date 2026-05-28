@@ -215,3 +215,18 @@ Completed:
 Result:
 
 Users can paste online content or claims, receive structured credibility analysis, and revisit previous truth checks from the dashboard.
+
+---
+
+## Phase 6 — Production Hardening
+
+Status: In Progress
+
+Goal:
+
+- secure APIs at gateway level
+- propagate authenticated user context
+- filter user-owned data
+- add Kafka retry and DLQ handling
+- improve tracing and error consistency
+- prepare system for real production deployment

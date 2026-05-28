@@ -2050,3 +2050,56 @@ Current limitations:
 - no fact-checking provider integration yet
 - truth analysis is still synchronous
 - no retry/DLQ handling yet for truth analysis events
+
+## Phase 6 — Production Hardening
+
+Phase 6 focuses on security, reliability, observability, and operational readiness.
+
+Main goals:
+
+- enforce authentication at API Gateway
+- propagate authenticated user context to services
+- make user-specific data filtering real
+- improve Kafka reliability with retry and DLQ
+- improve tracing through gateway-level correlation IDs
+- standardize production error handling
+- improve service-to-service resilience
+
+Reason:
+
+Features alone are not enough for production readiness. The system must behave safely during invalid requests, service failures, bad events, retries, and operational incidents.
+
+### Gateway-Level Authentication
+
+`api-gateway` now validates Google ID tokens before routing requests to backend services.
+
+Current protected APIs:
+
+```text
+/api/users/**
+/api/ai/**
+/api/documents/**
+/api/tasks/**
+/api/truth/**
+```
+
+Public APIs:
+```text
+/actuator/health
+/actuator/info
+```
+
+
+Current flow:
+```text
+React frontend
+  → Authorization: Bearer <google_id_token>
+  → api-gateway validates token issuer, signature, expiry, and audience
+  → request is routed to backend service
+```
+Reason:
+
+- frontend route protection is not enough
+- prevents direct unauthenticated API access
+- centralizes authentication logic
+- prepares for user context propagation and authorization
