@@ -1,5 +1,6 @@
 package com.lifeops.taskservice.controller;
 
+import com.lifeops.taskservice.common.UserContextHeaders;
 import com.lifeops.taskservice.dto.TaskResponse;
 import com.lifeops.taskservice.service.TaskService;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,11 @@ class TaskControllerTest {
 
         when(taskService.getRecentTask()).thenReturn(List.of(task));
 
-        mockMvc.perform(get("/api/tasks"))
+        mockMvc.perform(get("/api/tasks")
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Tasks fetched successfully"))
@@ -47,7 +52,11 @@ class TaskControllerTest {
 
         when(taskService.getPendingTask()).thenReturn(List.of(task));
 
-        mockMvc.perform(get("/api/tasks/pending"))
+        mockMvc.perform(get("/api/tasks/pending")
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Pending tasks fetched successfully"))
@@ -61,7 +70,11 @@ class TaskControllerTest {
 
         when(taskService.getTaskById(taskId)).thenReturn(task);
 
-        mockMvc.perform(get("/api/tasks/{id}", taskId))
+        mockMvc.perform(get("/api/tasks/{id}", taskId)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.id").value(taskId.toString()));
@@ -74,7 +87,11 @@ class TaskControllerTest {
 
         when(taskService.approveTask(taskId)).thenReturn(task);
 
-        mockMvc.perform(post("/api/tasks/{id}/approve", taskId))
+        mockMvc.perform(post("/api/tasks/{id}/approve", taskId)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Task approved successfully"))
@@ -88,7 +105,11 @@ class TaskControllerTest {
 
         when(taskService.rejectTask(taskId)).thenReturn(task);
 
-        mockMvc.perform(post("/api/tasks/{id}/reject", taskId))
+        mockMvc.perform(post("/api/tasks/{id}/reject", taskId)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Task rejected successfully"))

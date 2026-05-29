@@ -2,6 +2,7 @@ package com.lifeops.documentservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lifeops.documentservice.common.UserContextHeaders;
 import com.lifeops.documentservice.dto.AnalyzeDocumentRequest;
 import com.lifeops.documentservice.dto.CreateDocumentRequest;
 import com.lifeops.documentservice.dto.DocumentResponse;
@@ -61,6 +62,10 @@ class DocumentControllerTest {
 
         mockMvc.perform(post("/api/documents")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
@@ -94,6 +99,10 @@ class DocumentControllerTest {
 
         mockMvc.perform(post("/api/documents/analyze")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -111,6 +120,10 @@ class DocumentControllerTest {
 
         mockMvc.perform(post("/api/documents/analyze")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
@@ -137,7 +150,11 @@ class DocumentControllerTest {
 
         when(documentService.getDocumentById(documentId)).thenReturn(response);
 
-        mockMvc.perform(get("/api/documents/{id}", documentId))
+        mockMvc.perform(get("/api/documents/{id}", documentId)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.id").value(documentId.toString()))

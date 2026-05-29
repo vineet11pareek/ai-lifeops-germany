@@ -3,6 +3,7 @@ package com.lifeops.aiservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lifeops.aiservice.common.UserContextHeaders;
 import com.lifeops.aiservice.dto.AiChatRequest;
 import com.lifeops.aiservice.dto.AiChatResponse;
 import com.lifeops.aiservice.dto.AiQueryHistoryResponse;
@@ -55,6 +56,10 @@ public class AiChatControllerTest {
 
         mockMvc.perform(post("/api/ai/chat")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -69,6 +74,10 @@ public class AiChatControllerTest {
 
         mockMvc.perform(post("/api/ai/chat")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
@@ -90,7 +99,11 @@ public class AiChatControllerTest {
 
         when(aiChatService.getRecentQueries()).thenReturn(List.of(history));
 
-        mockMvc.perform(get("/api/ai/queries"))
+        mockMvc.perform(get("/api/ai/queries")
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data[0].question").value("Explain Anmeldung"))

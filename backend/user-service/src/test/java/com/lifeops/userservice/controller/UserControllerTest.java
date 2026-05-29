@@ -2,6 +2,7 @@ package com.lifeops.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lifeops.userservice.common.UserContextHeaders;
 import com.lifeops.userservice.dto.AuthenticatedUser;
 import com.lifeops.userservice.dto.CreateUserRequest;
 import com.lifeops.userservice.dto.UserResponse;
@@ -60,6 +61,10 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
@@ -80,6 +85,10 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
@@ -105,20 +114,23 @@ public class UserControllerTest {
                 "GOOGLE"
         );
 
-        Mockito.when(googleTokenVerifierService.verify("test-token"))
-                .thenReturn(authenticatedUser);
+        /*Mockito.when(googleTokenVerifierService.verify("test-token"))
+                .thenReturn(authenticatedUser);*/
         Mockito.when(userService.getOrCreateAuthenticatedUser(any(AuthenticatedUser.class)))
                 .thenReturn(response);
 
         mockMvc.perform(get("/api/users/me")
-                        .header("Authorization", "Bearer test-token"))
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Current user fetched successfully"))
                 .andExpect(jsonPath("$.data.name").value("Test User"))
                 .andExpect(jsonPath("$.data.email").value("test.user@example.com"));
 
-        Mockito.verify(googleTokenVerifierService).verify("test-token");
+        //Mockito.verify(googleTokenVerifierService).verify("test-token");
         Mockito.verify(userService).getOrCreateAuthenticatedUser(any(AuthenticatedUser.class));
     }
 }

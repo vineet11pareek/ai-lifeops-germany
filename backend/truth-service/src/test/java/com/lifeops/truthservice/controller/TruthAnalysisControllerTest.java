@@ -1,6 +1,7 @@
 package com.lifeops.truthservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lifeops.truthservice.common.UserContextHeaders;
 import com.lifeops.truthservice.dto.AnalyzeTruthRequest;
 import com.lifeops.truthservice.dto.CreateTruthAnalysisRequest;
 import com.lifeops.truthservice.dto.TruthAnalysisResponse;
@@ -53,6 +54,10 @@ class TruthAnalysisControllerTest {
 
         mockMvc.perform(post("/api/truth")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
@@ -75,6 +80,10 @@ class TruthAnalysisControllerTest {
 
         mockMvc.perform(post("/api/truth/analyze")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -90,6 +99,10 @@ class TruthAnalysisControllerTest {
 
         mockMvc.perform(post("/api/truth/analyze")
                 .contentType(MediaType.APPLICATION_JSON)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
@@ -102,7 +115,11 @@ class TruthAnalysisControllerTest {
         when(service.getRecentAnalyses())
                 .thenReturn(List.of(sampleResponse("ANALYZED")));
 
-        mockMvc.perform(get("/api/truth"))
+        mockMvc.perform(get("/api/truth")
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data[0].status").value("ANALYZED"));
@@ -115,7 +132,11 @@ class TruthAnalysisControllerTest {
         when(service.getAnalysisById(id))
                 .thenReturn(sampleResponse(id, "ANALYZED"));
 
-        mockMvc.perform(get("/api/truth/{id}", id))
+        mockMvc.perform(get("/api/truth/{id}", id)
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_NAME,"Test User")
+                        .header(UserContextHeaders.USER_EMAIL,"User@test.com")
+                        .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.id").value(id.toString()));
