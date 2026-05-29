@@ -1194,3 +1194,22 @@ Reason:
 
 ---
 
+## Decision 080 — Propagate User Context via Gateway Headers
+
+Status: Accepted
+
+The API Gateway forwards authenticated user context to services using trusted headers.
+
+Reason:
+
+- keeps token validation centralized
+- avoids duplicating Google JWT parsing in every service
+- makes backend services provider-independent
+- prepares for user-specific data filtering
+
+Security note:
+
+Services should trust these headers only when traffic comes through the gateway. In production, services must not be publicly exposed.
+
+---
+

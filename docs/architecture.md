@@ -2103,3 +2103,32 @@ Reason:
 - prevents direct unauthenticated API access
 - centralizes authentication logic
 - prepares for user context propagation and authorization
+
+### Authenticated User Context Propagation
+
+The API Gateway now propagates authenticated user context to backend services after validating the Google ID token.
+
+Current trusted headers:
+
+```text
+X-User-External-Id
+X-User-Email
+X-User-Name
+X-Auth-Provider
+```
+Current flow:
+```text
+React frontend
+  → Authorization: Bearer <google_id_token>
+  → api-gateway validates JWT
+  → api-gateway extracts user claims
+  → api-gateway removes incoming X-User-* headers
+  → api-gateway injects trusted X-User-* headers
+  → backend services receive user context
+```
+Reason:
+
+- services can identify the current user without re-validating Google tokens
+- enables user-specific filtering
+- keeps identity-provider logic centralized at the gateway
+- prepares for authorization and tenant isolation

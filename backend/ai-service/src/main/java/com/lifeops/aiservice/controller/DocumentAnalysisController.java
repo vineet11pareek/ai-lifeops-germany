@@ -1,16 +1,15 @@
 package com.lifeops.aiservice.controller;
 
+import com.lifeops.aiservice.common.UserContextHeaders;
 import com.lifeops.aiservice.dto.ApiResponse;
+import com.lifeops.aiservice.dto.AuthenticatedUserContext;
 import com.lifeops.aiservice.dto.DocumentAnalysisRequest;
 import com.lifeops.aiservice.dto.DocumentAnalysisResponse;
 import com.lifeops.aiservice.service.DocumentAnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/ai/document-analysis")
@@ -28,10 +27,35 @@ public class DocumentAnalysisController {
 
     @PostMapping
     @Operation(summary = "Analyze document", description = "Analyzes document text and returns structured summary, deadline, action, risk level, and next step.")
-    public ApiResponse<DocumentAnalysisResponse> analyzeDocument(@Valid @RequestBody DocumentAnalysisRequest request){
+    public ApiResponse<DocumentAnalysisResponse> analyzeDocument(@Valid @RequestBody DocumentAnalysisRequest request,
+                                                                 @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                                 @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                                 @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                                 @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider){
+
+        AuthenticatedUserContext userContext = getUserContext(
+                externalId,
+                email,
+                name,
+                provider
+        );
         return ApiResponse.success(
                 "Document analysis completed successfully",
                 documentAnalysisService.analyze(request.title(), request.content())
+        );
+    }
+
+    private AuthenticatedUserContext getUserContext(
+            String externalId,
+            String email,
+            String name,
+            String provider
+    ) {
+        return new AuthenticatedUserContext(
+                externalId,
+                email,
+                name,
+                provider
         );
     }
 }

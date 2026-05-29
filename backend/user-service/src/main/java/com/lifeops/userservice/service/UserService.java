@@ -28,6 +28,7 @@ public class UserService {
         User user = userRepository.findByEmail(authenticatedUser.email())
                 .orElseGet(()-> {
                     log.info("Creating new authenticated user with email={}",authenticatedUser.email());
+                    log.info("Received user context externalId={}, email={}", authenticatedUser.externalId(), authenticatedUser.email());
 
                     User newUser = new User(
                             authenticatedUser.externalId(),

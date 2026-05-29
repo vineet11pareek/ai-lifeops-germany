@@ -1,6 +1,8 @@
 package com.lifeops.taskservice.controller;
 
+import com.lifeops.taskservice.common.UserContextHeaders;
 import com.lifeops.taskservice.dto.ApiResponse;
+import com.lifeops.taskservice.dto.AuthenticatedUserContext;
 import com.lifeops.taskservice.dto.TaskResponse;
 import com.lifeops.taskservice.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +25,13 @@ public class TaskController {
 
     @GetMapping
     @Operation(summary = "Get recent tasks", description = "Returns recent task records.")
-    public ApiResponse<List<TaskResponse>> getRecentTasks() {
+    public ApiResponse<List<TaskResponse>> getRecentTasks(
+            @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+            @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+            @RequestHeader(UserContextHeaders.USER_NAME) String name,
+            @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider
+    ) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Tasks fetched successfully",
                 taskService.getRecentTask()
@@ -32,7 +40,13 @@ public class TaskController {
 
     @GetMapping("/pending")
     @Operation(summary = "Get pending tasks", description = " Return tasks waiting for user approval.")
-    public ApiResponse<List<TaskResponse>> getPendingTasks(){
+    public ApiResponse<List<TaskResponse>> getPendingTasks(
+            @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+            @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+            @RequestHeader(UserContextHeaders.USER_NAME) String name,
+            @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider
+    ){
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Pending tasks fetched successfully",
                 taskService.getPendingTask()
@@ -41,7 +55,13 @@ public class TaskController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get task by Id", description = "Return task details for the given ID.")
-    public ApiResponse<TaskResponse> getTaskById(@PathVariable UUID id){
+    public ApiResponse<TaskResponse> getTaskById(@PathVariable UUID id,
+                                                 @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                 @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                 @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                 @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider){
+
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Task fetched successfully",
                 taskService.getTaskById(id)
@@ -51,7 +71,12 @@ public class TaskController {
 
     @PostMapping("/{id}/approve")
     @Operation(summary = "Approve task", description = "Approves a task waiting for user approval.")
-    public ApiResponse<TaskResponse> approveTask(@PathVariable UUID id){
+    public ApiResponse<TaskResponse> approveTask(@PathVariable UUID id,
+                                                 @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                 @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                 @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                 @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider){
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Task approved successfully",
                 taskService.approveTask(id)
@@ -60,11 +85,21 @@ public class TaskController {
 
     @PostMapping("/{id}/reject")
     @Operation(summary = "Reject task", description = "Reject a task waiting for user approval.")
-    public ApiResponse<TaskResponse> rejectTask(@PathVariable UUID id){
+    public ApiResponse<TaskResponse> rejectTask(@PathVariable UUID id,
+                                                @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider){
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Task rejected successfully",
                 taskService.rejectTask(id)
         );
+    }
+
+    private AuthenticatedUserContext getUserContext(String externalId, String email, String name, String provider){
+        return new AuthenticatedUserContext(
+                externalId, email, name, provider);
     }
 
 }

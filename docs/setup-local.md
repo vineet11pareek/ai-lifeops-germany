@@ -1438,5 +1438,22 @@ Required local config:
 GOOGLE_CLIENT_ID=your-google-client-id
 ```
 
+## Testing User Context Propagation
+
+After frontend login, backend services receive:
+
+```text
+X-User-External-Id
+X-User-Email
+X-User-Name
+X-Auth-Provider
+```
+Test:
+
+1. Login with Google
+2. Open dashboard
+3. Confirm profile loads
+4. Confirm document/truth/task APIs still work
+
 
 

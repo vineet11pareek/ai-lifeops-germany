@@ -1,5 +1,6 @@
 package com.lifeops.userservice.controller;
 
+import com.lifeops.userservice.common.UserContextHeaders;
 import com.lifeops.userservice.dto.ApiResponse;
 import com.lifeops.userservice.dto.AuthenticatedUser;
 import com.lifeops.userservice.dto.CreateUserRequest;
@@ -32,12 +33,17 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "Get current user",
             description = "Returns the current demo user profile. Later this will return the authenticated user.")
-    public ApiResponse<UserResponse> getCurrentUser(@RequestHeader("Authorization") String authorizationHeader){
-       String token  = extractBearerToken(authorizationHeader);
-        AuthenticatedUser authenticatedUser = googleTokenVerifierService.verify(token);
+    public ApiResponse<UserResponse> getCurrentUser( @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                     @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                     @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                     @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider){
+        //Google verification steps before we introduce proper user context
+       //String token  = extractBearerToken(authorizationHeader);
+        //AuthenticatedUser authenticatedUser = googleTokenVerifierService.verify(token);
+        AuthenticatedUser userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Current user fetched successfully",
-                userService.getOrCreateAuthenticatedUser(authenticatedUser)
+                userService.getOrCreateAuthenticatedUser(userContext)
         );
     }
 
@@ -56,6 +62,12 @@ public class UserController {
             throw new InvalidAuthTokenException("Missing or invalid Authorization header");
         }
         return authorizationHeader.substring(7);
+    }
+
+    private AuthenticatedUser getUserContext(String externalId, String email, String name, String provider){
+        return new AuthenticatedUser(
+                externalId,name,email,provider
+        );
     }
 
 

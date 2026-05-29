@@ -1,9 +1,7 @@
 package com.lifeops.truthservice.controller;
 
-import com.lifeops.truthservice.dto.AnalyzeTruthRequest;
-import com.lifeops.truthservice.dto.ApiResponse;
-import com.lifeops.truthservice.dto.CreateTruthAnalysisRequest;
-import com.lifeops.truthservice.dto.TruthAnalysisResponse;
+import com.lifeops.truthservice.common.UserContextHeaders;
+import com.lifeops.truthservice.dto.*;
 import com.lifeops.truthservice.service.TruthAnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +30,13 @@ public class TruthAnalysisController {
             description = "Stores content for later truth analysis."
     )
     public ApiResponse<TruthAnalysisResponse> createTruthAnalysis(
-            @Valid @RequestBody CreateTruthAnalysisRequest request
+            @Valid @RequestBody CreateTruthAnalysisRequest request,
+            @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+            @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+            @RequestHeader(UserContextHeaders.USER_NAME) String name,
+            @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider
     ) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analysis request created successfully",
                 truthAnalysisService.createTruthAnalysis(request)
@@ -45,7 +48,13 @@ public class TruthAnalysisController {
             summary = "Get recent truth analyses",
             description = "Returns recent truth analysis records."
     )
-    public ApiResponse<List<TruthAnalysisResponse>> getRecentAnalyses() {
+    public ApiResponse<List<TruthAnalysisResponse>> getRecentAnalyses(
+            @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+            @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+            @RequestHeader(UserContextHeaders.USER_NAME) String name,
+            @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider
+    ) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analyses fetched successfully",
                 truthAnalysisService.getRecentAnalyses()
@@ -58,8 +67,13 @@ public class TruthAnalysisController {
             description = "Returns truth analysis details for the given ID."
     )
     public ApiResponse<TruthAnalysisResponse> getAnalysisById(
-            @PathVariable UUID id
+            @PathVariable UUID id,
+            @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+            @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+            @RequestHeader(UserContextHeaders.USER_NAME) String name,
+            @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider
     ) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analysis fetched successfully",
                 truthAnalysisService.getAnalysisById(id)
@@ -73,11 +87,19 @@ public class TruthAnalysisController {
             description = "Stores content and analyzes credibility using AI."
     )
     public ApiResponse<TruthAnalysisResponse> analyzeTruth(
-            @Valid @RequestBody AnalyzeTruthRequest request
+            @Valid @RequestBody AnalyzeTruthRequest request,
+            @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+            @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+            @RequestHeader(UserContextHeaders.USER_NAME) String name,
+            @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider
     ) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analysis completed successfully",
                 truthAnalysisService.analyzeTruth(request)
         );
+    }
+    private AuthenticatedUserContext getUserContext(String externalId, String email, String name, String provider){
+        return new AuthenticatedUserContext(externalId, email, name, provider);
     }
 }

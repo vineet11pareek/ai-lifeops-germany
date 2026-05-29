@@ -1,10 +1,7 @@
 package com.lifeops.documentservice.controller;
 
-import com.lifeops.documentservice.dto.AnalyzeDocumentRequest;
-import com.lifeops.documentservice.dto.ApiResponse;
-import com.lifeops.documentservice.dto.CreateDocumentRequest;
-import com.lifeops.documentservice.dto.DocumentResponse;
-import com.lifeops.documentservice.dto.ai.AiApiResponse;
+import com.lifeops.documentservice.common.UserContextHeaders;
+import com.lifeops.documentservice.dto.*;
 import com.lifeops.documentservice.service.DocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,8 +32,14 @@ public class DocumentController {
             summary = "Create document metadata",
             description = "Stores document title and content with RECIEVED status."
     )
-    public ApiResponse<DocumentResponse> createDocument(@Valid @RequestBody CreateDocumentRequest request){
-        return ApiResponse.success("Document created successfully",documentService.createDocument(request));
+    public ApiResponse<DocumentResponse> createDocument(@Valid @RequestBody CreateDocumentRequest request,
+                                                        @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                        @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                        @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                        @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider) {
+
+        AuthenticatedUserContext userContext = getUserContext(externalId, name, email, provider);
+        return ApiResponse.success("Document created successfully", documentService.createDocument(request));
     }
 
     @GetMapping("/{id}")
@@ -44,7 +47,13 @@ public class DocumentController {
             summary = "Get document by ID",
             description = "Returns document details for the given ID"
     )
-    public ApiResponse<DocumentResponse> getDocumentById(@PathVariable UUID id){
+    public ApiResponse<DocumentResponse> getDocumentById(@PathVariable UUID id,
+                                                         @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                         @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                         @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                         @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider) {
+
+        AuthenticatedUserContext userContext = getUserContext(externalId, name, email, provider);
         return ApiResponse.success(
                 "Document fetched successfully",
                 documentService.getDocumentById(id)
@@ -56,7 +65,12 @@ public class DocumentController {
             summary = "Get recent documents",
             description = "Returns recent documents records"
     )
-    public ApiResponse<List<DocumentResponse>> getRecentDocuments(){
+    public ApiResponse<List<DocumentResponse>> getRecentDocuments(@RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                                  @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                                  @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                                  @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
+
         return ApiResponse.success(
                 "Documents fetched successfully",
                 documentService.getRecentDocuments()
@@ -68,10 +82,25 @@ public class DocumentController {
             summary = "Analyze document text",
             description = "Stores document text and analyzes it using AI to extract summary, deadline, action, risk, and next step."
     )
-    public ApiResponse<DocumentResponse> analyzeDocument(@Valid @RequestBody AnalyzeDocumentRequest request){
+    public ApiResponse<DocumentResponse> analyzeDocument(@Valid @RequestBody AnalyzeDocumentRequest request,
+                                                         @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
+                                                         @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
+                                                         @RequestHeader(UserContextHeaders.USER_NAME) String name,
+                                                         @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider) {
+        AuthenticatedUserContext userContext = getUserContext(externalId, name, email, provider);
+
         return ApiResponse.success(
                 "Document analyzed successfully",
                 documentService.analyzeDocument(request)
+        );
+    }
+
+    private AuthenticatedUserContext getUserContext(String externalId, String name, String email, String provider) {
+        return new AuthenticatedUserContext(
+                externalId,
+                email,
+                name,
+                provider
         );
     }
 }
