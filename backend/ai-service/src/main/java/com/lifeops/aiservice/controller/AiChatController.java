@@ -38,7 +38,7 @@ public class AiChatController {
         );
         return ApiResponse.success(
                 "AI response generated successfully",
-                aiChatService.ask(request.question())
+                aiChatService.ask(request.question(), userContext)
         );
     }
 
@@ -59,7 +59,7 @@ public class AiChatController {
         );
         return ApiResponse.success(
                 "AI query history fetched successfully",
-                aiChatService.getRecentQueries()
+                aiChatService.getRecentQueries(userContext)
         );
     }
 

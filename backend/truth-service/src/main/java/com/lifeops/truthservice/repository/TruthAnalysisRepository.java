@@ -9,5 +9,5 @@ import java.util.UUID;
 
 
 public interface TruthAnalysisRepository extends JpaRepository<TruthAnalysis, UUID> {
-    List<TruthAnalysis> findTop20ByOrderByCreatedAtDesc();
+    List<TruthAnalysis> findTop20ByUserExternalIdOrderByCreatedAtDesc(String userExternalId);
 }

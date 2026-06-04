@@ -1455,5 +1455,26 @@ Test:
 3. Confirm profile loads
 4. Confirm document/truth/task APIs still work
 
+### Testing User-Specific Data Filtering
+After login, services store and filter data by:
 
+```text
+X-User-External-Id
+```
+Test:
+
+- login with Google
+- create AI query
+- analyze document
+- analyze truth claim
+- check histories
+- only current user's records should appear
+
+Old local records without user_external_id may disappear from history.
+
+To reset local DB:
+```text
+docker compose -f infra/local/docker-compose.yml down -v
+docker compose -f infra/local/docker-compose.yml --profile tools up --build
+```
 

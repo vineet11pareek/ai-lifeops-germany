@@ -1,8 +1,11 @@
 package com.lifeops.taskservice.controller;
 
 import com.lifeops.taskservice.common.UserContextHeaders;
+import com.lifeops.taskservice.dto.AuthenticatedUserContext;
 import com.lifeops.taskservice.dto.TaskResponse;
 import com.lifeops.taskservice.service.TaskService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -14,6 +17,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,14 +34,26 @@ class TaskControllerTest {
     @MockitoBean
     private TaskService taskService;
 
+    private AuthenticatedUserContext userContext;
+
+    @BeforeEach
+    void setup(){
+        userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "User@test.com",
+                "Test User",
+                "GOOGLE"
+        );
+    }
+
     @Test
     void shouldReturnRecentTasks() throws Exception {
         TaskResponse task = sampleTask("WAITING_FOR_APPROVAL");
 
-        when(taskService.getRecentTask()).thenReturn(List.of(task));
+        when(taskService.getRecentTask(userContext)).thenReturn(List.of(task));
 
         mockMvc.perform(get("/api/tasks")
-                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,"google-sub-123")
                         .header(UserContextHeaders.USER_NAME,"Test User")
                         .header(UserContextHeaders.USER_EMAIL,"User@test.com")
                         .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
@@ -50,10 +67,10 @@ class TaskControllerTest {
     void shouldReturnPendingTasks() throws Exception {
         TaskResponse task = sampleTask("WAITING_FOR_APPROVAL");
 
-        when(taskService.getPendingTask()).thenReturn(List.of(task));
+        when(taskService.getPendingTask(userContext)).thenReturn(List.of(task));
 
         mockMvc.perform(get("/api/tasks/pending")
-                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,"google-sub-123")
                         .header(UserContextHeaders.USER_NAME,"Test User")
                         .header(UserContextHeaders.USER_EMAIL,"User@test.com")
                         .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
@@ -61,6 +78,7 @@ class TaskControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("Pending tasks fetched successfully"))
                 .andExpect(jsonPath("$.data[0].status").value("WAITING_FOR_APPROVAL"));
+
     }
 
     @Test
@@ -68,10 +86,10 @@ class TaskControllerTest {
         UUID taskId = UUID.randomUUID();
         TaskResponse task = sampleTask(taskId, "WAITING_FOR_APPROVAL");
 
-        when(taskService.getTaskById(taskId)).thenReturn(task);
+        when(taskService.getTaskById(taskId,userContext)).thenReturn(task);
 
         mockMvc.perform(get("/api/tasks/{id}", taskId)
-                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,"google-sub-123")
                         .header(UserContextHeaders.USER_NAME,"Test User")
                         .header(UserContextHeaders.USER_EMAIL,"User@test.com")
                         .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
@@ -85,10 +103,10 @@ class TaskControllerTest {
         UUID taskId = UUID.randomUUID();
         TaskResponse task = sampleTask(taskId, "APPROVED");
 
-        when(taskService.approveTask(taskId)).thenReturn(task);
+        when(taskService.approveTask(taskId,userContext)).thenReturn(task);
 
         mockMvc.perform(post("/api/tasks/{id}/approve", taskId)
-                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,"google-sub-123")
                         .header(UserContextHeaders.USER_NAME,"Test User")
                         .header(UserContextHeaders.USER_EMAIL,"User@test.com")
                         .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))
@@ -103,10 +121,10 @@ class TaskControllerTest {
         UUID taskId = UUID.randomUUID();
         TaskResponse task = sampleTask(taskId, "REJECTED");
 
-        when(taskService.rejectTask(taskId)).thenReturn(task);
+        when(taskService.rejectTask(taskId,userContext)).thenReturn(task);
 
         mockMvc.perform(post("/api/tasks/{id}/reject", taskId)
-                        .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())
+                        .header(UserContextHeaders.USER_EXTERNAL_ID,"google-sub-123")
                         .header(UserContextHeaders.USER_NAME,"Test User")
                         .header(UserContextHeaders.USER_EMAIL,"User@test.com")
                         .header(UserContextHeaders.AUTH_PROVIDER,"GOOGLE"))

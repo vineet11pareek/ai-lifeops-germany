@@ -2132,3 +2132,35 @@ Reason:
 - enables user-specific filtering
 - keeps identity-provider logic centralized at the gateway
 - prepares for authorization and tenant isolation
+
+### User-Specific Data Filtering
+
+Services now use the gateway-propagated authenticated user context to store and filter user-owned data.
+
+Current owner key:
+
+```text
+X-User-External-Id
+```
+
+Applied to:
+```text
+ai_queries.user_external_id
+documents.user_external_id
+truth_analyses.user_external_id
+tasks.user_external_id
+```
+
+Current behavior:
+
+- AI query history returns only current user records
+- document history returns only current user records
+- truth analysis history returns only current user records
+- pending tasks return only current user records
+- approve/reject operations verify task ownership
+
+Reason:
+
+- prevents cross-user data leakage
+- supports privacy and GDPR-sensitive use cases
+- prepares for multi-user production use

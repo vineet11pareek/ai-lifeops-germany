@@ -1,9 +1,6 @@
 package com.lifeops.truthservice.service;
 
-import com.lifeops.truthservice.dto.AnalyzeTruthRequest;
-import com.lifeops.truthservice.dto.CreateTruthAnalysisRequest;
-import com.lifeops.truthservice.dto.TruthAnalysisResponse;
-import com.lifeops.truthservice.dto.TruthAnalysisResult;
+import com.lifeops.truthservice.dto.*;
 import com.lifeops.truthservice.entity.RiskLevel;
 import com.lifeops.truthservice.entity.TruthAnalysis;
 import com.lifeops.truthservice.event.TruthAnalyzedEvent;
@@ -36,11 +33,12 @@ public class TruthAnalysisService {
     }
 
     @Transactional
-    public TruthAnalysisResponse createTruthAnalysis(CreateTruthAnalysisRequest request) {
+    public TruthAnalysisResponse createTruthAnalysis(CreateTruthAnalysisRequest request, AuthenticatedUserContext userContext) {
         log.info("Creating truth analysis request title={}", request.title());
 
         TruthAnalysis truthAnalysis = new TruthAnalysis(
                 null,
+                userContext.externalId(),
                 request.title(),
                 request.content()
         );
@@ -53,8 +51,8 @@ public class TruthAnalysisService {
     }
 
     @Transactional(readOnly = true)
-    public List<TruthAnalysisResponse> getRecentAnalyses() {
-        return truthAnalysisRepository.findTop20ByOrderByCreatedAtDesc()
+    public List<TruthAnalysisResponse> getRecentAnalyses(AuthenticatedUserContext userContext) {
+        return truthAnalysisRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(userContext.externalId())
                 .stream()
                 .map(truthAnalysisMapper::toResponse)
                 .toList();
@@ -70,11 +68,12 @@ public class TruthAnalysisService {
 
 
     @Transactional
-    public TruthAnalysisResponse analyzeTruth(AnalyzeTruthRequest request) {
+    public TruthAnalysisResponse analyzeTruth(AnalyzeTruthRequest request,AuthenticatedUserContext userContext) {
         log.info("Creating truth analysis for AI processing title={}", request.title());
 
         TruthAnalysis truthAnalysis = new TruthAnalysis(
                 null,
+                userContext.externalId(),
                 request.title(),
                 request.content()
         );
@@ -103,6 +102,7 @@ public class TruthAnalysisService {
                     UUID.randomUUID(),
                     analyzed.getId(),
                     analyzed.getUserId(),
+                    userContext.externalId(),
                     analyzed.getTitle(),
                     analyzed.getClaimSummary(),
                     analyzed.getTrustScore(),

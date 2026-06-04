@@ -27,6 +27,7 @@ class DocumentAnalyzedEventConsumerTest {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 null,
+                "google-sub-123",
                 "Letter from Finanzamt",
                 "Summary",
                 "15.06.2026",
@@ -38,7 +39,7 @@ class DocumentAnalyzedEventConsumerTest {
 
         consumer.consume(objectMapper.writeValueAsString(event));
 
-        verify(taskService).createTaskFromDocumentAnalyzedEvent(event);
+        verify(taskService).createTaskFromDocumentAnalyzedEvent(event, event.userExternalId());
     }
 
 

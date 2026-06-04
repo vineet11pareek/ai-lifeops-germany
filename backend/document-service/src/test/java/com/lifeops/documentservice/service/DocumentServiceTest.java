@@ -1,9 +1,6 @@
 package com.lifeops.documentservice.service;
 
-import com.lifeops.documentservice.dto.AnalyzeDocumentRequest;
-import com.lifeops.documentservice.dto.CreateDocumentRequest;
-import com.lifeops.documentservice.dto.DocumentAnalysisResult;
-import com.lifeops.documentservice.dto.DocumentResponse;
+import com.lifeops.documentservice.dto.*;
 import com.lifeops.documentservice.entity.Document;
 import com.lifeops.documentservice.event.DocumentAnalyzedEvent;
 import com.lifeops.documentservice.repository.DocumentRepository;
@@ -46,12 +43,19 @@ class DocumentServiceTest {
     @DisplayName("Should create document successfully")
     void shouldCreateDocumentSuccessfully(){
         //Given
+        AuthenticatedUserContext userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "test@example.com",
+                "Test User",
+                "GOOGLE"
+        );
         CreateDocumentRequest request = new CreateDocumentRequest(
                 "Letter from Finanzamt",
                 "Please submit missing document"
         );
 
         Document savedDocument = new Document(
+                userContext.externalId(),
                 null,
                 request.title(),
                 request.content()
@@ -74,7 +78,7 @@ class DocumentServiceTest {
         when(documentRepository.save(any(Document.class))).thenReturn(savedDocument);
         when(documentMapper.toResponse(any(Document.class))).thenReturn(expectedResponse);
 
-        DocumentResponse response = documentService.createDocument(request);
+        DocumentResponse response = documentService.createDocument(request,userContext);
 
         //Then
         assertThat(response.title()).isEqualTo("Letter from Finanzamt");
@@ -93,12 +97,19 @@ class DocumentServiceTest {
     void shouldAnalyzedDocumentSuccessfullyAndPublishEvent(){
 
         //Given
+        AuthenticatedUserContext userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "test@example.com",
+                "Test User",
+                "GOOGLE"
+        );
         AnalyzeDocumentRequest request = new AnalyzeDocumentRequest(
                 "Letter from Finanzamt",
                 "Please submit missing document"
         );
 
         Document document = new Document(
+                userContext.externalId(),
                 null,
                 request.title(),
                 request.content()
@@ -141,7 +152,7 @@ class DocumentServiceTest {
 
 
         //Then
-        DocumentResponse response = documentService.analyzeDocument(request);
+        DocumentResponse response = documentService.analyzeDocument(request,userContext);
 
 
         assertThat(response.status()).isEqualTo("ANALYZED");
@@ -168,7 +179,14 @@ class DocumentServiceTest {
     @DisplayName("Should return the recent documents")
     void shouldReturnRecentDocuments(){
         //Given
+        AuthenticatedUserContext userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "test@example.com",
+                "Test User",
+                "GOOGLE"
+        );
         Document document = new Document(
+                userContext.externalId(),
                 null,
                 "Letter from Finanzamt",
                 "Please submit missing document"
@@ -188,11 +206,11 @@ class DocumentServiceTest {
         );
 
         //When
-        when(documentRepository.findTop20ByOrderByCreatedAtDesc()).thenReturn(List.of(document));
+        when(documentRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(any(String.class))).thenReturn(List.of(document));
         when(documentMapper.toResponse(any(Document.class))).thenReturn(expectedResponse);
 
         //Then
-        List<DocumentResponse> response = documentService.getRecentDocuments();
+        List<DocumentResponse> response = documentService.getRecentDocuments(userContext);
 
         assertThat(response).hasSize(1);
         assertThat(response.get(0).title()).isEqualTo("Letter from Finanzamt");
@@ -205,6 +223,7 @@ class DocumentServiceTest {
         UUID documentId = UUID.randomUUID();
 
         Document document = new Document(
+                "google-sub-123",
                 null,
                 "Letter from Finanzamt",
                 "Please submit missing documents."

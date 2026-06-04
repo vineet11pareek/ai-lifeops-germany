@@ -7,6 +7,7 @@ public record TruthAnalyzedEvent(
         UUID eventId,
         UUID analysisId,
         UUID userId,
+        String userExternalId,
         String title,
         String claimSummary,
         Integer trustScore,

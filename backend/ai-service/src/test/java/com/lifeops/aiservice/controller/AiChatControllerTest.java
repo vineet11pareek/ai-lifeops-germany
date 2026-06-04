@@ -7,6 +7,7 @@ import com.lifeops.aiservice.common.UserContextHeaders;
 import com.lifeops.aiservice.dto.AiChatRequest;
 import com.lifeops.aiservice.dto.AiChatResponse;
 import com.lifeops.aiservice.dto.AiQueryHistoryResponse;
+import com.lifeops.aiservice.dto.AuthenticatedUserContext;
 import com.lifeops.aiservice.service.AiChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -50,7 +52,7 @@ public class AiChatControllerTest {
                 Instant.now()
         );
 
-        when(aiChatService.ask(anyString())).thenReturn(response);
+        when(aiChatService.ask(anyString(),any(AuthenticatedUserContext.class))).thenReturn(response);
 
         AiChatRequest request = new AiChatRequest("Explain Anmeldung");
 
@@ -97,7 +99,7 @@ public class AiChatControllerTest {
                 Instant.now()
         );
 
-        when(aiChatService.getRecentQueries()).thenReturn(List.of(history));
+        when(aiChatService.getRecentQueries(any(AuthenticatedUserContext.class))).thenReturn(List.of(history));
 
         mockMvc.perform(get("/api/ai/queries")
                         .header(UserContextHeaders.USER_EXTERNAL_ID,UUID.randomUUID())

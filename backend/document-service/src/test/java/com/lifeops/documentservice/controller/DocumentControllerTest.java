@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lifeops.documentservice.common.UserContextHeaders;
 import com.lifeops.documentservice.dto.AnalyzeDocumentRequest;
+import com.lifeops.documentservice.dto.AuthenticatedUserContext;
 import com.lifeops.documentservice.dto.CreateDocumentRequest;
 import com.lifeops.documentservice.dto.DocumentResponse;
 import com.lifeops.documentservice.service.DocumentService;
@@ -52,7 +53,7 @@ class DocumentControllerTest {
                 Instant.now()
         );
 
-        when(documentService.createDocument(any(CreateDocumentRequest.class)))
+        when(documentService.createDocument(any(CreateDocumentRequest.class),any(AuthenticatedUserContext.class)))
                 .thenReturn(response);
 
         CreateDocumentRequest request = new CreateDocumentRequest(
@@ -89,7 +90,7 @@ class DocumentControllerTest {
                 Instant.now()
         );
 
-        when(documentService.analyzeDocument(any(AnalyzeDocumentRequest.class)))
+        when(documentService.analyzeDocument(any(AnalyzeDocumentRequest.class),any(AuthenticatedUserContext.class)))
                 .thenReturn(response);
 
         AnalyzeDocumentRequest request = new AnalyzeDocumentRequest(

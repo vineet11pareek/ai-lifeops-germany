@@ -1,5 +1,6 @@
 package com.lifeops.taskservice.service;
 
+import com.lifeops.taskservice.dto.AuthenticatedUserContext;
 import com.lifeops.taskservice.dto.TaskResponse;
 import com.lifeops.taskservice.entity.Task;
 import com.lifeops.taskservice.entity.TaskSourceType;
@@ -7,6 +8,7 @@ import com.lifeops.taskservice.entity.TaskStatus;
 import com.lifeops.taskservice.event.DocumentAnalyzedEvent;
 import com.lifeops.taskservice.exception.InvalidTaskStateException;
 import com.lifeops.taskservice.repository.TaskRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,6 +37,20 @@ class TaskServiceTest {
     @InjectMocks
     private TaskService taskService;
 
+    private AuthenticatedUserContext userContext;
+
+    @BeforeEach
+    void setup(){
+        userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "test@examle.com",
+                "Test User",
+                "GOOGLE"
+        );
+    }
+
+    private String externalId = "google-sub-123";
+
     @Test
     void shouldReturnRecentTask(){
         //Given
@@ -42,11 +58,11 @@ class TaskServiceTest {
         TaskResponse response = toResponse(task);
 
         //when
-        when(taskRepository.findTop20ByOrderByCreatedAtDesc()).thenReturn(List.of(task));
+        when(taskRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(externalId)).thenReturn(List.of(task));
         when(taskMapper.toResponse(task)).thenReturn(response);
 
 
-        List<TaskResponse> taskList = taskService.getRecentTask();
+        List<TaskResponse> taskList = taskService.getRecentTask(userContext);
 
         assertNotNull(taskList);
         assertThat(taskList).hasSize(1);
@@ -60,11 +76,11 @@ class TaskServiceTest {
 
         TaskResponse response = toResponse(task);
 
-        when(taskRepository.findTop20ByStatusOrderByCreatedAtDesc(TaskStatus.WAITING_FOR_APPROVAL))
+        when(taskRepository.findTop20ByUserExternalIdAndStatusOrderByCreatedAtDesc(externalId,TaskStatus.WAITING_FOR_APPROVAL))
                 .thenReturn(List.of(task));
         when(taskMapper.toResponse(task)).thenReturn(response);
 
-        List<TaskResponse> result = taskService.getPendingTask();
+        List<TaskResponse> result = taskService.getPendingTask(userContext);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).status()).isEqualTo("WAITING_FOR_APPROVAL");
@@ -79,7 +95,7 @@ class TaskServiceTest {
         when(taskRepository.save(task)).thenReturn(task);
         when(taskMapper.toResponse(task)).thenAnswer(invocation -> toResponse(task));
 
-        TaskResponse response = taskService.approveTask(taskId);
+        TaskResponse response = taskService.approveTask(taskId, userContext);
 
         assertThat(response.status()).isEqualTo("APPROVED");
         verify(taskRepository).save(task);
@@ -94,7 +110,7 @@ class TaskServiceTest {
         when(taskRepository.save(task)).thenReturn(task);
         when(taskMapper.toResponse(task)).thenAnswer(invocation -> toResponse(task));
 
-        TaskResponse response = taskService.rejectTask(taskId);
+        TaskResponse response = taskService.rejectTask(taskId,userContext);
 
         assertThat(response.status()).isEqualTo("REJECTED");
         verify(taskRepository).save(task);
@@ -108,7 +124,7 @@ class TaskServiceTest {
 
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
 
-        assertThatThrownBy(() -> taskService.approveTask(taskId))
+        assertThatThrownBy(() -> taskService.approveTask(taskId,userContext))
                 .isInstanceOf(InvalidTaskStateException.class)
                 .hasMessageContaining("Only tasks waiting for approval can be approved");
 
@@ -120,6 +136,7 @@ class TaskServiceTest {
     private Task createTask() {
         return new Task(
                 null,
+                "google-sub-123",
                 TaskSourceType.DOCUMENT_ANALYSIS,
                 UUID.randomUUID(),
                 "Review required action",
@@ -137,6 +154,7 @@ class TaskServiceTest {
                 UUID.randomUUID(),
                 documentId,
                 null,
+                "google-sub-123",
                 "Letter from Finanzamt",
                 "The document asks for missing documents.",
                 "15.06.2026",
@@ -146,10 +164,10 @@ class TaskServiceTest {
                 Instant.now()
         );
 
-        when(taskRepository.findBySourceId(documentId)).thenReturn(Optional.empty());
+        when(taskRepository.findBySourceIdAndUserExternalId(documentId,externalId)).thenReturn(Optional.empty());
         when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        taskService.createTaskFromDocumentAnalyzedEvent(event);
+        taskService.createTaskFromDocumentAnalyzedEvent(event, event.userExternalId());
 
         verify(taskRepository).save(any(Task.class));
     }
@@ -163,6 +181,7 @@ class TaskServiceTest {
                 UUID.randomUUID(),
                 documentId,
                 null,
+                "google-sub-123",
                 "Letter from Finanzamt",
                 "The document asks for missing documents.",
                 "15.06.2026",
@@ -172,9 +191,9 @@ class TaskServiceTest {
                 Instant.now()
         );
 
-        when(taskRepository.findBySourceId(documentId)).thenReturn(Optional.of(existingTask));
+        when(taskRepository.findBySourceIdAndUserExternalId(documentId,externalId)).thenReturn(Optional.of(existingTask));
 
-        taskService.createTaskFromDocumentAnalyzedEvent(event);
+        taskService.createTaskFromDocumentAnalyzedEvent(event, event.userExternalId());
 
         verify(taskRepository, never()).save(any(Task.class));
     }

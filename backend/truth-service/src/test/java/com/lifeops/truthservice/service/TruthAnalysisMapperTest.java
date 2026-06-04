@@ -19,6 +19,7 @@ class TruthAnalysisMapperTest {
         //Given
         TruthAnalysis analysis = new TruthAnalysis(
                 null,
+                "google-sub-123",
                 "Online claim about Bürgergeld",
                 "Everyone can get Bürgergeld without checks."
         );

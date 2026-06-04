@@ -10,6 +10,7 @@ public record DocumentAnalyzedEvent(
         UUID eventId,
         UUID documentId,
         UUID userId,
+        String userExternalId,
         String title,
         String summary,
         String deadlineText,

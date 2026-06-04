@@ -17,6 +17,7 @@ class DocumentMapperTest {
     void shouldMapDocumentToResponse(){
         //Given
         Document document = new Document(
+                "google-sub-123",
                 null,
                 "Letter from Finanzamt",
                 "Please submit missing documents by 15.06.2026."

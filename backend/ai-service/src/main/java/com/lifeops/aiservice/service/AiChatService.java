@@ -2,6 +2,7 @@ package com.lifeops.aiservice.service;
 
 import com.lifeops.aiservice.dto.AiChatResponse;
 import com.lifeops.aiservice.dto.AiQueryHistoryResponse;
+import com.lifeops.aiservice.dto.AuthenticatedUserContext;
 import com.lifeops.aiservice.entity.AiQuery;
 import com.lifeops.aiservice.event.AiQueryCompletedEvent;
 import com.lifeops.aiservice.exception.AiProcessingException;
@@ -42,11 +43,11 @@ public class AiChatService {
 
 
     @Transactional
-    public AiChatResponse ask(String question){
+    public AiChatResponse ask(String question, AuthenticatedUserContext userContext){
 
         log.info("Creating AI query record");
 
-        AiQuery aiQuery = new AiQuery(null,question);
+        AiQuery aiQuery = new AiQuery(userContext.externalId(), null,question);
         aiQuery.markProcessing();
         aiQueryRepository.saveAndFlush(aiQuery);
 
@@ -70,6 +71,7 @@ public class AiChatService {
                     UUID.randomUUID(),
                     savedQuery.getId(),
                     savedQuery.getUserId(),
+                    userContext.externalId(),
                     savedQuery.getQuestion(),
                     savedQuery.getStatus().name(),
                     savedQuery.getProvider(),
@@ -92,8 +94,8 @@ public class AiChatService {
     }
 
     @Transactional(readOnly = true)
-    public List<AiQueryHistoryResponse> getRecentQueries(){
-        return aiQueryRepository.findTop20ByOrderByCreatedAtDesc()
+    public List<AiQueryHistoryResponse> getRecentQueries(AuthenticatedUserContext userContext){
+        return aiQueryRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(userContext.externalId())
                 .stream()
                 .map(aiQueryMapper::toHistoryResponse )
                 .toList();

@@ -39,7 +39,7 @@ public class DocumentController {
                                                         @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider) {
 
         AuthenticatedUserContext userContext = getUserContext(externalId, name, email, provider);
-        return ApiResponse.success("Document created successfully", documentService.createDocument(request));
+        return ApiResponse.success("Document created successfully", documentService.createDocument(request,userContext));
     }
 
     @GetMapping("/{id}")
@@ -73,7 +73,7 @@ public class DocumentController {
 
         return ApiResponse.success(
                 "Documents fetched successfully",
-                documentService.getRecentDocuments()
+                documentService.getRecentDocuments(userContext)
         );
     }
 
@@ -91,7 +91,7 @@ public class DocumentController {
 
         return ApiResponse.success(
                 "Document analyzed successfully",
-                documentService.analyzeDocument(request)
+                documentService.analyzeDocument(request, userContext)
         );
     }
 

@@ -15,6 +15,9 @@ public class Document {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "user_external_id")
+    private String userExternalId;
+
     @Column(nullable = false)
     private String title;
 
@@ -51,8 +54,9 @@ public class Document {
 
     }
 
-    public Document(UUID userId, String title, String content) {
+    public Document(String userExternalId,UUID userId, String title, String content) {
         this.id = UUID.randomUUID();
+        this.userExternalId = userExternalId;
         this.userId = userId;
         this.title = title;
         this.content = content;
@@ -117,6 +121,10 @@ public class Document {
 
     public UUID getUserId() {
         return userId;
+    }
+
+    public String getUserExternalId() {
+        return userExternalId;
     }
 
     public String getTitle() {

@@ -1,12 +1,10 @@
 package com.lifeops.truthservice.service;
 
-import com.lifeops.truthservice.dto.AnalyzeTruthRequest;
-import com.lifeops.truthservice.dto.CreateTruthAnalysisRequest;
-import com.lifeops.truthservice.dto.TruthAnalysisResponse;
-import com.lifeops.truthservice.dto.TruthAnalysisResult;
+import com.lifeops.truthservice.dto.*;
 import com.lifeops.truthservice.entity.TruthAnalysis;
 import com.lifeops.truthservice.event.TruthAnalyzedEvent;
 import com.lifeops.truthservice.repository.TruthAnalysisRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -41,6 +39,18 @@ class TruthAnalysisServiceTest {
     @InjectMocks
     private TruthAnalysisService service;
 
+    private AuthenticatedUserContext userContext;
+
+    @BeforeEach
+    void setup(){
+        userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "User@test.com",
+                "Test User",
+                "GOOGLE"
+        );
+    }
+
     @Test
     void shouldCreateTruthAnalysisRequest(){
         //Given
@@ -49,7 +59,7 @@ class TruthAnalysisServiceTest {
                 "Everyone can get Bürgergeld without checks."
         );
 
-        TruthAnalysis saved = new TruthAnalysis(null, request.title(),request.content());
+        TruthAnalysis saved = new TruthAnalysis(null,"google-sub-123", request.title(),request.content());
 
         TruthAnalysisResponse expected = new TruthAnalysisResponse(
                 saved.getId(),
@@ -68,7 +78,7 @@ class TruthAnalysisServiceTest {
         when(truthAnalysisRepository.save(any(TruthAnalysis.class))).thenReturn(saved);
         when(truthAnalysisMapper.toResponse(saved)).thenReturn(expected);
 
-        TruthAnalysisResponse response = service.createTruthAnalysis(request);
+        TruthAnalysisResponse response = service.createTruthAnalysis(request,userContext);
 
         //then
         assertThat(response.status()).isEqualTo("RECEIVED");
@@ -120,7 +130,7 @@ class TruthAnalysisServiceTest {
                     );
                 });
 
-        TruthAnalysisResponse response = service.analyzeTruth(request);
+        TruthAnalysisResponse response = service.analyzeTruth(request,userContext);
 
         assertThat(response.status()).isEqualTo("ANALYZED");
         assertThat(response.trustScore()).isEqualTo(35);
@@ -144,6 +154,7 @@ class TruthAnalysisServiceTest {
         //Given
         TruthAnalysis analysis = new TruthAnalysis(
                 null,
+                "google-sub-123",
                 "Online claim about Bürgergeld",
                 "Everyone can get Bürgergeld without checks."
         );
@@ -162,10 +173,10 @@ class TruthAnalysisServiceTest {
         );
 
         //When
-        when(truthAnalysisRepository.findTop20ByOrderByCreatedAtDesc()).thenReturn(List.of(analysis));
+        when(truthAnalysisRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(any(String.class))).thenReturn(List.of(analysis));
         when(truthAnalysisMapper.toResponse(analysis)).thenReturn(expected);
 
-        List<TruthAnalysisResponse> response = service.getRecentAnalyses();
+        List<TruthAnalysisResponse> response = service.getRecentAnalyses(userContext);
 
         //Then
         assertThat(response).hasSize(1);
@@ -179,6 +190,7 @@ class TruthAnalysisServiceTest {
 
         TruthAnalysis analysis = new TruthAnalysis(
                 null,
+                "google-sub-123",
                 "Online claim about Bürgergeld",
                 "Everyone can get Bürgergeld without checks."
         );

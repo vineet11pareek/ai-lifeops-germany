@@ -16,6 +16,9 @@ public class Task {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "user_external_id")
+    private String userExternalId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "source_type", nullable = false)
     private TaskSourceType sourceType;
@@ -56,6 +59,7 @@ public class Task {
 
     public Task(
             UUID userId,
+            String externalId,
             TaskSourceType sourceType,
             UUID sourceId,
             String title,
@@ -65,6 +69,7 @@ public class Task {
     ) {
         this.id = UUID.randomUUID();
         this.userId = userId;
+        this.userExternalId = externalId;
         this.sourceType = sourceType;
         this.sourceId = sourceId;
         this.title = title;
@@ -112,6 +117,10 @@ public class Task {
 
     public UUID getUserId() {
         return userId;
+    }
+
+    public String getUserExternalId() {
+        return userExternalId;
     }
 
     public TaskSourceType getSourceType() {

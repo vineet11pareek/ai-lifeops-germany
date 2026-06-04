@@ -16,6 +16,9 @@ public class AiQuery {
     @Id
     private UUID id;
 
+    @Column(name = "user_external_id")
+    private String userExternalId;
+
     @Column(name = "user_id")
     private UUID userId;
 
@@ -45,8 +48,9 @@ public class AiQuery {
     public AiQuery() {
     }
 
-    public AiQuery(UUID userId, String question) {
+    public AiQuery(String userExternalId, UUID userId, String question) {
         this.id = UUID.randomUUID();
+        this.userExternalId = userExternalId;
         this.userId = userId;
         this.question = question;
         this.status = AiQueryStatus.CREATED;
@@ -87,6 +91,10 @@ public class AiQuery {
 
     public UUID getUserId() {
         return userId;
+    }
+
+    public String getUserExternalId() {
+        return userExternalId;
     }
 
     public String getQuestion() {

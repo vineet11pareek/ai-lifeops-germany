@@ -7,6 +7,7 @@ public record AiQueryCompletedEvent(
         UUID eventId,
         UUID queryId,
         UUID userId,
+        String userExternalId,
         String question,
         String status,
         String provider,

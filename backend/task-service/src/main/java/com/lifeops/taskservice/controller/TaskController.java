@@ -34,7 +34,7 @@ public class TaskController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Tasks fetched successfully",
-                taskService.getRecentTask()
+                taskService.getRecentTask(userContext)
         );
     }
 
@@ -49,7 +49,7 @@ public class TaskController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Pending tasks fetched successfully",
-                taskService.getPendingTask()
+                taskService.getPendingTask(userContext)
         );
     }
 
@@ -64,7 +64,7 @@ public class TaskController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Task fetched successfully",
-                taskService.getTaskById(id)
+                taskService.getTaskById(id,userContext)
         );
 
     }
@@ -79,7 +79,7 @@ public class TaskController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Task approved successfully",
-                taskService.approveTask(id)
+                taskService.approveTask(id, userContext)
         );
     }
 
@@ -93,7 +93,7 @@ public class TaskController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Task rejected successfully",
-                taskService.rejectTask(id)
+                taskService.rejectTask(id, userContext)
         );
     }
 

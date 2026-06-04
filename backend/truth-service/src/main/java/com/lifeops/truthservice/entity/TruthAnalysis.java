@@ -15,6 +15,9 @@ public class TruthAnalysis {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "user_external_id")
+    private String userExternalId;
+
     @Column(nullable = false)
     private String title;
 
@@ -50,9 +53,10 @@ public class TruthAnalysis {
     protected TruthAnalysis() {
     }
 
-    public TruthAnalysis(UUID userId, String title, String content) {
+    public TruthAnalysis(UUID userId,String userExternalId, String title, String content) {
         this.id = UUID.randomUUID();
         this.userId = userId;
+        this.userExternalId = userExternalId;
         this.title = title;
         this.content = content;
         this.status = TruthAnalysisStatus.RECEIVED;
@@ -117,6 +121,10 @@ public class TruthAnalysis {
 
     public UUID getUserId() {
         return userId;
+    }
+
+    public String getUserExternalId() {
+        return userExternalId;
     }
 
     public String getTitle() {

@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, UUID> {
 
-    List<Document> findTop20ByOrderByCreatedAtDesc();
+    List<Document> findTop20ByUserExternalIdOrderByCreatedAtDesc(String userExternalId);
 
 }

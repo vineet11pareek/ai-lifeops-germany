@@ -39,7 +39,7 @@ public class TruthAnalysisController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analysis request created successfully",
-                truthAnalysisService.createTruthAnalysis(request)
+                truthAnalysisService.createTruthAnalysis(request,userContext)
         );
     }
 
@@ -57,7 +57,7 @@ public class TruthAnalysisController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analyses fetched successfully",
-                truthAnalysisService.getRecentAnalyses()
+                truthAnalysisService.getRecentAnalyses(userContext)
         );
     }
 
@@ -96,7 +96,7 @@ public class TruthAnalysisController {
         AuthenticatedUserContext userContext = getUserContext(externalId, email, name, provider);
         return ApiResponse.success(
                 "Truth analysis completed successfully",
-                truthAnalysisService.analyzeTruth(request)
+                truthAnalysisService.analyzeTruth(request,userContext)
         );
     }
     private AuthenticatedUserContext getUserContext(String externalId, String email, String name, String provider){

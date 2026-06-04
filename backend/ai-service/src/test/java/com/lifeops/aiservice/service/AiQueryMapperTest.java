@@ -14,6 +14,7 @@ public class AiQueryMapperTest {
     @Test
     void shouldMapAiQueryToHistoryResponse(){
         AiQuery aiQuery = new AiQuery(
+                "google-sub-123",
                 null,
                 "Explain Anmeldung"
         );

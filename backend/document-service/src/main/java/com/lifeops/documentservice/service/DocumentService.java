@@ -1,10 +1,7 @@
 package com.lifeops.documentservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lifeops.documentservice.dto.AnalyzeDocumentRequest;
-import com.lifeops.documentservice.dto.CreateDocumentRequest;
-import com.lifeops.documentservice.dto.DocumentAnalysisResult;
-import com.lifeops.documentservice.dto.DocumentResponse;
+import com.lifeops.documentservice.dto.*;
 import com.lifeops.documentservice.entity.Document;
 import com.lifeops.documentservice.entity.RiskLevel;
 import com.lifeops.documentservice.event.DocumentAnalyzedEvent;
@@ -40,10 +37,11 @@ public class DocumentService {
     }
 
     @Transactional
-    public DocumentResponse createDocument(CreateDocumentRequest request){
+    public DocumentResponse createDocument(CreateDocumentRequest request, AuthenticatedUserContext userContext){
         log.info("Creating document metadata title: {}",request.title());
 
         Document document = new Document(
+                userContext.externalId(),
                 null,
                 request.title(),
                 request.content()
@@ -55,8 +53,8 @@ public class DocumentService {
     }
 
     @Transactional(readOnly = true)
-    public List<DocumentResponse> getRecentDocuments(){
-        return documentRepository.findTop20ByOrderByCreatedAtDesc()
+    public List<DocumentResponse> getRecentDocuments(AuthenticatedUserContext userContext){
+        return documentRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(userContext.externalId())
                 .stream()
                 .map(documentMapper::toResponse)
                 .toList();
@@ -70,10 +68,11 @@ public class DocumentService {
     }
 
     @Transactional
-    public DocumentResponse analyzeDocument(AnalyzeDocumentRequest request){
+    public DocumentResponse analyzeDocument(AnalyzeDocumentRequest request,AuthenticatedUserContext userContext){
         log.info("Creating document for AI analysis title: {}", request.title());
 
         Document document = new Document(
+                userContext.externalId(),
                 null,
                 request.title(),
                 request.content()
@@ -102,6 +101,7 @@ public class DocumentService {
                     UUID.randomUUID(),
                     analyzedDocument.getId(),
                     analyzedDocument.getUserId(),
+                    userContext.externalId(),
                     analyzedDocument.getTitle(),
                     analyzedDocument.getSummary(),
                     analyzedDocument.getDeadlineText(),

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 
-    List<Task> findTop20ByOrderByCreatedAtDesc();
-    List<Task> findTop20ByStatusOrderByCreatedAtDesc(TaskStatus status);
-    Optional<Task> findBySourceId(UUID sourceId);
+    List<Task> findTop20ByUserExternalIdOrderByCreatedAtDesc(String externalId);
+    List<Task> findTop20ByUserExternalIdAndStatusOrderByCreatedAtDesc(String externalId,TaskStatus status);
+    Optional<Task> findBySourceIdAndUserExternalId(UUID sourceId, String externalId);
 }

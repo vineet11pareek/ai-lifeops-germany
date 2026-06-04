@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AiQueryRepository extends JpaRepository<AiQuery, UUID> {
-    List<AiQuery> findTop20ByOrderByCreatedAtDesc();
+    List<AiQuery> findTop20ByUserExternalIdOrderByCreatedAtDesc(String userExternalId);
 }

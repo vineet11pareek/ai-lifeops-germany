@@ -27,18 +27,8 @@ public class DocumentAnalysisController {
 
     @PostMapping
     @Operation(summary = "Analyze document", description = "Analyzes document text and returns structured summary, deadline, action, risk level, and next step.")
-    public ApiResponse<DocumentAnalysisResponse> analyzeDocument(@Valid @RequestBody DocumentAnalysisRequest request,
-                                                                 @RequestHeader(UserContextHeaders.USER_EXTERNAL_ID) String externalId,
-                                                                 @RequestHeader(UserContextHeaders.USER_EMAIL) String email,
-                                                                 @RequestHeader(UserContextHeaders.USER_NAME) String name,
-                                                                 @RequestHeader(UserContextHeaders.AUTH_PROVIDER) String provider){
+    public ApiResponse<DocumentAnalysisResponse> analyzeDocument(@Valid @RequestBody DocumentAnalysisRequest request){
 
-        AuthenticatedUserContext userContext = getUserContext(
-                externalId,
-                email,
-                name,
-                provider
-        );
         return ApiResponse.success(
                 "Document analysis completed successfully",
                 documentAnalysisService.analyze(request.title(), request.content())

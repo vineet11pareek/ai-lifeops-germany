@@ -20,6 +20,7 @@ class TaskMapperTest {
        //Given
        Task task = new Task(
                UUID.randomUUID(),
+               "google-sub-123",
                TaskSourceType.DOCUMENT_ANALYSIS,
                UUID.randomUUID(),
                "Test Document Analyzed",

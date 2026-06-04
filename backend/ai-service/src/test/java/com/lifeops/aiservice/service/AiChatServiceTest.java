@@ -1,6 +1,7 @@
 package com.lifeops.aiservice.service;
 
 import com.lifeops.aiservice.dto.AiQueryHistoryResponse;
+import com.lifeops.aiservice.dto.AuthenticatedUserContext;
 import com.lifeops.aiservice.entity.AiQuery;
 import com.lifeops.aiservice.repository.AiQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,9 +56,18 @@ public class AiChatServiceTest {
 
     @Test
     void shouldReturnRecentQueries(){
+        //Given
+        String userExternalId = "107691503500061573151129";
         AiQuery aiQuery = new AiQuery(
+                userExternalId,
                 null,
                 "Explain Anmeldung in Germany"
+        );
+        AuthenticatedUserContext userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "test@example.com",
+                "Test User",
+                "GOOGLE"
         );
 
         aiQuery.markProcessing();
@@ -78,13 +89,13 @@ public class AiChatServiceTest {
         when(aiQueryMapper.toHistoryResponse(aiQuery))
                 .thenReturn(historyResponse);
 
-        when(aiQueryRepository.findTop20ByOrderByCreatedAtDesc())
+        when(aiQueryRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(any(String.class)))
                 .thenReturn(List.of(aiQuery));
 
 
 
-        List<AiQueryHistoryResponse> history = aiChatService.getRecentQueries();
-        verify(aiQueryRepository).findTop20ByOrderByCreatedAtDesc();
+        List<AiQueryHistoryResponse> history = aiChatService.getRecentQueries(userContext);
+        verify(aiQueryRepository).findTop20ByUserExternalIdOrderByCreatedAtDesc(userContext.externalId());
         assertThat(history).hasSize(1);
         assertThat(history.get(0).question()).isEqualTo("Explain Anmeldung in Germany");
         assertThat(history.get(0).status()).isEqualTo("COMPLETED");

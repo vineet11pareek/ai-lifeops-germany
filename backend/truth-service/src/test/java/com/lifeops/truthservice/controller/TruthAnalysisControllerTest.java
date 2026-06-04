@@ -3,9 +3,11 @@ package com.lifeops.truthservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifeops.truthservice.common.UserContextHeaders;
 import com.lifeops.truthservice.dto.AnalyzeTruthRequest;
+import com.lifeops.truthservice.dto.AuthenticatedUserContext;
 import com.lifeops.truthservice.dto.CreateTruthAnalysisRequest;
 import com.lifeops.truthservice.dto.TruthAnalysisResponse;
 import com.lifeops.truthservice.service.TruthAnalysisService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -38,6 +40,18 @@ class TruthAnalysisControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    private AuthenticatedUserContext userContext;
+
+    @BeforeEach
+    void setup(){
+        userContext = new AuthenticatedUserContext(
+                "google-sub-123",
+                "User@test.com",
+                "Test User",
+                "GOOGLE"
+        );
+    }
+
     @Test
     void shouldCreateTruthAnalysisRequest() throws Exception{
 
@@ -45,7 +59,7 @@ class TruthAnalysisControllerTest {
         TruthAnalysisResponse response = sampleResponse("RECEIVED");
 
         //when
-        when(service.createTruthAnalysis(any(CreateTruthAnalysisRequest.class))).thenReturn(response);
+        when(service.createTruthAnalysis(any(CreateTruthAnalysisRequest.class),any(AuthenticatedUserContext.class))).thenReturn(response);
 
         CreateTruthAnalysisRequest request = new CreateTruthAnalysisRequest(
                 "Online claim about Bürgergeld",
@@ -76,7 +90,7 @@ class TruthAnalysisControllerTest {
         );
 
         //when
-        when(service.analyzeTruth(any(AnalyzeTruthRequest.class))).thenReturn(response);
+        when(service.analyzeTruth(any(AnalyzeTruthRequest.class),any(AuthenticatedUserContext.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/truth/analyze")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +126,7 @@ class TruthAnalysisControllerTest {
 
     @Test
     void shouldReturnRecentTruthAnalyses() throws Exception {
-        when(service.getRecentAnalyses())
+        when(service.getRecentAnalyses(any(AuthenticatedUserContext.class)))
                 .thenReturn(List.of(sampleResponse("ANALYZED")));
 
         mockMvc.perform(get("/api/truth")

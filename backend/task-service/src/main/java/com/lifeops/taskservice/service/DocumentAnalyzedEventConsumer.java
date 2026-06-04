@@ -35,7 +35,7 @@ public class DocumentAnalyzedEventConsumer {
                     event.riskLevel(),
                     event.status()
             );
-           taskService.createTaskFromDocumentAnalyzedEvent(event);
+           taskService.createTaskFromDocumentAnalyzedEvent(event,event.userExternalId());
         } catch (JsonProcessingException e) {
             //TODO: create a custom exception and handle from global exception, instead of only log and ignore
             log.error("Deserialisation of an event having issue",e);

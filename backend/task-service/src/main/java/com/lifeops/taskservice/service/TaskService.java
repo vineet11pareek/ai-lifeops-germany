@@ -1,5 +1,6 @@
 package com.lifeops.taskservice.service;
 
+import com.lifeops.taskservice.dto.AuthenticatedUserContext;
 import com.lifeops.taskservice.dto.TaskResponse;
 import com.lifeops.taskservice.entity.Task;
 import com.lifeops.taskservice.entity.TaskSourceType;
@@ -29,33 +30,33 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public List<TaskResponse> getRecentTask() {
-        return taskRepository.findTop20ByOrderByCreatedAtDesc()
+    public List<TaskResponse> getRecentTask(AuthenticatedUserContext userContext) {
+        return taskRepository.findTop20ByUserExternalIdOrderByCreatedAtDesc(userContext.externalId())
                 .stream()
                 .map(taskMapper::toResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<TaskResponse> getPendingTask() {
-        return taskRepository.findTop20ByStatusOrderByCreatedAtDesc(TaskStatus.WAITING_FOR_APPROVAL)
+    public List<TaskResponse> getPendingTask(AuthenticatedUserContext userContext) {
+        return taskRepository.findTop20ByUserExternalIdAndStatusOrderByCreatedAtDesc(userContext.externalId(),TaskStatus.WAITING_FOR_APPROVAL )
                 .stream()
                 .map(taskMapper::toResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public TaskResponse getTaskById(UUID id) {
-        Task task = taskRepository.findBySourceId(id)
+    public TaskResponse getTaskById(UUID id, AuthenticatedUserContext userContext) {
+        Task task = taskRepository.findBySourceIdAndUserExternalId(id,userContext.externalId())
                 .orElseThrow(() -> new TaskNotFoundException(id));
         return taskMapper.toResponse(task);
     }
 
     @Transactional
-    public void createTaskFromDocumentAnalyzedEvent(DocumentAnalyzedEvent event) {
+    public void createTaskFromDocumentAnalyzedEvent(DocumentAnalyzedEvent event, String userExternalId) {
         log.info("Creating task proposal from document analyzed event documentId: {}", event.documentId());
 
-        if (taskRepository.findBySourceId(event.documentId()).isPresent()) {
+        if (taskRepository.findBySourceIdAndUserExternalId(event.documentId(), userExternalId).isPresent()) {
             log.info("Task proposal already exists for documentId={}, skipping", event.documentId());
             return;
         }
@@ -82,6 +83,7 @@ public class TaskService {
 
         Task task = new Task(
                 event.userId(),
+                userExternalId,
                 TaskSourceType.DOCUMENT_ANALYSIS,
                 event.documentId(),
                 title,
@@ -99,9 +101,12 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskResponse approveTask(UUID id){
+    public TaskResponse approveTask(UUID id, AuthenticatedUserContext userContext){
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
+        if(!userContext.externalId().equals(task.getUserExternalId())){
+            throw new TaskNotFoundException(id);
+        }
 
         task.approve();
         Task savedTask = taskRepository.save(task);
@@ -109,10 +114,12 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskResponse rejectTask(UUID id) {
+    public TaskResponse rejectTask(UUID id, AuthenticatedUserContext userContext) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
-
+        if(!userContext.externalId().equals(task.getUserExternalId())){
+            throw new TaskNotFoundException(id);
+        }
         task.reject();
 
         Task savedTask = taskRepository.save(task);

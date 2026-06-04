@@ -1213,3 +1213,22 @@ Services should trust these headers only when traffic comes through the gateway.
 
 ---
 
+## Decision 081 — Use External User ID as Initial Ownership Key
+
+Status: Accepted
+
+Services use the gateway-propagated external user ID as the initial ownership key.
+
+Reason:
+
+- Google subject is stable for the authenticated user
+- avoids cross-service user lookup during early hardening
+- enables immediate user-specific filtering
+- keeps service logic simple
+
+Future improvement:
+
+Resolve and propagate internal user UUID from user-service or identity provider.
+
+---
+

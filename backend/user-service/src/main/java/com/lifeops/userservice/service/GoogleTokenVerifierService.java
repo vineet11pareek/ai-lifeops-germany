@@ -46,6 +46,7 @@ public class GoogleTokenVerifierService {
             }
             GoogleIdToken.Payload payload = idToken.getPayload();
 
+
             return new AuthenticatedUser(
                     payload.getSubject(),
                     payload.get("name").toString(),

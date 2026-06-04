@@ -28,7 +28,6 @@ public class UserContextHeaderFilter implements GlobalFilter, Ordered {
                     String externalId = jwt.getSubject();
                     String email = jwt.getClaimAsString("email");
                     String name = jwt.getClaimAsString("name");
-
                     ServerHttpRequest mutatedRequest = exchange.getRequest()
                             .mutate()
                             .headers(headers -> {
