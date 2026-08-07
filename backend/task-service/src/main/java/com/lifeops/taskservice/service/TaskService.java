@@ -53,10 +53,10 @@ public class TaskService {
     }
 
     @Transactional
-    public void createTaskFromDocumentAnalyzedEvent(DocumentAnalyzedEvent event, String userExternalId) {
+    public void createTaskFromDocumentAnalyzedEvent(DocumentAnalyzedEvent event) {
         log.info("Creating task proposal from document analyzed event documentId: {}", event.documentId());
 
-        if (taskRepository.findBySourceIdAndUserExternalId(event.documentId(), userExternalId).isPresent()) {
+        if (taskRepository.findBySourceIdAndUserExternalId(event.documentId(), event.userExternalId()).isPresent()) {
             log.info("Task proposal already exists for documentId={}, skipping", event.documentId());
             return;
         }
@@ -83,7 +83,7 @@ public class TaskService {
 
         Task task = new Task(
                 event.userId(),
-                userExternalId,
+                event.userExternalId(),
                 TaskSourceType.DOCUMENT_ANALYSIS,
                 event.documentId(),
                 title,

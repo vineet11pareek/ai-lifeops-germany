@@ -24,7 +24,20 @@ public class DocumentAnalyzedEventConsumer {
             topics = "${lifeops.kafka.topics.document-analyzed}",
             groupId = "${spring.kafka.consumer.group-id}"
     )
-    public void consume(String rawEvent){
+    public void consume(DocumentAnalyzedEvent event){
+
+            log.info(
+                    "Received document analyzed event eventId={}, documentId={}, title={}, riskLevel={}, status={}",
+                    event.eventId(),
+                    event.documentId(),
+                    event.title(),
+                    event.riskLevel(),
+                    event.status()
+            );
+           taskService.createTaskFromDocumentAnalyzedEvent(event);
+
+    }
+    /*public void consume(String rawEvent){
         try {
             DocumentAnalyzedEvent event = objectMapper.readValue(rawEvent, DocumentAnalyzedEvent.class);
             log.info(
@@ -35,11 +48,11 @@ public class DocumentAnalyzedEventConsumer {
                     event.riskLevel(),
                     event.status()
             );
-           taskService.createTaskFromDocumentAnalyzedEvent(event,event.userExternalId());
+           taskService.createTaskFromDocumentAnalyzedEvent(event);
         } catch (JsonProcessingException e) {
             //TODO: create a custom exception and handle from global exception, instead of only log and ignore
             log.error("Deserialisation of an event having issue",e);
         }
 
-    }
+    }*/
 }

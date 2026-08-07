@@ -138,6 +138,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
     networks:
       - lifeops-network
     healthcheck:
@@ -168,6 +170,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
     networks:
       - lifeops-network
     healthcheck:
@@ -257,6 +261,22 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
+
+  kafka-init:
+    image: apache/kafka:3.9.0
+    container_name: lifeops-kafka-init
+    restart: "no"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command:
+      [
+        "sh",
+        "-c",
+        "/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic document.analyzed.DLQ --partitions 3 --replication-factor 1"
+      ]
+    networks:
+      - lifeops-network
 
 volumes:
   lifeops_postgres_data:

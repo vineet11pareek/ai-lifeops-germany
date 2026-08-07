@@ -1232,3 +1232,26 @@ Resolve and propagate internal user UUID from user-service or identity provider.
 
 ---
 
+## Decision 082 — Use DLQ for Kafka Consumer Failures
+
+Status: Accepted
+
+Kafka consumer failures are routed to service-specific DLQ topics after retries are exhausted.
+
+Reason:
+
+- prevents poison messages from blocking processing
+- preserves failed events for investigation
+- keeps business consumer code clean
+- improves production reliability
+
+Alternative considered:
+
+Catch exceptions manually inside each consumer.
+
+Reason rejected:
+
+- mixes infrastructure concerns with business logic
+- repeats error handling in every consumer
+- risks swallowing failures without proper recovery
+

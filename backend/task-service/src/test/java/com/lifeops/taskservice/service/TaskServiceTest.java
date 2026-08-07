@@ -167,7 +167,7 @@ class TaskServiceTest {
         when(taskRepository.findBySourceIdAndUserExternalId(documentId,externalId)).thenReturn(Optional.empty());
         when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        taskService.createTaskFromDocumentAnalyzedEvent(event, event.userExternalId());
+        taskService.createTaskFromDocumentAnalyzedEvent(event);
 
         verify(taskRepository).save(any(Task.class));
     }
@@ -193,7 +193,7 @@ class TaskServiceTest {
 
         when(taskRepository.findBySourceIdAndUserExternalId(documentId,externalId)).thenReturn(Optional.of(existingTask));
 
-        taskService.createTaskFromDocumentAnalyzedEvent(event, event.userExternalId());
+        taskService.createTaskFromDocumentAnalyzedEvent(event);
 
         verify(taskRepository, never()).save(any(Task.class));
     }

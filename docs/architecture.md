@@ -2164,3 +2164,32 @@ Reason:
 - prevents cross-user data leakage
 - supports privacy and GDPR-sensitive use cases
 - prepares for multi-user production use
+
+### Kafka DLQ Strategy for task-service
+
+`task-service` now uses a Dead Letter Queue strategy for `document.analyzed` consumer failures.
+
+Current normal topic:
+
+```text
+document.analyzed
+```
+
+Current DLQ topic:
+```text
+document.analyzed.DLQ
+```
+
+
+Current behavior:
+
+- task-service retries failed message processing
+- retries use fixed backoff
+- after retries are exhausted, failed messages are published to DLQ
+- consumer continues processing later messages
+
+Reason:
+
+- prevents poison messages from blocking the consumer
+- preserves failed events for debugging
+- improves reliability of event-driven task creation

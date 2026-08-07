@@ -1478,3 +1478,18 @@ docker compose -f infra/local/docker-compose.yml down -v
 docker compose -f infra/local/docker-compose.yml --profile tools up --build
 ```
 
+### Testing Kafka DLQ for task-service
+
+The local compose stack creates `document.analyzed.DLQ` automatically through the Kafka init service.
+
+If you need to recreate it manually:
+
+```bash
+docker exec -it lifeops-kafka kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --create \
+  --topic document.analyzed.DLQ \
+  --partitions 3 \
+  --replication-factor 1
+```
+

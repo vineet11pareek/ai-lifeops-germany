@@ -37,9 +37,9 @@ class DocumentAnalyzedEventConsumerTest {
                 Instant.now()
         );
 
-        consumer.consume(objectMapper.writeValueAsString(event));
+        consumer.consume(event);
 
-        verify(taskService).createTaskFromDocumentAnalyzedEvent(event, event.userExternalId());
+        verify(taskService).createTaskFromDocumentAnalyzedEvent(event);
     }
 
 
